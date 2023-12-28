@@ -297,6 +297,15 @@ public interface SoundEntry extends Keyed, Examinable {
     boolean allDefault();
 
     /**
+     * Converts this sound entry instance to its builder type,
+     * with all the properties already set
+     *
+     * @return The created builder
+     */
+    @Contract("-> new")
+    @NotNull Builder toBuilder();
+
+    /**
      * Specifies the type of {@link SoundEntry}
      *
      * @since 1.0.0
