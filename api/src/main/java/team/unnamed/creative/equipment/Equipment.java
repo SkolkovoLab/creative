@@ -318,12 +318,12 @@ public interface Equipment extends ResourcePackPart, Keyed, Examinable {
          *
          * @param layer The layer to add
          * @return This builder
-         * @since 1.8.5
+         * @since 1.9.0
          * @sinceMinecraft 1.21.6
          */
         @Contract("_ -> this")
         default @NotNull Builder addHappyGhastHarness(@NotNull EquipmentLayer layer) {
-            return addLayer(EquipmentLayerType.HAPPY_GHAST_HARNESS, layer);
+            return addLayer(EquipmentLayerType.HAPPY_GHAST_BODY, layer);
         }
         //#endregion
 

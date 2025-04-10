@@ -328,6 +328,9 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                         : HeadSpecialRender.DEFAULT_ANIMATION;
                 render = SpecialRender.head(kind, headTexture, animation);
                 break;
+            case "player_head":
+                render = SpecialRender.playerHead();
+                break;
             case "shulker_box":
                 final Key shulkerBoxTexture = Key.key(modelNode.get("texture").getAsString());
                 final float shulkerBoxOpenness = modelNode.has("openness")

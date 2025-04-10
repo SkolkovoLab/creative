@@ -179,7 +179,7 @@ final class MinecraftResourcePackWriterImpl implements MinecraftResourcePackWrit
             String dir = overlay.directory();
             PackFormat packFormat = overlayFormats.get(dir);
             int overlayTargetPackFormat = packFormat == null ? -1 : packFormat.min(); // todo: consider max pack format
-            writeWithBasePathAndTargetPackFormat(target, overlay, OVERLAYS_FOLDER + '/' + dir + '/', overlayTargetPackFormat);
+            writeWithBasePathAndTargetPackFormat(target, overlay, dir + '/', overlayTargetPackFormat);
         }
     }
 

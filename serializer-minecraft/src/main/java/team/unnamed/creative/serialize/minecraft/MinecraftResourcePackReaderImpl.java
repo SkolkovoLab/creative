@@ -157,11 +157,7 @@ final class MinecraftResourcePackReaderImpl implements MinecraftResourcePackRead
             // pack, the first folder is always "assets"
             String folder = tokens.poll();
 
-            if (folder.equals(OVERLAYS_FOLDER)) {
-                // gets the overlay name, set after the
-                // "overlays" folder, e.g. "overlays/foo",
-                // or "overlays/bar"
-                overlayDir = tokens.poll();
+            if (packFormatsByOverlayDir.containsKey(folder)) {
                 if (tokens.isEmpty()) {
                     // this means that there is a file directly
                     // inside the "overlays" folder, this is illegal
@@ -169,6 +165,7 @@ final class MinecraftResourcePackReaderImpl implements MinecraftResourcePackRead
                     continue;
                 }
 
+                overlayDir = folder;
                 Overlay overlay = resourcePack.overlay(overlayDir);
                 if (overlay == null) {
                     // first occurrence, register overlay
@@ -178,7 +175,7 @@ final class MinecraftResourcePackReaderImpl implements MinecraftResourcePackRead
 
                 container = overlay;
                 folder = tokens.poll();
-                containerPath = path.substring((OVERLAYS_FOLDER + '/' + overlayDir + '/').length());
+                containerPath = path.substring((overlayDir + '/').length());
                 localPackFormat = packFormatsByOverlayDir.getOrDefault(overlayDir, -1);
             }
 
