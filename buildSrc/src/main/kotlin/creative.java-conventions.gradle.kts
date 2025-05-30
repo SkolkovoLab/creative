@@ -9,8 +9,14 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")
+    val junitVersion = "5.13.0"
+    val platformVersion = "1.13.0"
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation("org.junit.platform:junit-platform-commons:$platformVersion")
+    testImplementation("org.junit.platform:junit-platform-launcher:$platformVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-engine:$platformVersion")
 }
 
 java {
