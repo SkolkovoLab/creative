@@ -46,7 +46,7 @@ public interface Item extends Keyed, ResourcePackPart, Examinable {
     boolean DEFAULT_HAND_ANIMATION_ON_SWAP = true;
 
     @ApiStatus.Internal
-    boolean DEFAULT_OVERSIZED_IN_GUI = true;
+    boolean DEFAULT_OVERSIZED_IN_GUI = false;
 
     /**
      * Describes if down-and-up animation should be played in first-person view
@@ -83,7 +83,7 @@ public interface Item extends Keyed, ResourcePackPart, Examinable {
      * @param handAnimationOnSwap If hand animation should be played
      * @param oversizedInGui If item clipping should not be applied
      * @return The item
-     * @since 1.8.4
+     * @since 1.9.1
      */
     @Contract(value = "_, _, _, _ -> new", pure = true)
     static @NotNull Item item(final @NotNull Key key, final @NotNull ItemModel model, final boolean handAnimationOnSwap, final boolean oversizedInGui) {

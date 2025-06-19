@@ -157,10 +157,10 @@ public interface SpecialRender extends Examinable {
     }
 
     /**
-     * Returns a player head special renderer. Which renders a player head.
+     * Returns a special renderer which renders a player head using the item profile component
      *
      * @return A trident special renderer
-     * @since 1.9.0
+     * @since 1.9.1
      * @sinceMinecraft 1.21.6
      * @sincePackFormat 63
      */
@@ -264,18 +264,6 @@ public interface SpecialRender extends Examinable {
      */
     static @NotNull HeadSpecialRender head(final @NotNull HeadType kind) {
         return head(kind, null, HeadSpecialRender.DEFAULT_ANIMATION);
-    }
-
-    /**
-     * Returns a special renderer which renders a player head using the item profile component
-     *
-     * @return A player head special renderer
-     * @since 1.8.4
-     * @sinceMinecraft 1.21.6
-     * @sincePackFormat 63
-     */
-    static @NotNull NoFieldSpecialRender playerHead() {
-        return NoFieldSpecialRenderImpl.PLAYER_HEAD;
     }
 
     /**

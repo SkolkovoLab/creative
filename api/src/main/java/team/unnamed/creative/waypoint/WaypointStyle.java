@@ -41,7 +41,7 @@ import java.util.List;
  * <p>First added in 1.21.6, see <a href="https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-6">1.21.6 Changelog</a></p>
  *
  * @sinceMinecraft 1.21.6
- * @since 1.8.4
+ * @since 1.9.1
  */
 public interface WaypointStyle extends ResourcePackPart, Keyed, Examinable {
     @ApiStatus.Internal
@@ -101,7 +101,7 @@ public interface WaypointStyle extends ResourcePackPart, Keyed, Examinable {
     /**
      * Represents a builder for creating {@link Equipment} instances.
      *
-     * @since 1.8.0
+     * @since 1.9.1
      */
     interface Builder {
         /**
