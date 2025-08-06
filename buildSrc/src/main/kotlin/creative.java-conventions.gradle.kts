@@ -20,10 +20,10 @@ dependencies {
 }
 
 java {
-    withJavadocJar()
+    //withJavadocJar()
     withSourcesJar()
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -34,13 +34,13 @@ license {
 }
 
 tasks {
-    javadoc {
-        isFailOnError = false
-        (options as StandardJavadocDocletOptions).run {
-            tags("sinceMinecraft:a:Since Minecraft:")
-            tags("sincePackFormat:a:Since Resource-Pack Format:")
-        }
-    }
+    //javadoc {
+    //    isFailOnError = false
+    //    (options as StandardJavadocDocletOptions).run {
+    //        tags("sinceMinecraft:a:Since Minecraft:")
+    //        tags("sincePackFormat:a:Since Resource-Pack Format:")
+    //    }
+    //}
     test {
         useJUnitPlatform()
     }

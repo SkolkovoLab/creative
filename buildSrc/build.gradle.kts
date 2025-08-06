@@ -12,11 +12,11 @@ dependencies {
 
 tasks {
     compileJava {
-        options.release.set(8)
+        options.release.set(21)
     }
     compileKotlin {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = "21"
         }
     }
 }

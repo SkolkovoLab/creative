@@ -252,4 +252,19 @@ public interface ItemStringProperty extends ItemProperty {
     static @NotNull NoFieldItemStringProperty trimMaterial() {
         return NoFieldItemStringPropertyImpl.TRIM_MATERIAL;
     }
+
+    /**
+     * Returns the <strong>component</strong> item string property, which evaluates to the
+     * ID of the component, if any.
+     *
+     * <p>Possible values are namespaced component IDs like {@code minecraft:attribute_modifiers}</p>
+     *
+     * @return The component item string property
+     * @since 1.8.0
+     * @sinceMinecraft 1.21.5
+     * @sincePackFormat 55
+     */
+    static @NotNull ComponentItemStringProperty component(final @NotNull String component) {
+        return new ComponentItemStringPropertyImpl(component);
+    }
 }

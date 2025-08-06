@@ -406,6 +406,9 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         } else if (condition instanceof KeybindDownItemBooleanProperty) {
             writer.name("property").value("keybind_down");
             writer.name("keybind").value(((KeybindDownItemBooleanProperty) condition).key());
+        } else if (condition instanceof ComponentItemBooleanProperty component) {
+            writer.name("predicate").value(component.predicate());
+            writer.name("value").value(component.value());
         } else if (condition instanceof NoFieldItemBooleanProperty) {
             writer.name("property").value(KeySerializer.toString(((NoFieldItemBooleanProperty) condition).key()));
         } else {
@@ -467,6 +470,11 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
             case "view_entity":
                 condition = ItemBooleanProperty.viewEntity();
                 break;
+            case "component":
+                final String predicate = node.get("predicate").getAsString();
+                final String value = node.get("value").getAsString();
+                condition = ItemBooleanProperty.component(predicate, value);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown condition property: " + property);
         }
@@ -504,6 +512,8 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
             if (timezone != null) {
                 writer.name("timezone").value(timezone);
             }
+        } else if (property instanceof ComponentItemStringProperty component) {
+            writer.name("component").value(component.component());
         } else if (property instanceof NoFieldItemStringProperty) {
             writer.name("property").value(KeySerializer.toString(((NoFieldItemStringProperty) property).key()));
         } else {
@@ -580,6 +590,9 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                 break;
             case "trim_material":
                 property = ItemStringProperty.trimMaterial();
+                break;
+            case "component":
+                property = ItemStringProperty.component(node.get("component").getAsString());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown select property type: " + propertyType);

@@ -219,4 +219,16 @@ public interface ItemBooleanProperty extends ItemProperty {
     static @NotNull KeybindDownItemBooleanProperty keybindDown(final @NotNull String keybind) {
         return new KeybindDownItemBooleanPropertyImpl(keybind);
     }
+
+    /**
+     * Returns an item condition that checks the value of an item's component for a given predicate,
+     *
+     * @param predicate The id of the component to check
+     * @since 1.9.0
+     * @sinceMinecraft 1.21.5
+     * @sincePackFormat 55
+     */
+    static @NotNull ComponentItemBooleanProperty component(final @NotNull String predicate, final @NotNull String value) {
+        return new ComponentItemBooleanPropertyImpl(predicate, value);
+    }
 }
