@@ -29,15 +29,11 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.item.special.SpecialRender;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class SpecialItemModelImpl implements SpecialItemModel {
-    private final SpecialRender render;
-    private final Key base;
-
+record SpecialItemModelImpl(SpecialRender render, Key base) implements SpecialItemModel {
     SpecialItemModelImpl(final @NotNull SpecialRender render, final @NotNull Key base) {
         this.render = requireNonNull(render, "render");
         this.base = requireNonNull(base, "base");
@@ -56,8 +52,8 @@ final class SpecialItemModelImpl implements SpecialItemModel {
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("base", base),
-            ExaminableProperty.of("render", render)
+                ExaminableProperty.of("base", base),
+                ExaminableProperty.of("render", render)
         );
     }
 
@@ -69,12 +65,7 @@ final class SpecialItemModelImpl implements SpecialItemModel {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(render, base);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

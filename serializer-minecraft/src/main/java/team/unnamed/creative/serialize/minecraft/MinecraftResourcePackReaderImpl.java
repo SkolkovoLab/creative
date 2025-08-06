@@ -218,12 +218,11 @@ final class MinecraftResourcePackReaderImpl implements MinecraftResourcePackRead
                             parseJson(reader.stream()),
                             namespace
                     ));
-                    continue;
                 } else {
                     // TODO: gpu_warnlist.json?
                     container.unknownFile(containerPath, reader.content().asWritable());
-                    continue;
                 }
+                continue;
             }
 
             // so "category" is actually a category like "textures",

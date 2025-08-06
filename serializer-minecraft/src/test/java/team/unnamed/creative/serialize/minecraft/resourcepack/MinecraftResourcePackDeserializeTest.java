@@ -30,6 +30,7 @@ import team.unnamed.creative.serialize.minecraft.MinecraftResourcePackReader;
 import team.unnamed.creative.serialize.minecraft.fs.FileTreeReader;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -44,7 +45,7 @@ class MinecraftResourcePackDeserializeTest {
     @DisplayName("Test downloading & deserializing the Minecraft default resource-pack")
     void test() throws Exception {
         final String ref = "1.20.2";
-        final URL url = new URL("https://github.com/InventivetalentDev/minecraft-assets/zipball/refs/heads/" + ref);
+        final URL url = URI.create("https://github.com/InventivetalentDev/minecraft-assets/zipball/refs/heads/" + ref).toURL();
 
         // download file from "url" to a temporary file
         System.out.println("Downloading resource-pack...");

@@ -43,7 +43,7 @@ public class MultiVariant implements Examinable {
     }
 
     private void validate() {
-        if (variants.size() < 1) {
+        if (variants.isEmpty()) {
             throw new IllegalArgumentException("No variants provided!");
         }
     }

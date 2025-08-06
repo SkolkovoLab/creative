@@ -81,7 +81,7 @@ final class MetadataImpl implements Metadata {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 

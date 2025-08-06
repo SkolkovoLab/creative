@@ -27,20 +27,9 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class CountItemNumericPropertyImpl implements CountItemNumericProperty {
-    private final boolean normalize;
-
-    CountItemNumericPropertyImpl(final boolean normalize) {
-        this.normalize = normalize;
-    }
-
-    @Override
-    public boolean normalize() {
-        return normalize;
-    }
+record CountItemNumericPropertyImpl(boolean normalize) implements CountItemNumericProperty {
 
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
@@ -55,12 +44,7 @@ final class CountItemNumericPropertyImpl implements CountItemNumericProperty {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(normalize);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

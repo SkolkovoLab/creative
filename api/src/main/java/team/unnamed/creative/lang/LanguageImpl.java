@@ -30,15 +30,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class LanguageImpl implements Language {
-
-    private final Key key;
-    private final Map<String, String> translations;
+record LanguageImpl(Key key, Map<String, String> translations) implements Language {
 
     LanguageImpl(
             final @NotNull Key key,
@@ -75,7 +71,7 @@ final class LanguageImpl implements Language {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -86,11 +82,6 @@ final class LanguageImpl implements Language {
         LanguageImpl that = (LanguageImpl) o;
         return key.equals(that.key)
                 && translations.equals(that.translations);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key, translations);
     }
 
     static final class BuilderImpl implements Builder {

@@ -29,20 +29,16 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class KeyedAndBackedTintSourceImpl implements KeyedAndBackedTintSource {
+record KeyedAndBackedTintSourceImpl(Key key, int defaultTint) implements KeyedAndBackedTintSource {
     static final Key DYE = Key.key("dye");
     static final Key FIREWORK = Key.key("firework");
     static final Key MAP_COLOR = Key.key("map_color");
     static final Key POTION = Key.key("potion");
     static final Key TEAM = Key.key("team");
-
-    private final Key key;
-    private final int defaultTint;
 
     KeyedAndBackedTintSourceImpl(final @NotNull Key key, final int defaultTint) {
         this.key = requireNonNull(key, "key");
@@ -55,15 +51,10 @@ final class KeyedAndBackedTintSourceImpl implements KeyedAndBackedTintSource {
     }
 
     @Override
-    public int defaultTint() {
-        return defaultTint;
-    }
-
-    @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("key", key),
-            ExaminableProperty.of("defaultTint", defaultTint)
+                ExaminableProperty.of("key", key),
+                ExaminableProperty.of("defaultTint", defaultTint)
         );
     }
 
@@ -72,11 +63,6 @@ final class KeyedAndBackedTintSourceImpl implements KeyedAndBackedTintSource {
         if (o == null || getClass() != o.getClass()) return false;
         final KeyedAndBackedTintSourceImpl that = (KeyedAndBackedTintSourceImpl) o;
         return key.equals(that.key) && defaultTint == that.defaultTint;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key, defaultTint);
     }
 
     @Override

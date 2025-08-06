@@ -27,25 +27,14 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class UseDurationItemNumericPropertyImpl implements UseDurationItemNumericProperty {
-    private final boolean remaining;
-
-    UseDurationItemNumericPropertyImpl(final boolean remaining) {
-        this.remaining = remaining;
-    }
-
-    @Override
-    public boolean remaining() {
-        return remaining;
-    }
+record UseDurationItemNumericPropertyImpl(boolean remaining) implements UseDurationItemNumericProperty {
 
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("remaining", remaining)
+                ExaminableProperty.of("remaining", remaining)
         );
     }
 
@@ -57,12 +46,7 @@ final class UseDurationItemNumericPropertyImpl implements UseDurationItemNumeric
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(remaining);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

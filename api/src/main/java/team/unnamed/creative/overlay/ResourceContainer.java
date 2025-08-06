@@ -45,7 +45,6 @@ import team.unnamed.creative.sound.SoundEvent;
 import team.unnamed.creative.sound.SoundRegistry;
 import team.unnamed.creative.texture.Texture;
 import team.unnamed.creative.waypoint.WaypointStyle;
-import team.unnamed.creative.waypoint.WaypointStyleImpl;
 
 import java.util.Collection;
 import java.util.HashSet;

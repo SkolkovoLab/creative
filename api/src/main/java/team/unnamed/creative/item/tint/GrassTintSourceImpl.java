@@ -27,13 +27,9 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class GrassTintSourceImpl implements GrassTintSource {
-    private final float temperature;
-    private final float downfall;
-
+record GrassTintSourceImpl(float temperature, float downfall) implements GrassTintSource {
     GrassTintSourceImpl(final float temperature, final float downfall) {
         this.temperature = temperature;
         this.downfall = downfall;
@@ -46,20 +42,10 @@ final class GrassTintSourceImpl implements GrassTintSource {
     }
 
     @Override
-    public float temperature() {
-        return temperature;
-    }
-
-    @Override
-    public float downfall() {
-        return downfall;
-    }
-
-    @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("temperature", temperature),
-            ExaminableProperty.of("downfall", downfall)
+                ExaminableProperty.of("temperature", temperature),
+                ExaminableProperty.of("downfall", downfall)
         );
     }
 
@@ -71,12 +57,7 @@ final class GrassTintSourceImpl implements GrassTintSource {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(temperature, downfall);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

@@ -32,15 +32,12 @@ import team.unnamed.creative.base.KeyPattern;
 import team.unnamed.creative.metadata.MetadataPart;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 import static team.unnamed.creative.util.MoreCollections.immutableListOf;
 
-final class FilterMetaImpl implements FilterMeta {
-    private final List<KeyPattern> patterns;
-
+record FilterMetaImpl(List<KeyPattern> patterns) implements FilterMeta {
     FilterMetaImpl(final @NotNull List<KeyPattern> patterns) {
         this.patterns = immutableListOf(requireNonNull(patterns, "patterns"));
         validate();
@@ -86,8 +83,4 @@ final class FilterMetaImpl implements FilterMeta {
         return patterns.equals(that.patterns);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(patterns);
-    }
 }

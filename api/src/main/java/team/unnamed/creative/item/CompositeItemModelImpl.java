@@ -34,9 +34,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class CompositeItemModelImpl implements CompositeItemModel {
-    private final List<ItemModel> models;
-
+record CompositeItemModelImpl(List<ItemModel> models) implements CompositeItemModel {
     CompositeItemModelImpl(final @NotNull List<ItemModel> models) {
         this.models = requireNonNull(models, "models");
     }
@@ -58,11 +56,6 @@ final class CompositeItemModelImpl implements CompositeItemModel {
         if (o == null || getClass() != o.getClass()) return false;
         CompositeItemModelImpl that = (CompositeItemModelImpl) o;
         return Objects.equals(models, that.models);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(models);
     }
 
     @Override

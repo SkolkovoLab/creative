@@ -34,13 +34,10 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class OverlayEntryImpl implements OverlayEntry {
+record OverlayEntryImpl(PackFormat formats, String directory) implements OverlayEntry {
 
     static final @RegExp String DIRECTORY_PATTERN = "[a-z0-9-_]+";
     private static final Pattern DIRECTORY_COMPILED_PATTERN = Pattern.compile(DIRECTORY_PATTERN);
-
-    private final PackFormat formats;
-    private final String directory;
 
     OverlayEntryImpl(
             final @NotNull PackFormat formats,
@@ -74,7 +71,7 @@ final class OverlayEntryImpl implements OverlayEntry {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -85,13 +82,6 @@ final class OverlayEntryImpl implements OverlayEntry {
         OverlayEntryImpl that = (OverlayEntryImpl) o;
         if (!formats.equals(that.formats)) return false;
         return directory.equals(that.directory);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = formats.hashCode();
-        result = 31 * result + directory.hashCode();
-        return result;
     }
 
 }

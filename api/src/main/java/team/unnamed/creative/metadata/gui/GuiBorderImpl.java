@@ -28,15 +28,9 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class GuiBorderImpl implements GuiBorder {
-    private final int top;
-    private final int bottom;
-    private final int left;
-    private final int right;
-
+record GuiBorderImpl(int top, int bottom, int left, int right) implements GuiBorder {
     GuiBorderImpl(final int top, final int bottom, final int left, final int right) {
         this.top = top;
         this.bottom = bottom;
@@ -57,26 +51,6 @@ final class GuiBorderImpl implements GuiBorder {
     }
 
     @Override
-    public int top() {
-        return top;
-    }
-
-    @Override
-    public int bottom() {
-        return bottom;
-    }
-
-    @Override
-    public int left() {
-        return left;
-    }
-
-    @Override
-    public int right() {
-        return right;
-    }
-
-    @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
                 ExaminableProperty.of("top", top),
@@ -94,13 +68,8 @@ final class GuiBorderImpl implements GuiBorder {
     @Override
     public boolean equals(final @Nullable Object o) {
         if (this == o) return true;
-        if (!(o instanceof GuiBorderImpl)) return false;
-        final GuiBorderImpl guiBorder = (GuiBorderImpl) o;
+        if (!(o instanceof GuiBorderImpl guiBorder)) return false;
         return top == guiBorder.top && bottom == guiBorder.bottom && left == guiBorder.left && right == guiBorder.right;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(top, bottom, left, right);
-    }
 }

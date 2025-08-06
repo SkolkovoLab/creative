@@ -33,19 +33,13 @@ import team.unnamed.creative.metadata.MetadataPart;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 import static team.unnamed.creative.util.MoreCollections.immutableListOf;
 
-final class AnimationMetaImpl implements AnimationMeta {
-    private final boolean interpolate;
-    private final int width;
-    private final int height;
-    private final int frameTime;
-    private final List<AnimationFrame> frames;
-
+record AnimationMetaImpl(boolean interpolate, int width, int height, int frameTime,
+                         List<AnimationFrame> frames) implements AnimationMeta {
     AnimationMetaImpl(
             final boolean interpolate,
             final int width,
@@ -63,26 +57,6 @@ final class AnimationMetaImpl implements AnimationMeta {
     @Override
     public @NotNull Class<? extends MetadataPart> type() {
         return AnimationMeta.class;
-    }
-
-    @Override
-    public boolean interpolate() {
-        return interpolate;
-    }
-
-    @Override
-    public int width() {
-        return width;
-    }
-
-    @Override
-    public int height() {
-        return height;
-    }
-
-    @Override
-    public int frameTime() {
-        return frameTime;
     }
 
     @Override
@@ -116,11 +90,6 @@ final class AnimationMetaImpl implements AnimationMeta {
                 && height == that.height
                 && frameTime == that.frameTime
                 && frames.equals(that.frames);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(interpolate, width, height, frameTime, frames);
     }
 
     static final class BuilderImpl implements Builder {

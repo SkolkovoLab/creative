@@ -30,10 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-final class TileGuiScalingImpl implements TileGuiScaling {
-    private final int width;
-    private final int height;
-
+record TileGuiScalingImpl(int width, int height) implements TileGuiScaling {
     TileGuiScalingImpl(final int width, final int height) {
         this.width = width;
         this.height = height;
@@ -45,16 +42,6 @@ final class TileGuiScalingImpl implements TileGuiScaling {
             throw new IllegalArgumentException("Width must be positive! Got " + width);
         if (height <= 0)
             throw new IllegalArgumentException("Height must be positive! Got " + height);
-    }
-
-    @Override
-    public int width() {
-        return width;
-    }
-
-    @Override
-    public int height() {
-        return height;
     }
 
     @Override
@@ -79,10 +66,4 @@ final class TileGuiScalingImpl implements TileGuiScaling {
         return height == that.height;
     }
 
-    @Override
-    public int hashCode() {
-        int result = width;
-        result = 31 * result + height;
-        return result;
-    }
 }

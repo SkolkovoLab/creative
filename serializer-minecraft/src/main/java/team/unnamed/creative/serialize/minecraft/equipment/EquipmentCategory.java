@@ -27,8 +27,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.equipment.Equipment;
 import team.unnamed.creative.overlay.ResourceContainer;
-import team.unnamed.creative.serialize.minecraft.ResourceCategory;
 import team.unnamed.creative.serialize.minecraft.MinecraftResourcePackStructure;
+import team.unnamed.creative.serialize.minecraft.ResourceCategory;
 import team.unnamed.creative.serialize.minecraft.io.ResourceDeserializer;
 import team.unnamed.creative.serialize.minecraft.io.ResourceSerializer;
 

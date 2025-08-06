@@ -29,11 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Stream;
 
-final class PackFormatImpl implements PackFormat {
-
-    private final int format;
-    private final int min;
-    private final int max;
+record PackFormatImpl(int format, int min, int max) implements PackFormat {
 
     PackFormatImpl(final int format, final int min, final int max) {
         this.format = format;
@@ -45,21 +41,6 @@ final class PackFormatImpl implements PackFormat {
             throw new IllegalArgumentException("Minimum " + min + " is greater than maximum " + max);
         if (!isInRange(format))
             throw new IllegalArgumentException("Format " + format + " is not in the range [" + min + ", " + max + "]");
-    }
-
-    @Override
-    public int format() {
-        return format;
-    }
-
-    @Override
-    public int min() {
-        return min;
-    }
-
-    @Override
-    public int max() {
-        return max;
     }
 
     @Override
@@ -82,7 +63,7 @@ final class PackFormatImpl implements PackFormat {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -94,14 +75,6 @@ final class PackFormatImpl implements PackFormat {
         if (format != that.format) return false;
         if (min != that.min) return false;
         return max == that.max;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = format;
-        result = 31 * result + min;
-        result = 31 * result + max;
-        return result;
     }
 
 }

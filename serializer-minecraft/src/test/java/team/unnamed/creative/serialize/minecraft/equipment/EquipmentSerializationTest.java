@@ -24,6 +24,7 @@
 package team.unnamed.creative.serialize.minecraft.equipment;
 
 import net.kyori.adventure.key.Key;
+import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import team.unnamed.creative.equipment.Equipment;
 import team.unnamed.creative.equipment.EquipmentLayer;
@@ -47,7 +48,7 @@ class EquipmentSerializationTest {
 
     @Test
     void test_deserialization() throws Exception {
-        String serialized = "{\"layers\":{\"humanoid\":[{\"texture\":\"creative:layer\"}],\"horse_body\":[{\"texture\":\"creative:layer\",\"use_player_texture\":true}]}}";
+        @Language("JSON") String serialized = "{\"layers\":{\"humanoid\":[{\"texture\":\"creative:layer\"}],\"horse_body\":[{\"texture\":\"creative:layer\",\"use_player_texture\":true}]}}";
         Equipment deserialized = EquipmentSerializer.INSTANCE.deserializeFromJsonString(serialized, Key.key("creative:equipment"));
 
         assertEquals("creative:equipment", deserialized.key().asString());
@@ -55,11 +56,11 @@ class EquipmentSerializationTest {
         assertEquals(1, deserialized.layers().get(EquipmentLayerType.HUMANOID).size());
         assertEquals(1, deserialized.layers().get(EquipmentLayerType.HORSE_BODY).size());
 
-        EquipmentLayer humanoidLayer = deserialized.layers().get(EquipmentLayerType.HUMANOID).get(0);
+        EquipmentLayer humanoidLayer = deserialized.layers().get(EquipmentLayerType.HUMANOID).getFirst();
         assertEquals("creative:layer", humanoidLayer.texture().asString());
         assertFalse(humanoidLayer.usePlayerTexture());
 
-        EquipmentLayer horseBodyLayer = deserialized.layers().get(EquipmentLayerType.HORSE_BODY).get(0);
+        EquipmentLayer horseBodyLayer = deserialized.layers().get(EquipmentLayerType.HORSE_BODY).getFirst();
         assertEquals("creative:layer", horseBodyLayer.texture().asString());
         assertTrue(horseBodyLayer.usePlayerTexture());
     }

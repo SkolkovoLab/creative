@@ -41,12 +41,13 @@ class ItemSerializationTest {
 
     @Test
     void test_air_deserialization() throws Exception {
-        final @Language("JSON") String input = "{\n" +
-                "  \"model\": {\n" +
-                "    \"type\": \"minecraft:model\",\n" +
-                "    \"model\": \"minecraft:item/air\"\n" +
-                "  }\n" +
-                "}";
+        final @Language("JSON") String input = """
+                {
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "minecraft:item/air"
+                  }
+                }""";
 
         final Item item = ItemSerializer.INSTANCE.deserializeFromJsonString(input, Key.key("minecraft", "air"));
 
@@ -76,43 +77,44 @@ class ItemSerializationTest {
 
     @Test
     void test_bow_deserialization() throws Exception {
-        final @Language("JSON") String input = "{\n" +
-                "  \"hand_animation_on_swap\": false,\n" +
-                "  \"oversized_in_gui\": true,\n" +
-                "  \"model\": {\n" +
-                "    \"type\": \"minecraft:condition\",\n" +
-                "    \"on_false\": {\n" +
-                "      \"type\": \"minecraft:model\",\n" +
-                "      \"model\": \"minecraft:item/bow\"\n" +
-                "    },\n" +
-                "    \"on_true\": {\n" +
-                "      \"type\": \"minecraft:range_dispatch\",\n" +
-                "      \"entries\": [\n" +
-                "        {\n" +
-                "          \"model\": {\n" +
-                "            \"type\": \"minecraft:model\",\n" +
-                "            \"model\": \"minecraft:item/bow_pulling_1\"\n" +
-                "          },\n" +
-                "          \"threshold\": 0.65\n" +
-                "        },\n" +
-                "        {\n" +
-                "          \"model\": {\n" +
-                "            \"type\": \"minecraft:model\",\n" +
-                "            \"model\": \"minecraft:item/bow_pulling_2\"\n" +
-                "          },\n" +
-                "          \"threshold\": 0.9\n" +
-                "        }\n" +
-                "      ],\n" +
-                "      \"fallback\": {\n" +
-                "        \"type\": \"minecraft:model\",\n" +
-                "        \"model\": \"minecraft:item/bow_pulling_0\"\n" +
-                "      },\n" +
-                "      \"property\": \"minecraft:use_duration\",\n" +
-                "      \"scale\": 0.05\n" +
-                "    },\n" +
-                "    \"property\": \"minecraft:using_item\"\n" +
-                "  }\n" +
-                "}";
+        final @Language("JSON") String input = """
+                {
+                  "hand_animation_on_swap": false,
+                  "oversized_in_gui": true,
+                  "model": {
+                    "type": "minecraft:condition",
+                    "on_false": {
+                      "type": "minecraft:model",
+                      "model": "minecraft:item/bow"
+                    },
+                    "on_true": {
+                      "type": "minecraft:range_dispatch",
+                      "entries": [
+                        {
+                          "model": {
+                            "type": "minecraft:model",
+                            "model": "minecraft:item/bow_pulling_1"
+                          },
+                          "threshold": 0.65
+                        },
+                        {
+                          "model": {
+                            "type": "minecraft:model",
+                            "model": "minecraft:item/bow_pulling_2"
+                          },
+                          "threshold": 0.9
+                        }
+                      ],
+                      "fallback": {
+                        "type": "minecraft:model",
+                        "model": "minecraft:item/bow_pulling_0"
+                      },
+                      "property": "minecraft:use_duration",
+                      "scale": 0.05
+                    },
+                    "property": "minecraft:using_item"
+                  }
+                }""";
         final Item item = ItemSerializer.INSTANCE.deserializeFromJsonString(input, Key.key("minecraft", "bow"));
 
         assertEquals(Key.key("minecraft", "bow"), item.key());
@@ -150,7 +152,7 @@ class ItemSerializationTest {
 
         assertEquals(2, rangeDispatch.entries().size());
 
-        final RangeDispatchItemModel.Entry entry1 = rangeDispatch.entries().get(0);
+        final RangeDispatchItemModel.Entry entry1 = rangeDispatch.entries().getFirst();
         assertEquals(0.65f, entry1.threshold());
 
         final ItemModel model1 = entry1.model();

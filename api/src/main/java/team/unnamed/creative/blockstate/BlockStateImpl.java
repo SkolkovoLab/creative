@@ -30,16 +30,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class BlockStateImpl implements BlockState {
-
-    private final Key key;
-    private final Map<String, MultiVariant> variants;
-    private final List<Selector> multipart;
+record BlockStateImpl(Key key, Map<String, MultiVariant> variants, List<Selector> multipart) implements BlockState {
 
     BlockStateImpl(
             final @NotNull Key key,
@@ -63,14 +58,6 @@ final class BlockStateImpl implements BlockState {
         return key;
     }
 
-    public Map<String, MultiVariant> variants() {
-        return variants;
-    }
-
-    public List<Selector> multipart() {
-        return multipart;
-    }
-
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
@@ -81,7 +68,7 @@ final class BlockStateImpl implements BlockState {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -93,11 +80,6 @@ final class BlockStateImpl implements BlockState {
         return key.equals(that.key)
                 && variants.equals(that.variants)
                 && multipart.equals(that.multipart);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key, variants, multipart);
     }
 
 }

@@ -131,7 +131,7 @@ public interface ResourcePack extends ResourceContainer {
 
     default void packMeta(final @NotNull PackMeta packMeta) {
         requireNonNull(packMeta, "packMeta");
-        editMetadata(metadata -> metadata.add(packMeta));
+        editMetadata(metadata -> metadata.addPart(packMeta));
     }
 
     default void packMeta(final int format, final @NotNull String description) {
@@ -196,7 +196,7 @@ public interface ResourcePack extends ResourceContainer {
         }
     }
 
-    default @Nullable String description() {
+    default @Nullable Component description() {
         PackMeta meta = packMeta();
         if (meta == null) {
             return null;
@@ -211,7 +211,7 @@ public interface ResourcePack extends ResourceContainer {
 
     default void languageMeta(final @NotNull LanguageMeta languageMeta) {
         requireNonNull(languageMeta, "languageMeta");
-        editMetadata(metadata -> metadata.add(languageMeta));
+        editMetadata(metadata -> metadata.addPart(languageMeta));
     }
 
     default @Nullable FilterMeta filterMeta() {
@@ -220,7 +220,7 @@ public interface ResourcePack extends ResourceContainer {
 
     default void filterMeta(final @NotNull FilterMeta filterMeta) {
         requireNonNull(filterMeta, "filterMeta");
-        editMetadata(metadata -> metadata.add(filterMeta));
+        editMetadata(metadata -> metadata.addPart(filterMeta));
     }
 
     /**
@@ -247,7 +247,7 @@ public interface ResourcePack extends ResourceContainer {
      */
     default void overlaysMeta(final @NotNull OverlaysMeta overlaysMeta) {
         requireNonNull(overlaysMeta, "overlaysMeta");
-        editMetadata(metadata -> metadata.add(overlaysMeta));
+        editMetadata(metadata -> metadata.addPart(overlaysMeta));
     }
     //#endregion
 
@@ -288,6 +288,6 @@ public interface ResourcePack extends ResourceContainer {
 
     default void sodiumMeta(final @NotNull SodiumMeta sodiumMeta) {
         requireNonNull(sodiumMeta, "sodiumMeta");
-        editMetadata(metadata -> metadata.add(sodiumMeta));
+        editMetadata(metadata -> metadata.addPart(sodiumMeta));
     }
 }

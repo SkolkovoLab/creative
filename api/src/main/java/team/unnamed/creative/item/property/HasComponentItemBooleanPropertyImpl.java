@@ -28,15 +28,12 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class HasComponentItemBooleanPropertyImpl implements HasComponentItemBooleanProperty {
-    private final String component;
-    private final boolean ignoreDefault;
-
+record HasComponentItemBooleanPropertyImpl(String component,
+                                           boolean ignoreDefault) implements HasComponentItemBooleanProperty {
     HasComponentItemBooleanPropertyImpl(final @NotNull String component, final boolean ignoreDefault) {
         this.component = requireNonNull(component, "component");
         this.ignoreDefault = ignoreDefault;
@@ -45,11 +42,6 @@ final class HasComponentItemBooleanPropertyImpl implements HasComponentItemBoole
     @Override
     public @NotNull String component() {
         return component;
-    }
-
-    @Override
-    public boolean ignoreDefault() {
-        return ignoreDefault;
     }
 
     @Override
@@ -68,12 +60,7 @@ final class HasComponentItemBooleanPropertyImpl implements HasComponentItemBoole
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(component, ignoreDefault);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

@@ -34,10 +34,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class SingleAtlasSourceImpl implements SingleAtlasSource {
-
-    private final Key resource;
-    private final Key sprite;
+record SingleAtlasSourceImpl(Key resource, Key sprite) implements SingleAtlasSource {
 
     SingleAtlasSourceImpl(final @NotNull Key resource, final @Nullable Key sprite) {
         this.resource = requireNonNull(resource, "resource");
@@ -63,7 +60,7 @@ final class SingleAtlasSourceImpl implements SingleAtlasSource {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -74,13 +71,6 @@ final class SingleAtlasSourceImpl implements SingleAtlasSource {
         SingleAtlasSourceImpl that = (SingleAtlasSourceImpl) o;
         if (!resource.equals(that.resource)) return false;
         return Objects.equals(sprite, that.sprite);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = resource.hashCode();
-        result = 31 * result + (sprite != null ? sprite.hashCode() : 0);
-        return result;
     }
 
 }

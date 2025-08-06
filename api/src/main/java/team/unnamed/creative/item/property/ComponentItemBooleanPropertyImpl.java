@@ -27,15 +27,11 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ComponentItemBooleanPropertyImpl implements ComponentItemBooleanProperty {
-    private final String predicate;
-    private final String value;
-
+record ComponentItemBooleanPropertyImpl(String predicate, String value) implements ComponentItemBooleanProperty {
     ComponentItemBooleanPropertyImpl(final @NotNull String predicate, final @NotNull String value) {
         this.predicate = requireNonNull(predicate, "predicate");
         this.value = requireNonNull(value, "value");
@@ -67,12 +63,7 @@ final class ComponentItemBooleanPropertyImpl implements ComponentItemBooleanProp
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(predicate, value);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

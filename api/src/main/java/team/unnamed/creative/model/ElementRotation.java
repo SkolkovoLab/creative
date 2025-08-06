@@ -135,7 +135,7 @@ public class ElementRotation implements Examinable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -217,7 +217,7 @@ public class ElementRotation implements Examinable {
         }
 
         public Builder angle(float angle) {
-            this.angle = requireNonNull(angle, "angle");
+            this.angle = angle;
             return this;
         }
 

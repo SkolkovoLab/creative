@@ -36,11 +36,8 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class PalettedPermutationsAtlasSourceImpl implements PalettedPermutationsAtlasSource {
-
-    private final List<Key> textures;
-    private final Key paletteKey;
-    private final Map<String, Key> permutations;
+record PalettedPermutationsAtlasSourceImpl(List<Key> textures, Key paletteKey,
+                                           Map<String, Key> permutations) implements PalettedPermutationsAtlasSource {
 
     PalettedPermutationsAtlasSourceImpl(
             final @NotNull List<Key> textures,
@@ -80,7 +77,7 @@ final class PalettedPermutationsAtlasSourceImpl implements PalettedPermutationsA
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -92,14 +89,6 @@ final class PalettedPermutationsAtlasSourceImpl implements PalettedPermutationsA
         if (!textures.equals(that.textures)) return false;
         if (!paletteKey.equals(that.paletteKey)) return false;
         return permutations.equals(that.permutations);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = textures.hashCode();
-        result = 31 * result + paletteKey.hashCode();
-        result = 31 * result + permutations.hashCode();
-        return result;
     }
 
 }

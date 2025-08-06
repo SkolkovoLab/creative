@@ -98,39 +98,41 @@ final class GuiMetaCodec implements MetadataPartCodec<GuiMeta> {
         writer.beginObject();
         GuiScaling scaling = value.scaling();
         writer.name("scaling").beginObject();
-        if (scaling instanceof StretchGuiScaling) {
-            writer.name("type").value("stretch");
-        } else if (scaling instanceof TileGuiScaling) {
-            final TileGuiScaling tile = (TileGuiScaling) scaling;
-            writer.name("type").value("tile");
-            writer.name("width").value(tile.width());
-            writer.name("height").value(tile.height());
-        } else if (scaling instanceof NineSliceGuiScaling) {
-            final NineSliceGuiScaling nineSlice = (NineSliceGuiScaling) scaling;
-            writer.name("type").value("nine_slice");
-            writer.name("width").value(nineSlice.width());
-            writer.name("height").value(nineSlice.height());
-
-            final GuiBorder border = nineSlice.border();
-            final int top = border.top();
-            final int bottom = border.bottom();
-            final int left = border.left();
-            final int right = border.right();
-
-            writer.name("border");
-            if (top == bottom && bottom == left && left == right) {
-                // if they are all equal just write as an int
-                writer.value(top);
-            } else {
-                // otherwise write as an object
-                writer.beginObject()
-                        .name("top").value(top)
-                        .name("bottom").value(bottom)
-                        .name("left").value(left)
-                        .name("right").value(right)
-                        .endObject();
+        switch (scaling) {
+            case StretchGuiScaling ignored -> writer.name("type").value("stretch");
+            case TileGuiScaling tile -> {
+                writer.name("type").value("tile");
+                writer.name("width").value(tile.width());
+                writer.name("height").value(tile.height());
             }
-            writer.name("stretch_inner").value(nineSlice.stretchInner());
+            case NineSliceGuiScaling nineSlice -> {
+                writer.name("type").value("nine_slice");
+                writer.name("width").value(nineSlice.width());
+                writer.name("height").value(nineSlice.height());
+
+                final GuiBorder border = nineSlice.border();
+                final int top = border.top();
+                final int bottom = border.bottom();
+                final int left = border.left();
+                final int right = border.right();
+
+                writer.name("border");
+                if (top == bottom && bottom == left && left == right) {
+                    // if they are all equal just write as an int
+                    writer.value(top);
+                } else {
+                    // otherwise write as an object
+                    writer.beginObject()
+                            .name("top").value(top)
+                            .name("bottom").value(bottom)
+                            .name("left").value(left)
+                            .name("right").value(right)
+                            .endObject();
+                }
+                writer.name("stretch_inner").value(nineSlice.stretchInner());
+            }
+            default -> {
+            }
         }
         writer.endObject();
         writer.endObject();

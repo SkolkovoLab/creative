@@ -85,7 +85,7 @@ public class SpaceFontProvider implements FontProvider {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 

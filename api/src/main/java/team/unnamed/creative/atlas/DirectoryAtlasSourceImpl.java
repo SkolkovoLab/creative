@@ -31,10 +31,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class DirectoryAtlasSourceImpl implements DirectoryAtlasSource {
-
-    private final String source;
-    private final String prefix;
+record DirectoryAtlasSourceImpl(String source, String prefix) implements DirectoryAtlasSource {
 
     DirectoryAtlasSourceImpl(
             final @NotNull String source,
@@ -63,7 +60,7 @@ final class DirectoryAtlasSourceImpl implements DirectoryAtlasSource {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -74,13 +71,6 @@ final class DirectoryAtlasSourceImpl implements DirectoryAtlasSource {
         DirectoryAtlasSourceImpl that = (DirectoryAtlasSourceImpl) o;
         if (!source.equals(that.source)) return false;
         return prefix.equals(that.prefix);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = source.hashCode();
-        result = 31 * result + prefix.hashCode();
-        return result;
     }
 
 }

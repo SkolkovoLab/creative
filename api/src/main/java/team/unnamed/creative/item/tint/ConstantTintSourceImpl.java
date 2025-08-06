@@ -27,20 +27,9 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class ConstantTintSourceImpl implements ConstantTintSource {
-    private final int tint;
-
-    ConstantTintSourceImpl(final int tint) {
-        this.tint = tint;
-    }
-
-    @Override
-    public int tint() {
-        return tint;
-    }
+record ConstantTintSourceImpl(int tint) implements ConstantTintSource {
 
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
@@ -55,12 +44,7 @@ final class ConstantTintSourceImpl implements ConstantTintSource {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(tint);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

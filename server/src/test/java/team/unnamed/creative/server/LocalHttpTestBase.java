@@ -34,7 +34,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
-import java.net.URL;
+import java.net.URI;
 
 class LocalHttpTestBase {
 
@@ -60,8 +60,7 @@ class LocalHttpTestBase {
     }
 
     HttpURLConnection open(String path) throws IOException {
-        return (HttpURLConnection) new URL("http://localhost:" + PORT + path)
-                .openConnection();
+        return (HttpURLConnection) URI.create("http://localhost:" + PORT + path).toURL().openConnection();
     }
 
     void stream(InputStream input, OutputStream output) throws IOException {

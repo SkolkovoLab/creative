@@ -34,11 +34,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class EquipmentLayerImpl implements EquipmentLayer {
-    private final Key texture;
-    private final EquipmentLayerDye dye;
-    private final boolean usePlayerTexture;
-
+record EquipmentLayerImpl(Key texture, EquipmentLayerDye dye, boolean usePlayerTexture) implements EquipmentLayer {
     EquipmentLayerImpl(final @NotNull Key texture, final @Nullable EquipmentLayerDye dye, final boolean usePlayerTexture) {
         this.texture = requireNonNull(texture, "texture");
         this.dye = dye;
@@ -56,11 +52,6 @@ final class EquipmentLayerImpl implements EquipmentLayer {
     }
 
     @Override
-    public boolean usePlayerTexture() {
-        return usePlayerTexture;
-    }
-
-    @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
                 ExaminableProperty.of("texture", texture),
@@ -72,16 +63,10 @@ final class EquipmentLayerImpl implements EquipmentLayer {
     @Override
     public boolean equals(final @Nullable Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof EquipmentLayerImpl)) return false;
-        final EquipmentLayerImpl that = (EquipmentLayerImpl) obj;
+        if (!(obj instanceof EquipmentLayerImpl that)) return false;
         return texture.equals(that.texture)
                 && Objects.equals(dye, that.dye)
                 && usePlayerTexture == that.usePlayerTexture;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(texture, dye, usePlayerTexture);
     }
 
     @Override

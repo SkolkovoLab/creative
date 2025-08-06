@@ -38,12 +38,7 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static team.unnamed.creative.util.MoreCollections.immutableListOf;
 
-final class SoundEventImpl implements SoundEvent {
-
-    private final Key key;
-    private final boolean replace;
-    private final String subtitle;
-    private final List<SoundEntry> sounds;
+record SoundEventImpl(Key key, boolean replace, String subtitle, List<SoundEntry> sounds) implements SoundEvent {
 
     SoundEventImpl(
             final @NotNull Key key,
@@ -62,11 +57,6 @@ final class SoundEventImpl implements SoundEvent {
     @Override
     public @NotNull Key key() {
         return key;
-    }
-
-    @Override
-    public boolean replace() {
-        return replace;
     }
 
     @Override
@@ -94,19 +84,8 @@ final class SoundEventImpl implements SoundEvent {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SoundEventImpl that = (SoundEventImpl) o;
-        return Objects.equals(key, that.key)
-                && replace == that.replace
-                && Objects.equals(subtitle, that.subtitle)
-                && Objects.equals(sounds, that.sounds);
     }
 
     @Override

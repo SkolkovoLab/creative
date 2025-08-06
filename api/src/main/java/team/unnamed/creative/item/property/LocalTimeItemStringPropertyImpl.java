@@ -33,11 +33,8 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class LocalTimeItemStringPropertyImpl implements LocalTimeItemStringProperty {
-    private final String locale;
-    private final String timezone;
-    private final String pattern;
-
+record LocalTimeItemStringPropertyImpl(String locale, String timezone,
+                                       String pattern) implements LocalTimeItemStringProperty {
     LocalTimeItemStringPropertyImpl(final @NotNull String locale, final @Nullable String timezone, final @NotNull String pattern) {
         this.locale = requireNonNull(locale, "locale");
         this.timezone = timezone;
@@ -62,27 +59,21 @@ final class LocalTimeItemStringPropertyImpl implements LocalTimeItemStringProper
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("locale", locale),
-            ExaminableProperty.of("timezone", timezone),
-            ExaminableProperty.of("pattern", pattern)
+                ExaminableProperty.of("locale", locale),
+                ExaminableProperty.of("timezone", timezone),
+                ExaminableProperty.of("pattern", pattern)
         );
     }
 
     @Override
     public boolean equals(final Object object) {
         if (this == object) return true;
-        if (!(object instanceof LocalTimeItemStringPropertyImpl)) return false;
-        final LocalTimeItemStringPropertyImpl that = (LocalTimeItemStringPropertyImpl) object;
+        if (!(object instanceof LocalTimeItemStringPropertyImpl that)) return false;
         return locale.equals(that.locale) && pattern.equals(that.pattern) && Objects.equals(timezone, that.timezone);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(locale, timezone, pattern);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.BuiltResourcePack;
 import team.unnamed.creative.ResourcePack;
 import team.unnamed.creative.base.Writable;
-import team.unnamed.creative.metadata.pack.PackFormat;
 import team.unnamed.creative.serialize.ResourcePackWriter;
 import team.unnamed.creative.serialize.minecraft.fs.FileTreeWriter;
 import team.unnamed.creative.serialize.minecraft.fs.ZipEntryLifecycleHandler;

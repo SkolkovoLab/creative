@@ -29,15 +29,11 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.base.Writable;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class SoundImpl implements Sound {
-    private final Key key;
-    private final Writable data;
-
+record SoundImpl(Key key, Writable data) implements Sound {
     SoundImpl(final @NotNull Key key, final @NotNull Writable data) {
         this.key = requireNonNull(key, "key");
         this.data = requireNonNull(data, "data");
@@ -54,7 +50,7 @@ final class SoundImpl implements Sound {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -64,11 +60,6 @@ final class SoundImpl implements Sound {
         if (o == null || getClass() != o.getClass()) return false;
         SoundImpl sound = (SoundImpl) o;
         return key.equals(sound.key) && data.equals(sound.data);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key, data);
     }
 
     @Override

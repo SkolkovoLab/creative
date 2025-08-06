@@ -28,10 +28,7 @@ import team.unnamed.creative.base.Writable;
 
 import static java.util.Objects.requireNonNull;
 
-final class BuiltResourcePackImpl implements BuiltResourcePack {
-
-    private final Writable data;
-    private final String hash;
+record BuiltResourcePackImpl(Writable data, String hash) implements BuiltResourcePack {
 
     BuiltResourcePackImpl(
             final @NotNull Writable data,

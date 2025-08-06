@@ -27,12 +27,9 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class UseCycleItemNumericPropertyImpl implements UseCycleItemNumericProperty {
-    private final float period;
-
+record UseCycleItemNumericPropertyImpl(float period) implements UseCycleItemNumericProperty {
     UseCycleItemNumericPropertyImpl(final float period) {
         this.period = period;
         if (period < 0) {
@@ -41,14 +38,9 @@ final class UseCycleItemNumericPropertyImpl implements UseCycleItemNumericProper
     }
 
     @Override
-    public float period() {
-        return period;
-    }
-
-    @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("period", period)
+                ExaminableProperty.of("period", period)
         );
     }
 
@@ -60,12 +52,7 @@ final class UseCycleItemNumericPropertyImpl implements UseCycleItemNumericProper
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(period);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

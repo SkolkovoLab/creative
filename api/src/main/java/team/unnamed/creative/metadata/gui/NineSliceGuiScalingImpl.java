@@ -32,12 +32,8 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class NineSliceGuiScalingImpl implements NineSliceGuiScaling {
-    private final int width;
-    private final int height;
-    private final GuiBorder border;
-    private final boolean stretchInner;
-
+record NineSliceGuiScalingImpl(int width, int height, GuiBorder border,
+                               boolean stretchInner) implements NineSliceGuiScaling {
     NineSliceGuiScalingImpl(final int width, final int height, final @NotNull GuiBorder border, final boolean stretchInner) {
         this.width = width;
         this.height = height;
@@ -59,23 +55,8 @@ final class NineSliceGuiScalingImpl implements NineSliceGuiScaling {
     }
 
     @Override
-    public int width() {
-        return width;
-    }
-
-    @Override
-    public int height() {
-        return height;
-    }
-
-    @Override
     public @NotNull GuiBorder border() {
         return border;
-    }
-
-    @Override
-    public boolean stretchInner() {
-        return stretchInner;
     }
 
     @Override
@@ -104,12 +85,4 @@ final class NineSliceGuiScalingImpl implements NineSliceGuiScaling {
         return stretchInner == that.stretchInner;
     }
 
-    @Override
-    public int hashCode() {
-        int result = width;
-        result = 31 * result + height;
-        result = 31 * result + border.hashCode();
-        result = 31 * result + (stretchInner ? 1 : 0);
-        return result;
-    }
 }

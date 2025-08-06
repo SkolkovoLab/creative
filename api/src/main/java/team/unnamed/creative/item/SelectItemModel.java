@@ -24,14 +24,12 @@
 package team.unnamed.creative.item;
 
 import net.kyori.examination.Examinable;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.unnamed.creative.item.property.ItemStringProperty;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -88,13 +86,6 @@ public interface SelectItemModel extends ItemModel {
         @Contract("_, _ -> this")
         default @NotNull Builder addCase(final @NotNull ItemModel model, final @NotNull String @NotNull ... when) {
             return addCase(model, Arrays.asList(when));
-        }
-
-        @Deprecated
-        @ApiStatus.ScheduledForRemoval
-        @Contract("_ -> this")
-        default @NotNull Builder addCase(final @NotNull ItemModel model) {
-            return addCase(model, Collections.emptyList());
         }
 
         @Contract("_ -> this")

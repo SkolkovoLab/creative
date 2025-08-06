@@ -23,9 +23,7 @@
  */
 package team.unnamed.creative.base;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import sun.reflect.ReflectionFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -59,7 +57,7 @@ public interface Writable {
         }
 
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return "Writable.EMPTY";
         }
 
@@ -226,7 +224,7 @@ public interface Writable {
             }
 
             @Override
-            public String toString() {
+            public @NotNull String toString() {
                 return "Writable.copyInputStream";
             }
 
@@ -296,7 +294,7 @@ public interface Writable {
             }
 
             @Override
-            public String toString() {
+            public @NotNull String toString() {
                 return "Writable { type='utf8', value='" + string + "' }";
             }
         };

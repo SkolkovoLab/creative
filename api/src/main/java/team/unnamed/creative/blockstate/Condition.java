@@ -45,7 +45,7 @@ public interface Condition extends Examinable {
     Condition NONE = new Condition() {
 
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return "Condition.NONE";
         }
 

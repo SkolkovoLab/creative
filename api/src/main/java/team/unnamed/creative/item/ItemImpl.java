@@ -28,17 +28,11 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ItemImpl implements Item {
-    private final Key key;
-    private final ItemModel model;
-    private final boolean handAnimationOnSwap;
-    private final boolean oversizedInGui;
-
+record ItemImpl(Key key, ItemModel model, boolean handAnimationOnSwap, boolean oversizedInGui) implements Item {
     ItemImpl(final @NotNull Key key, final @NotNull ItemModel model, final boolean handAnimationOnSwap, final boolean oversizedInGui) {
         this.key = requireNonNull(key, "key");
         this.model = requireNonNull(model, "model");
@@ -49,16 +43,6 @@ final class ItemImpl implements Item {
     @Override
     public @NotNull Key key() {
         return key;
-    }
-
-    @Override
-    public boolean handAnimationOnSwap() {
-        return handAnimationOnSwap;
-    }
-
-    @Override
-    public boolean oversizedInGui() {
-        return oversizedInGui;
     }
 
     @Override
@@ -87,12 +71,7 @@ final class ItemImpl implements Item {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(key, model, handAnimationOnSwap, oversizedInGui);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

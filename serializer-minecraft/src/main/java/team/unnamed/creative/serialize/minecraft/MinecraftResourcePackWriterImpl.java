@@ -52,7 +52,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
-import static team.unnamed.creative.serialize.minecraft.MinecraftResourcePackStructure.*;
+import static team.unnamed.creative.serialize.minecraft.MinecraftResourcePackStructure.PACK_ICON_FILE;
+import static team.unnamed.creative.serialize.minecraft.MinecraftResourcePackStructure.PACK_METADATA_FILE;
 
 final class MinecraftResourcePackWriterImpl implements MinecraftResourcePackWriter {
     static final MinecraftResourcePackWriter INSTANCE = MinecraftResourcePackWriter.builder()

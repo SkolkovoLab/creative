@@ -28,16 +28,11 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.base.Vector3Float;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ItemTransformImpl implements ItemTransform {
-
-    private final Vector3Float rotation;
-    private final Vector3Float translation;
-    private final Vector3Float scale;
+record ItemTransformImpl(Vector3Float rotation, Vector3Float translation, Vector3Float scale) implements ItemTransform {
 
     ItemTransformImpl(
             final @NotNull Vector3Float rotation,
@@ -91,7 +86,7 @@ final class ItemTransformImpl implements ItemTransform {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -103,11 +98,6 @@ final class ItemTransformImpl implements ItemTransform {
         return rotation.equals(that.rotation)
                 && translation.equals(that.translation)
                 && scale.equals(that.scale);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(rotation, translation, scale);
     }
 
     static final class BuilderImpl implements Builder {

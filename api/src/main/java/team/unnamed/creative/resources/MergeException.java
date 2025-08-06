@@ -25,6 +25,8 @@ package team.unnamed.creative.resources;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serial;
+
 /**
  * Signals that an intent to merge two resources or
  * resource containers has failed.
@@ -32,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.4.0
  */
 public class MergeException extends RuntimeException {
-    static final long serialVersionUID = -123823843829316772L;
+    @Serial private static final long serialVersionUID = -123823843829316772L;
 
     /**
      * Constructs an MergeException with no detail message.

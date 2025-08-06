@@ -39,16 +39,9 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ModelImpl implements Model {
-    private final Key key;
-    private final Key parent;
-    private final boolean ambientOcclusion;
-    private final Map<ItemTransform.Type, ItemTransform> display;
-    private final ModelTextures textures;
-    private final GuiLight guiLight;
-    private final List<Element> elements;
-    private final List<ItemOverride> overrides;
-
+record ModelImpl(Key key, Key parent, boolean ambientOcclusion, Map<ItemTransform.Type, ItemTransform> display,
+                 ModelTextures textures, GuiLight guiLight, List<Element> elements,
+                 List<ItemOverride> overrides) implements Model {
     ModelImpl(
             final @NotNull Key key,
             final @Nullable Key parent,
@@ -77,11 +70,6 @@ final class ModelImpl implements Model {
     @Override
     public @Nullable Key parent() {
         return parent;
-    }
-
-    @Override
-    public boolean ambientOcclusion() {
-        return ambientOcclusion;
     }
 
     @Override
@@ -141,11 +129,6 @@ final class ModelImpl implements Model {
                 && guiLight == that.guiLight
                 && elements.equals(that.elements)
                 && overrides.equals(that.overrides);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key, parent, ambientOcclusion, display, textures, guiLight, elements, overrides);
     }
 
     static final class BuilderImpl implements Builder {

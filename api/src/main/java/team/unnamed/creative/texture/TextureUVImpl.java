@@ -31,10 +31,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class TextureUVImpl implements TextureUV {
-    private final Vector2Float from;
-    private final Vector2Float to;
-
+record TextureUVImpl(Vector2Float from, Vector2Float to) implements TextureUV {
     TextureUVImpl(final @NotNull Vector2Float from, final @NotNull Vector2Float to) {
         this.from = requireNonNull(from, "from");
         this.to = requireNonNull(to, "to");
@@ -67,10 +64,4 @@ final class TextureUVImpl implements TextureUV {
         return to.equals(that.to);
     }
 
-    @Override
-    public int hashCode() {
-        int result = from.hashCode();
-        result = 31 * result + to.hashCode();
-        return result;
-    }
 }

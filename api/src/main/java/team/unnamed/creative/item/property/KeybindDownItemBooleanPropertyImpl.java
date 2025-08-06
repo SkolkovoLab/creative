@@ -28,14 +28,11 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class KeybindDownItemBooleanPropertyImpl implements KeybindDownItemBooleanProperty {
-    private final String key;
-
+record KeybindDownItemBooleanPropertyImpl(String key) implements KeybindDownItemBooleanProperty {
     KeybindDownItemBooleanPropertyImpl(final @NotNull String key) {
         this.key = requireNonNull(key, "key");
     }
@@ -48,7 +45,7 @@ final class KeybindDownItemBooleanPropertyImpl implements KeybindDownItemBoolean
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("key", key)
+                ExaminableProperty.of("key", key)
         );
     }
 
@@ -57,11 +54,6 @@ final class KeybindDownItemBooleanPropertyImpl implements KeybindDownItemBoolean
         if (o == null || getClass() != o.getClass()) return false;
         final KeybindDownItemBooleanPropertyImpl that = (KeybindDownItemBooleanPropertyImpl) o;
         return key.equals(that.key);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(key);
     }
 
     @Override

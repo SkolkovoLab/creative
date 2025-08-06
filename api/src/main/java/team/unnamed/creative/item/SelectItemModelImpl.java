@@ -36,11 +36,8 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class SelectItemModelImpl implements SelectItemModel {
-    private final ItemStringProperty property;
-    private final List<Case> cases;
-    private final ItemModel fallback;
-
+record SelectItemModelImpl(ItemStringProperty property, List<Case> cases,
+                           ItemModel fallback) implements SelectItemModel {
     SelectItemModelImpl(final @NotNull ItemStringProperty property, final @NotNull List<Case> cases, final @Nullable ItemModel fallback) {
         this.property = requireNonNull(property, "property");
         this.cases = requireNonNull(cases, "cases");
@@ -65,9 +62,9 @@ final class SelectItemModelImpl implements SelectItemModel {
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("property", property),
-            ExaminableProperty.of("cases", cases),
-            ExaminableProperty.of("fallback", fallback)
+                ExaminableProperty.of("property", property),
+                ExaminableProperty.of("cases", cases),
+                ExaminableProperty.of("fallback", fallback)
         );
     }
 
@@ -79,19 +76,11 @@ final class SelectItemModelImpl implements SelectItemModel {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(property, cases, fallback);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
-    static final class CaseImpl implements Case {
-        private final List<String> when;
-        private final ItemModel model;
-
+    record CaseImpl(List<String> when, ItemModel model) implements Case {
         CaseImpl(final @NotNull List<String> when, final @NotNull ItemModel model) {
             this.when = requireNonNull(when, "when");
             this.model = requireNonNull(model, "model");
@@ -110,8 +99,8 @@ final class SelectItemModelImpl implements SelectItemModel {
         @Override
         public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
             return Stream.of(
-                ExaminableProperty.of("when", when),
-                ExaminableProperty.of("model", model)
+                    ExaminableProperty.of("when", when),
+                    ExaminableProperty.of("model", model)
             );
         }
 
@@ -123,12 +112,7 @@ final class SelectItemModelImpl implements SelectItemModel {
         }
 
         @Override
-        public int hashCode() {
-            return Objects.hash(when, model);
-        }
-
-        @Override
-        public String toString() {
+        public @NotNull String toString() {
             return examine(StringExaminer.simpleEscaping());
         }
     }

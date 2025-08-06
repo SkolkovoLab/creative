@@ -27,22 +27,14 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class CustomModelDataItemNumericPropertyImpl implements CustomModelDataItemNumericProperty {
-    private final int index;
-
+record CustomModelDataItemNumericPropertyImpl(int index) implements CustomModelDataItemNumericProperty {
     CustomModelDataItemNumericPropertyImpl(final int index) {
         this.index = index;
         if (index < 0) {
             throw new IllegalArgumentException("Index must be greater than or equal to 0, got: " + index);
         }
-    }
-
-    @Override
-    public int index() {
-        return index;
     }
 
     @Override
@@ -58,12 +50,7 @@ final class CustomModelDataItemNumericPropertyImpl implements CustomModelDataIte
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(index);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

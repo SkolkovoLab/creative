@@ -30,15 +30,11 @@ import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.item.tint.TintSource;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ReferenceItemModelImpl implements ReferenceItemModel {
-    private final Key model;
-    private final List<TintSource> tints;
-
+record ReferenceItemModelImpl(Key model, List<TintSource> tints) implements ReferenceItemModel {
     ReferenceItemModelImpl(final @NotNull Key model, final @NotNull List<TintSource> tints) {
         this.model = requireNonNull(model, "model");
         this.tints = requireNonNull(tints, "tints");
@@ -57,8 +53,8 @@ final class ReferenceItemModelImpl implements ReferenceItemModel {
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("model", model),
-            ExaminableProperty.of("tints", tints)
+                ExaminableProperty.of("model", model),
+                ExaminableProperty.of("tints", tints)
         );
     }
 
@@ -70,12 +66,7 @@ final class ReferenceItemModelImpl implements ReferenceItemModel {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(model, tints);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

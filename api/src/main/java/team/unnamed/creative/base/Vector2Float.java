@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -40,7 +39,7 @@ import java.util.stream.Stream;
  *
  * @since 1.0.0
  */
-public final class Vector2Float implements Examinable, Iterable<Float> {
+public record Vector2Float(float x, float y) implements Examinable, Iterable<Float> {
 
     /**
      * Constant for {@link Vector2Float} value with
@@ -58,9 +57,6 @@ public final class Vector2Float implements Examinable, Iterable<Float> {
      */
     public static final Vector2Float ONE = new Vector2Float(1F, 1F);
 
-    private final float x;
-    private final float y;
-
     /**
      * Constructs a new {@link Vector2Float} with the
      * given {@code x} and {@code y} values.
@@ -69,9 +65,7 @@ public final class Vector2Float implements Examinable, Iterable<Float> {
      * @param y The vector ordinate
      * @since 1.0.0
      */
-    public Vector2Float(final float x, final float y) {
-        this.x = x;
-        this.y = y;
+    public Vector2Float {
     }
 
     /**
@@ -81,6 +75,7 @@ public final class Vector2Float implements Examinable, Iterable<Float> {
      * @return The vector abscissa
      * @since 1.0.0
      */
+    @Override
     public float x() {
         return x;
     }
@@ -92,6 +87,7 @@ public final class Vector2Float implements Examinable, Iterable<Float> {
      * @return The vector ordinate
      * @since 1.0.0
      */
+    @Override
     public float y() {
         return y;
     }
@@ -214,7 +210,7 @@ public final class Vector2Float implements Examinable, Iterable<Float> {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -224,11 +220,6 @@ public final class Vector2Float implements Examinable, Iterable<Float> {
         if (o == null || getClass() != o.getClass()) return false;
         Vector2Float that = (Vector2Float) o;
         return x == that.x && y == that.y;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
     }
 
 }

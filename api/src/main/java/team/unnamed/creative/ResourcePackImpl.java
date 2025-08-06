@@ -91,12 +91,11 @@ final class ResourcePackImpl extends ResourceContainerImpl implements ResourcePa
     public void merge(final @NotNull ResourceContainer other, final @NotNull MergeStrategy strategy) {
         super.merge(other, strategy);
 
-        if (!(other instanceof ResourcePack)) {
+        if (!(other instanceof ResourcePack otherPack)) {
             return;
         }
 
         // merge ResourcePack properties
-        final ResourcePack otherPack = (ResourcePack) other;
 
         // merge icon
         final Writable newIcon = otherPack.icon();
@@ -137,7 +136,7 @@ final class ResourcePackImpl extends ResourceContainerImpl implements ResourcePa
                         final PackMeta newPackMeta = (PackMeta) part;
                         oldParts.add(PackMeta.of(
                                 oldPackMeta.formats().union(newPackMeta.formats()),
-                                oldPackMeta.description0() // keep base description
+                                oldPackMeta.description() // keep base description
                         ));
                     }
                     continue;

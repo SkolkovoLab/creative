@@ -29,16 +29,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.unnamed.creative.item.property.ItemBooleanProperty;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ConditionItemModelImpl implements ConditionItemModel {
-    private final ItemBooleanProperty condition;
-    private final ItemModel onTrue;
-    private final ItemModel onFalse;
-
+record ConditionItemModelImpl(ItemBooleanProperty condition, ItemModel onTrue,
+                              ItemModel onFalse) implements ConditionItemModel {
     ConditionItemModelImpl(final @NotNull ItemBooleanProperty condition, final @NotNull ItemModel onTrue, final @NotNull ItemModel onFalse) {
         this.condition = requireNonNull(condition, "condition");
         this.onTrue = requireNonNull(onTrue, "onTrue");
@@ -63,9 +59,9 @@ final class ConditionItemModelImpl implements ConditionItemModel {
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("condition", condition),
-            ExaminableProperty.of("onTrue", onTrue),
-            ExaminableProperty.of("onFalse", onFalse)
+                ExaminableProperty.of("condition", condition),
+                ExaminableProperty.of("onTrue", onTrue),
+                ExaminableProperty.of("onFalse", onFalse)
         );
     }
 
@@ -74,11 +70,6 @@ final class ConditionItemModelImpl implements ConditionItemModel {
         if (o == null || getClass() != o.getClass()) return false;
         final ConditionItemModelImpl that = (ConditionItemModelImpl) o;
         return condition.equals(that.condition) && onTrue.equals(that.onTrue) && onFalse.equals(that.onFalse);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(condition, onTrue, onFalse);
     }
 
     @Override

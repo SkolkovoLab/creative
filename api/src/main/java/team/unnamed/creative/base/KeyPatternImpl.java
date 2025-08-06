@@ -33,30 +33,9 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-final class KeyPatternImpl implements KeyPattern {
+record KeyPatternImpl(@Nullable Pattern namespace, @Nullable Pattern value) implements KeyPattern {
 
     static final KeyPattern ANY = new KeyPatternImpl(null, null);
-
-    private final @Nullable Pattern namespace;
-    private final @Nullable Pattern value;
-
-    KeyPatternImpl(
-            final @Nullable Pattern namespace,
-            final @Nullable Pattern value
-    ) {
-        this.namespace = namespace;
-        this.value = value;
-    }
-
-    @Override
-    public @Nullable Pattern namespace() {
-        return namespace;
-    }
-
-    @Override
-    public @Nullable Pattern value() {
-        return value;
-    }
 
     @Override
     public boolean test(final @NotNull Key key) {
@@ -74,7 +53,7 @@ final class KeyPatternImpl implements KeyPattern {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -92,11 +71,6 @@ final class KeyPatternImpl implements KeyPattern {
         if (a == null) return false;
         if (b == null) return false;
         return a.pattern().equals(b.pattern());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(namespace, value);
     }
 
 }

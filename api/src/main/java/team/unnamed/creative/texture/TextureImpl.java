@@ -31,16 +31,11 @@ import org.jetbrains.annotations.Nullable;
 import team.unnamed.creative.base.Writable;
 import team.unnamed.creative.metadata.Metadata;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class TextureImpl implements Texture {
-
-    private final Key key;
-    private final Writable data;
-    private final Metadata meta;
+record TextureImpl(Key key, Writable data, Metadata meta) implements Texture {
 
     TextureImpl(
             final @NotNull Key key,
@@ -77,7 +72,7 @@ final class TextureImpl implements Texture {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -89,11 +84,6 @@ final class TextureImpl implements Texture {
         return key.equals(texture.key)
                 && data.equals(texture.data)
                 && meta.equals(texture.meta);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key, data, meta);
     }
 
     static final class BuilderImpl implements Builder {

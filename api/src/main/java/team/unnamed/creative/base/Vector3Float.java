@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -40,7 +39,7 @@ import java.util.stream.Stream;
  *
  * @since 1.0.0
  */
-public final class Vector3Float implements Examinable, Iterable<Float> {
+public record Vector3Float(float x, float y, float z) implements Examinable, Iterable<Float> {
 
     /**
      * Constant for {@link Vector3Float} value with
@@ -58,10 +57,6 @@ public final class Vector3Float implements Examinable, Iterable<Float> {
      */
     public static final Vector3Float ONE = new Vector3Float(1F, 1F, 1F);
 
-    private final float x;
-    private final float y;
-    private final float z;
-
     /**
      * Constructs a new {@link Vector3Float} with the
      * given {@code x}, {@code y} and {@code z} values.
@@ -71,10 +66,7 @@ public final class Vector3Float implements Examinable, Iterable<Float> {
      * @param z The vector applicate
      * @since 1.0.0
      */
-    public Vector3Float(final float x, final float y, final float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Vector3Float {
     }
 
     /**
@@ -84,6 +76,7 @@ public final class Vector3Float implements Examinable, Iterable<Float> {
      * @return The vector abscissa
      * @since 1.0.0
      */
+    @Override
     public float x() {
         return x;
     }
@@ -109,6 +102,7 @@ public final class Vector3Float implements Examinable, Iterable<Float> {
      * @return The vector ordinate
      * @since 1.0.0
      */
+    @Override
     public float y() {
         return y;
     }
@@ -134,6 +128,7 @@ public final class Vector3Float implements Examinable, Iterable<Float> {
      * @return The vector applicate
      * @since 1.0.0
      */
+    @Override
     public float z() {
         return z;
     }
@@ -363,16 +358,12 @@ public final class Vector3Float implements Examinable, Iterable<Float> {
      * @throws IllegalArgumentException If axis is not X, Y or Z
      */
     public float get(final @NotNull Axis3D axis) {
-        switch (axis) {
-            case X:
-                return x;
-            case Y:
-                return y;
-            case Z:
-                return z;
-            default:
-                throw new IllegalArgumentException("Invalid axis: " + axis);
-        }
+        return switch (axis) {
+            case X -> x;
+            case Y -> y;
+            case Z -> z;
+            default -> throw new IllegalArgumentException("Invalid axis: " + axis);
+        };
     }
 
     /**
@@ -403,7 +394,7 @@ public final class Vector3Float implements Examinable, Iterable<Float> {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -415,11 +406,6 @@ public final class Vector3Float implements Examinable, Iterable<Float> {
         return x == that.x
                 && y == that.y
                 && z == that.z;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y, z);
     }
 
 }

@@ -25,7 +25,6 @@ package team.unnamed.creative.util;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,7 +42,7 @@ public final class MoreCollections {
     public static <T> List<T> immutableListOf(List<T> list) {
         return list.isEmpty()
                 ? Collections.emptyList()
-                : Collections.unmodifiableList(new ArrayList<>(list));
+                : List.copyOf(list);
     }
 
     public static <K, V> Map<K, V> immutableMapOf(Map<K, V> map) {

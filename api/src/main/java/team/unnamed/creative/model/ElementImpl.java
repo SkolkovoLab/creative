@@ -38,14 +38,8 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static team.unnamed.creative.util.MoreCollections.immutableMapOf;
 
-final class ElementImpl implements Element {
-
-    private final Vector3Float from;
-    private final Vector3Float to;
-    private final ElementRotation rotation;
-    private final boolean shade;
-    private final Map<CubeFace, ElementFace> faces;
-    private final int lightEmission;
+record ElementImpl(Vector3Float from, Vector3Float to, ElementRotation rotation, boolean shade,
+                   Map<CubeFace, ElementFace> faces, int lightEmission) implements Element {
 
     ElementImpl(
             final @NotNull Vector3Float from,
@@ -78,7 +72,7 @@ final class ElementImpl implements Element {
     private void validate() {
         validateBound(from);
         validateBound(to);
-        if (faces.size() < 1 || faces.size() > 6)
+        if (faces.isEmpty() || faces.size() > 6)
             throw new IllegalArgumentException("Invalid amount of faces (" + faces.size() + ")");
     }
 
@@ -98,18 +92,8 @@ final class ElementImpl implements Element {
     }
 
     @Override
-    public boolean shade() {
-        return shade;
-    }
-
-    @Override
     public @Unmodifiable @NotNull Map<CubeFace, ElementFace> faces() {
         return faces;
-    }
-
-    @Override
-    public int lightEmission() {
-        return lightEmission;
     }
 
     @Override
@@ -135,11 +119,6 @@ final class ElementImpl implements Element {
                 && shade == element.shade
                 && faces.equals(element.faces)
                 && lightEmission == element.lightEmission;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(from, to, rotation, shade, faces, lightEmission);
     }
 
     static final class BuilderImpl implements Builder {

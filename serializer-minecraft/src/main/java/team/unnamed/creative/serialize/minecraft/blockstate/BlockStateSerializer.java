@@ -120,7 +120,7 @@ public final class BlockStateSerializer implements JsonResourceSerializer<BlockS
         List<Variant> variants = multiVariant.variants();
         if (variants.size() == 1) {
             // single variant, write as an object
-            writeVariant(writer, variants.get(0));
+            writeVariant(writer, variants.getFirst());
         } else {
             // multiple variants, write as an array
             writer.beginArray();
@@ -209,14 +209,13 @@ public final class BlockStateSerializer implements JsonResourceSerializer<BlockS
     }
 
     private static void writeCondition(JsonWriter writer, Condition condition, boolean topLevel) throws IOException {
-        if (condition instanceof Condition.Match) {
-            Condition.Match match = (Condition.Match) condition;
+        if (condition instanceof Condition.Match match) {
             writer.name(match.key()).value(match.value().toString());// TODO: don't toString()
         } else if (condition instanceof Condition.Or) {
             List<Condition> conditions = ((Condition.Or) condition).conditions();
             if (conditions.size() == 1) {
                 // single condition, just write it
-                writeCondition(writer, conditions.get(0));
+                writeCondition(writer, conditions.getFirst());
                 return;
             }
 

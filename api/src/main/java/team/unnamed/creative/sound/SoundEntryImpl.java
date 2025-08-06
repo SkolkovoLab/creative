@@ -28,21 +28,12 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class SoundEntryImpl implements SoundEntry {
-
-    private final Key key;
-    private final float volume;
-    private final float pitch;
-    private final int weight;
-    private final boolean stream;
-    private final int attenuationDistance;
-    private final boolean preload;
-    private final SoundEntry.Type type;
+record SoundEntryImpl(Key key, float volume, float pitch, int weight, boolean stream, int attenuationDistance,
+                      boolean preload, Type type) implements SoundEntry {
 
     SoundEntryImpl(
             final @NotNull Key key,
@@ -74,36 +65,6 @@ final class SoundEntryImpl implements SoundEntry {
     @Override
     public @NotNull Key key() {
         return key;
-    }
-
-    @Override
-    public float volume() {
-        return volume;
-    }
-
-    @Override
-    public float pitch() {
-        return pitch;
-    }
-
-    @Override
-    public int weight() {
-        return weight;
-    }
-
-    @Override
-    public boolean stream() {
-        return stream;
-    }
-
-    @Override
-    public int attenuationDistance() {
-        return attenuationDistance;
-    }
-
-    @Override
-    public boolean preload() {
-        return preload;
     }
 
     @Override
@@ -142,7 +103,7 @@ final class SoundEntryImpl implements SoundEntry {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -159,14 +120,6 @@ final class SoundEntryImpl implements SoundEntry {
                 && preload == sound.preload
                 && key.equals(sound.key)
                 && type == sound.type;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                key, volume, pitch, weight, stream,
-                attenuationDistance, preload, type
-        );
     }
 
     static final class BuilderImpl implements Builder {

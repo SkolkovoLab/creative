@@ -64,7 +64,7 @@ public interface ResourcePackRequestHandler extends team.unnamed.creative.server
 
     @Override
     default void onRequest(final @Nullable ResourcePackDownloadRequest request, final @NotNull HttpExchange exchange) throws IOException {
-        try {
+        try (exchange) {
             if (request == null) {
                 onInvalidRequest(exchange);
             } else {
@@ -78,8 +78,6 @@ public interface ResourcePackRequestHandler extends team.unnamed.creative.server
             }
         } catch (final Exception e) {
             onException(e);
-        } finally {
-            exchange.close();
         }
     }
 
@@ -134,7 +132,7 @@ public interface ResourcePackRequestHandler extends team.unnamed.creative.server
             }
 
             @Override
-            public String toString() {
+            public @NotNull String toString() {
                 return "BuiltResourcePackRequestHandler{"
                         + "pack=" + pack
                         + ", validOnly=" + validOnly

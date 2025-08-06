@@ -28,16 +28,11 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class LanguageEntryImpl implements LanguageEntry {
-    private final String name;
-    private final String region;
-    private final boolean bidirectional;
-
+record LanguageEntryImpl(String name, String region, boolean bidirectional) implements LanguageEntry {
     LanguageEntryImpl(final @NotNull String name, final @NotNull String region, final boolean bidirectional) {
         this.name = requireNonNull(name, "name");
         this.region = requireNonNull(region, "region");
@@ -63,11 +58,6 @@ final class LanguageEntryImpl implements LanguageEntry {
     }
 
     @Override
-    public boolean bidirectional() {
-        return bidirectional;
-    }
-
-    @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
                 ExaminableProperty.of("name", name),
@@ -89,11 +79,6 @@ final class LanguageEntryImpl implements LanguageEntry {
         return bidirectional == entry.bidirectional
                 && name.equals(entry.name)
                 && region.equals(entry.region);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, region, bidirectional);
     }
 
     static final class BuilderImpl implements Builder {

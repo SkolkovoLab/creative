@@ -28,14 +28,11 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class BedSpecialRenderImpl implements BedSpecialRender {
-    private final Key texture;
-
+record BedSpecialRenderImpl(Key texture) implements BedSpecialRender {
     BedSpecialRenderImpl(final @NotNull Key texture) {
         this.texture = requireNonNull(texture, "texture");
     }
@@ -60,12 +57,7 @@ final class BedSpecialRenderImpl implements BedSpecialRender {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(texture);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

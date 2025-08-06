@@ -32,15 +32,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class EquipmentImpl implements Equipment {
-    private final Key key;
-    private final Map<EquipmentLayerType, List<EquipmentLayer>> layers;
-
+record EquipmentImpl(Key key, Map<EquipmentLayerType, List<EquipmentLayer>> layers) implements Equipment {
     EquipmentImpl(final @NotNull Key key, final @NotNull Map<EquipmentLayerType, List<EquipmentLayer>> layers) {
         this.key = requireNonNull(key, "key");
         this.layers = requireNonNull(layers, "layers");
@@ -62,18 +58,6 @@ final class EquipmentImpl implements Equipment {
                 ExaminableProperty.of("key", key),
                 ExaminableProperty.of("layers", layers)
         );
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        EquipmentImpl equipment = (EquipmentImpl) o;
-        return Objects.equals(key, equipment.key) && Objects.equals(layers, equipment.layers);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(key, layers);
     }
 
     @Override

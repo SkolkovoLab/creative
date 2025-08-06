@@ -28,13 +28,9 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 import static java.util.Objects.requireNonNull;
 
-final class ReferenceFontProviderImpl implements ReferenceFontProvider {
-    private final Key id;
-
+record ReferenceFontProviderImpl(Key id) implements ReferenceFontProvider {
     ReferenceFontProviderImpl(final @NotNull Key id) {
         this.id = requireNonNull(id, "id");
     }
@@ -57,8 +53,4 @@ final class ReferenceFontProviderImpl implements ReferenceFontProvider {
         return id.equals(that.id);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

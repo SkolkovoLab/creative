@@ -28,14 +28,11 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ComponentItemStringPropertyImpl implements ComponentItemStringProperty {
-    private final String component;
-
+record ComponentItemStringPropertyImpl(String component) implements ComponentItemStringProperty {
     ComponentItemStringPropertyImpl(final @NotNull String component) {
         this.component = requireNonNull(component, "component");
     }
@@ -55,11 +52,6 @@ final class ComponentItemStringPropertyImpl implements ComponentItemStringProper
         if (o == null || getClass() != o.getClass()) return false;
         final ComponentItemStringPropertyImpl that = (ComponentItemStringPropertyImpl) o;
         return component.equals(that.component);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(component);
     }
 
     @Override

@@ -37,10 +37,7 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static team.unnamed.creative.util.MoreCollections.immutableListOf;
 
-final class UnihexFontProviderImpl implements UnihexFontProvider {
-    private final Key file;
-    private final List<SizeOverride> sizes;
-
+record UnihexFontProviderImpl(Key file, List<SizeOverride> sizes) implements UnihexFontProvider {
     UnihexFontProviderImpl(final @NotNull Key file, final @NotNull List<SizeOverride> sizes) {
         this.file = requireNonNull(file, "file");
         this.sizes = immutableListOf(requireNonNull(sizes, "sizes"));
@@ -76,13 +73,6 @@ final class UnihexFontProviderImpl implements UnihexFontProvider {
         final UnihexFontProviderImpl that = (UnihexFontProviderImpl) o;
         if (!file.equals(that.file)) return false;
         return sizes.equals(that.sizes);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = file.hashCode();
-        result = 31 * result + sizes.hashCode();
-        return result;
     }
 
     static final class SizeOverrideImpl implements SizeOverride {

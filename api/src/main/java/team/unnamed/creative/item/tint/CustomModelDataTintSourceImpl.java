@@ -27,50 +27,20 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class CustomModelDataTintSourceImpl implements CustomModelDataTintSource {
-    private final int index;
-    private final int defaultTint;
-
-    CustomModelDataTintSourceImpl(final int index, final int defaultTint) {
-        this.index = index;
-        this.defaultTint = defaultTint;
-    }
-
-    @Override
-    public int index() {
-        return index;
-    }
-
-    @Override
-    public int defaultTint() {
-        return defaultTint;
-    }
+record CustomModelDataTintSourceImpl(int index, int defaultTint) implements CustomModelDataTintSource {
 
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("index", index),
-            ExaminableProperty.of("defaultTint", defaultTint)
+                ExaminableProperty.of("index", index),
+                ExaminableProperty.of("defaultTint", defaultTint)
         );
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        CustomModelDataTintSourceImpl that = (CustomModelDataTintSourceImpl) o;
-        return index == that.index && defaultTint == that.defaultTint;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(index, defaultTint);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

@@ -31,19 +31,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-final class EquipmentLayerDyeImpl implements EquipmentLayerDye {
+record EquipmentLayerDyeImpl(@Nullable Integer colorWhenUndyed) implements EquipmentLayerDye {
     static final EquipmentLayerDye EMPTY = new EquipmentLayerDyeImpl(null);
-
-    private final @Nullable Integer colorWhenUndyed;
-
-    EquipmentLayerDyeImpl(final @Nullable Integer colorWhenUndyed) {
-        this.colorWhenUndyed = colorWhenUndyed;
-    }
-
-    @Override
-    public @Nullable Integer colorWhenUndyed() {
-        return colorWhenUndyed;
-    }
 
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
@@ -57,11 +46,6 @@ final class EquipmentLayerDyeImpl implements EquipmentLayerDye {
         if (o == null || getClass() != o.getClass()) return false;
         final EquipmentLayerDyeImpl that = (EquipmentLayerDyeImpl) o;
         return Objects.equals(colorWhenUndyed, that.colorWhenUndyed);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(colorWhenUndyed);
     }
 
     @Override

@@ -31,18 +31,13 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 import static team.unnamed.creative.util.MoreCollections.immutableListOf;
 
-final class BitMapFontProviderImpl implements BitMapFontProvider {
-    private final Key file;
-    private final int height;
-    private final int ascent;
-    @Unmodifiable private final List<String> characters;
-
+record BitMapFontProviderImpl(Key file, int height, int ascent,
+                              @Unmodifiable List<String> characters) implements BitMapFontProvider {
     BitMapFontProviderImpl(
             final @NotNull Key file,
             final int height,
@@ -50,7 +45,6 @@ final class BitMapFontProviderImpl implements BitMapFontProvider {
             final @NotNull List<String> characters
     ) {
         this.file = requireNonNull(file, "file");
-        ;
         this.height = height;
         this.ascent = ascent;
         this.characters = immutableListOf(requireNonNull(characters, "characters"));
@@ -63,7 +57,7 @@ final class BitMapFontProviderImpl implements BitMapFontProvider {
         if (characters.isEmpty())
             throw new IllegalArgumentException("Character list is empty");
 
-        String sample = characters.get(0);
+        String sample = characters.getFirst();
         int codePointCount = sample.codePointCount(0, sample.length());
         for (String character : characters) {
             requireNonNull(character, "An element from the character list is null");
@@ -84,18 +78,8 @@ final class BitMapFontProviderImpl implements BitMapFontProvider {
     }
 
     @Override
-    public int height() {
-        return height;
-    }
-
-    @Override
     public @NotNull BitMapFontProvider height(final int height) {
         return new BitMapFontProviderImpl(this.file, height, this.ascent, this.characters);
-    }
-
-    @Override
-    public int ascent() {
-        return ascent;
     }
 
     @Override
@@ -125,7 +109,7 @@ final class BitMapFontProviderImpl implements BitMapFontProvider {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -138,11 +122,6 @@ final class BitMapFontProviderImpl implements BitMapFontProvider {
                 && ascent == that.ascent
                 && file.equals(that.file)
                 && characters.equals(that.characters);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(file, height, ascent, characters);
     }
 
     static final class BuilderImpl implements Builder {

@@ -37,10 +37,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class AtlasImpl implements Atlas {
-
-    private final Key key;
-    private final List<AtlasSource> sources;
+record AtlasImpl(Key key, List<AtlasSource> sources) implements Atlas {
 
     AtlasImpl(
             final @NotNull Key key,
@@ -80,13 +77,6 @@ final class AtlasImpl implements Atlas {
         AtlasImpl atlas = (AtlasImpl) o;
         if (!key.equals(atlas.key)) return false;
         return sources.equals(atlas.sources);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = key.hashCode();
-        result = 31 * result + sources.hashCode();
-        return result;
     }
 
     static class BuilderImpl implements Builder {

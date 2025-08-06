@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -46,7 +45,7 @@ import java.util.stream.Stream;
  */
 @Deprecated
 @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
-public final class Vector4Float implements Examinable, Iterable<Float> {
+public record Vector4Float(float x, float y, float x2, float y2) implements Examinable, Iterable<Float> {
 
     /**
      * Constant for {@link Vector2Float} value with
@@ -55,24 +54,13 @@ public final class Vector4Float implements Examinable, Iterable<Float> {
      */
     public static final Vector4Float ZERO = new Vector4Float(0, 0, 0, 0);
 
-    private final float x;
-    private final float y;
-    private final float x2;
-    private final float y2;
-
-    public Vector4Float(float x, float y, float x2, float y2) {
-        this.x = x;
-        this.y = y;
-        this.x2 = x2;
-        this.y2 = y2;
-    }
-
     /**
      * Gets the first "X" value for this
      * vector
      *
      * @return The first X component
      */
+    @Override
     public float x() {
         return x;
     }
@@ -83,6 +71,7 @@ public final class Vector4Float implements Examinable, Iterable<Float> {
      *
      * @return The first Y component
      */
+    @Override
     public float y() {
         return y;
     }
@@ -93,6 +82,7 @@ public final class Vector4Float implements Examinable, Iterable<Float> {
      *
      * @return The second X component
      */
+    @Override
     public float x2() {
         return x2;
     }
@@ -103,6 +93,7 @@ public final class Vector4Float implements Examinable, Iterable<Float> {
      *
      * @return The second Y component
      */
+    @Override
     public float y2() {
         return y2;
     }
@@ -140,7 +131,7 @@ public final class Vector4Float implements Examinable, Iterable<Float> {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -153,11 +144,6 @@ public final class Vector4Float implements Examinable, Iterable<Float> {
                 && y == that.y
                 && x2 == that.x2
                 && y2 == that.y2;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y, x2, y2);
     }
 
 }

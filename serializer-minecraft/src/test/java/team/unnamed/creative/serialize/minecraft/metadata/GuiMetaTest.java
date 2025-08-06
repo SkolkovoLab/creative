@@ -59,9 +59,7 @@ class GuiMetaTest {
             }
 
             assertEquals(
-                    Metadata.metadata()
-                            .add(GuiMeta.of(entry.getValue()))
-                            .build(),
+                    Metadata.metadata().addPart(GuiMeta.of(entry.getValue())).build(),
                     metadata,
                     "Not equal for entry: " + entry.getKey()
             );

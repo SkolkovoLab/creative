@@ -29,14 +29,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.unnamed.creative.metadata.MetadataPart;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class GuiMetaImpl implements GuiMeta {
-    private final GuiScaling scaling;
-
+record GuiMetaImpl(GuiScaling scaling) implements GuiMeta {
     GuiMetaImpl(final @NotNull GuiScaling scaling) {
         this.scaling = requireNonNull(scaling, "scaling");
     }
@@ -71,8 +68,4 @@ final class GuiMetaImpl implements GuiMeta {
         return scaling.equals(that.scaling);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(scaling);
-    }
 }

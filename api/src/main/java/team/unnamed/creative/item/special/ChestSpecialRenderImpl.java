@@ -28,15 +28,11 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ChestSpecialRenderImpl implements ChestSpecialRender {
-    private final Key texture;
-    private final float openness;
-
+record ChestSpecialRenderImpl(Key texture, float openness) implements ChestSpecialRender {
     ChestSpecialRenderImpl(final @NotNull Key texture, final float openness) {
         this.texture = requireNonNull(texture, "texture");
         this.openness = openness;
@@ -49,11 +45,6 @@ final class ChestSpecialRenderImpl implements ChestSpecialRender {
     @Override
     public @NotNull Key texture() {
         return texture;
-    }
-
-    @Override
-    public float openness() {
-        return openness;
     }
 
     @Override
@@ -72,12 +63,7 @@ final class ChestSpecialRenderImpl implements ChestSpecialRender {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(texture, openness);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

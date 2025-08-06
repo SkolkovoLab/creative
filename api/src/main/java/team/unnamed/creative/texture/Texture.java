@@ -314,7 +314,7 @@ public interface Texture extends ResourcePackPart, Keyed, Examinable, Metadatabl
          */
         @Contract("_ -> this")
         default @NotNull Builder animationMeta(final @NotNull AnimationMeta animationMeta) {
-            return meta(meta().toBuilder().add(animationMeta).build());
+            return meta(meta().toBuilder().addPart(animationMeta).build());
         }
 
         /**
@@ -326,7 +326,7 @@ public interface Texture extends ResourcePackPart, Keyed, Examinable, Metadatabl
          */
         @Contract("_ -> this")
         default @NotNull Builder villagerMeta(final @NotNull VillagerMeta villagerMeta) {
-            return meta(meta().toBuilder().add(villagerMeta).build());
+            return meta(meta().toBuilder().addPart(villagerMeta).build());
         }
 
         /**
@@ -337,7 +337,7 @@ public interface Texture extends ResourcePackPart, Keyed, Examinable, Metadatabl
          * @since 1.0.0
          */
         default @NotNull Builder textureMeta(final @NotNull TextureMeta textureMeta) {
-            return meta(meta().toBuilder().add(textureMeta).build());
+            return meta(meta().toBuilder().addPart(textureMeta).build());
         }
 
         /**

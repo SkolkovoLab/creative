@@ -32,7 +32,6 @@ import team.unnamed.creative.base.Vector2Float;
 import team.unnamed.creative.font.BitMapFontProvider;
 import team.unnamed.creative.font.Font;
 import team.unnamed.creative.font.FontProvider;
-import team.unnamed.creative.font.LegacyUnicodeFontProvider;
 import team.unnamed.creative.font.ReferenceFontProvider;
 import team.unnamed.creative.font.SpaceFontProvider;
 import team.unnamed.creative.font.TrueTypeFontProvider;
@@ -71,20 +70,13 @@ public final class FontSerializer implements JsonResourceSerializer<Font>, JsonR
                 .name("providers")
                 .beginArray();
         for (FontProvider provider : font.providers()) {
-            if (provider instanceof BitMapFontProvider) {
-                writeBitMap(writer, (BitMapFontProvider) provider);
-            } else if (provider instanceof LegacyUnicodeFontProvider) { // TODO: Should we warn about deprecated stuff?
-                writeLegacyUnicode(writer, (LegacyUnicodeFontProvider) provider);
-            } else if (provider instanceof SpaceFontProvider) {
-                writeSpace(writer, (SpaceFontProvider) provider);
-            } else if (provider instanceof TrueTypeFontProvider) {
-                writeTrueType(writer, (TrueTypeFontProvider) provider);
-            } else if (provider instanceof ReferenceFontProvider) {
-                writeReference(writer, (ReferenceFontProvider) provider);
-            } else if (provider instanceof UnihexFontProvider) {
-                writeUnihex(writer, (UnihexFontProvider) provider);
-            } else {
-                throw new IllegalStateException("Unknown font provider type: " + provider);
+            switch (provider) {
+                case BitMapFontProvider bitMapFontProvider -> writeBitMap(writer, bitMapFontProvider);
+                case SpaceFontProvider spaceFontProvider -> writeSpace(writer, spaceFontProvider);
+                case TrueTypeFontProvider trueTypeFontProvider -> writeTrueType(writer, trueTypeFontProvider);
+                case ReferenceFontProvider referenceFontProvider -> writeReference(writer, referenceFontProvider);
+                case UnihexFontProvider unihexFontProvider -> writeUnihex(writer, unihexFontProvider);
+                case null, default -> throw new IllegalStateException("Unknown font provider type: " + provider);
             }
         }
         writer.endArray().endObject();
@@ -100,10 +92,6 @@ public final class FontSerializer implements JsonResourceSerializer<Font>, JsonR
             switch (type) {
                 case "bitmap": {
                     providers.add(readBitMap(providerObjectNode));
-                    break;
-                }
-                case "legacy_unicode": {
-                    providers.add(readLegacyUnicode(providerObjectNode));
                     break;
                 }
                 case "space": {
@@ -126,7 +114,7 @@ public final class FontSerializer implements JsonResourceSerializer<Font>, JsonR
                     throw new IllegalStateException("Unknown font provider type: " + type);
             }
         }
-        return Font.of(key, providers);
+        return Font.font(key, providers);
     }
 
     private static void writeBitMap(JsonWriter writer, BitMapFontProvider provider) throws IOException {
@@ -163,22 +151,6 @@ public final class FontSerializer implements JsonResourceSerializer<Font>, JsonR
                 .ascent(node.get("ascent").getAsInt())
                 .characters(characters)
                 .build();
-    }
-
-    private static void writeLegacyUnicode(JsonWriter writer, LegacyUnicodeFontProvider provider) throws IOException {
-        writer.beginObject()
-                .name("type").value("legacy_unicode")
-                .name("sizes").value(KeySerializer.toString(provider.sizes()))
-                .name("template").value(provider.template())
-                .endObject();
-    }
-
-    private static LegacyUnicodeFontProvider readLegacyUnicode(JsonObject node) {
-        // TODO: Should not be keys, they are formatted using String#format(...)
-        return FontProvider.legacyUnicode(
-                Key.key(node.get("sizes").getAsString()),
-                node.get("template").getAsString()
-        );
     }
 
     private static void writeSpace(JsonWriter writer, SpaceFontProvider provider) throws IOException {
@@ -255,7 +227,7 @@ public final class FontSerializer implements JsonResourceSerializer<Font>, JsonR
             // so we can optimize this
             writer.name("skip");
             if (skip.size() == 1) {
-                writer.value(skip.get(0));
+                writer.value(skip.getFirst());
             } else {
                 writer.beginArray();
                 for (String row : skip) {

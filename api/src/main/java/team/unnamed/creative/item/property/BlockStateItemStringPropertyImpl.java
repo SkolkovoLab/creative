@@ -28,14 +28,11 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class BlockStateItemStringPropertyImpl implements BlockStateItemStringProperty {
-    private final String property;
-
+record BlockStateItemStringPropertyImpl(String property) implements BlockStateItemStringProperty {
     BlockStateItemStringPropertyImpl(final @NotNull String property) {
         this.property = requireNonNull(property, "property");
     }
@@ -55,11 +52,6 @@ final class BlockStateItemStringPropertyImpl implements BlockStateItemStringProp
         if (o == null || getClass() != o.getClass()) return false;
         final BlockStateItemStringPropertyImpl that = (BlockStateItemStringPropertyImpl) o;
         return property.equals(that.property);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(property);
     }
 
     @Override

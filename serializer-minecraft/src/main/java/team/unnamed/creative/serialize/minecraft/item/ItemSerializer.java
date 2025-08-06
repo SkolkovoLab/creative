@@ -76,24 +76,17 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
 
     private void serializeItemModel(ItemModel model, JsonWriter writer, int targetPackFormat) throws IOException {
         writer.beginObject();
-        if (model instanceof EmptyItemModel) {
-            writer.name("type").value("empty");
-        } else if (model instanceof ReferenceItemModel) {
-            writeReference(writer, (ReferenceItemModel) model);
-        } else if (model instanceof SpecialItemModel) {
-            writeSpecial(writer, (SpecialItemModel) model);
-        } else if (model instanceof CompositeItemModel) {
-            writeComposite(writer, (CompositeItemModel) model, targetPackFormat);
-        } else if (model instanceof ConditionItemModel) {
-            writeCondition(writer, (ConditionItemModel) model, targetPackFormat);
-        } else if (model instanceof SelectItemModel) {
-            writeSelect(writer, (SelectItemModel) model, targetPackFormat);
-        } else if (model instanceof RangeDispatchItemModel) {
-            writeRangeDispatch(writer, (RangeDispatchItemModel) model, targetPackFormat);
-        } else if (model instanceof BundleSelectedItemModel) {
-            writer.name("type").value("bundle/selected_item");
-        } else {
-            throw new IllegalArgumentException("Unknown item model type: " + model.getClass());
+        switch (model) {
+            case EmptyItemModel ignored -> writer.name("type").value("empty");
+            case ReferenceItemModel referenceItemModel -> writeReference(writer, referenceItemModel);
+            case SpecialItemModel specialItemModel -> writeSpecial(writer, specialItemModel);
+            case CompositeItemModel compositeItemModel -> writeComposite(writer, compositeItemModel, targetPackFormat);
+            case ConditionItemModel conditionItemModel -> writeCondition(writer, conditionItemModel, targetPackFormat);
+            case SelectItemModel selectItemModel -> writeSelect(writer, selectItemModel, targetPackFormat);
+            case RangeDispatchItemModel rangeDispatchItemModel ->
+                    writeRangeDispatch(writer, rangeDispatchItemModel, targetPackFormat);
+            case BundleSelectedItemModel ignored -> writer.name("type").value("bundle/selected_item");
+            default -> throw new IllegalArgumentException("Unknown item model type: " + model.getClass());
         }
         writer.endObject();
     }
@@ -104,18 +97,17 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         if (!type.namespace().equals(Key.MINECRAFT_NAMESPACE)) {
             throw new IllegalArgumentException("Unknown item model type: " + type);
         }
-        switch (type.value()) {
-            case "empty": return ItemModel.empty();
-            case "model": return readReference(node);
-            case "special": return readSpecial(node);
-            case "composite": return readComposite(node);
-            case "condition": return readCondition(node);
-            case "select": return readSelect(node);
-            case "range_dispatch": return readRangeDispatch(node);
-            case "bundle/selected_item": return ItemModel.bundleSelectedItem();
-            default:
-                throw new IllegalArgumentException("Unknown item model type: " + type);
-        }
+        return switch (type.value()) {
+            case "empty" -> ItemModel.empty();
+            case "model" -> readReference(node);
+            case "special" -> readSpecial(node);
+            case "composite" -> readComposite(node);
+            case "condition" -> readCondition(node);
+            case "select" -> readSelect(node);
+            case "range_dispatch" -> readRangeDispatch(node);
+            case "bundle/selected_item" -> ItemModel.bundleSelectedItem();
+            default -> throw new IllegalArgumentException("Unknown item model type: " + type);
+        };
     }
 
     @Override
@@ -156,30 +148,31 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         writer.name("tints").beginArray();
         for (final TintSource tint : model.tints()) {
             writer.beginObject();
-            if (tint instanceof ConstantTintSource) {
-                writer.name("type").value("constant");
-                writer.name("value").value(((ConstantTintSource) tint).tint());
-            } else if (tint instanceof CustomModelDataTintSource) {
-                CustomModelDataTintSource customModelDataTintSource = (CustomModelDataTintSource) tint;
-                writer.name("type").value("custom_model_data");
-
-                int index = customModelDataTintSource.index();
-                if (index != CustomModelDataTintSource.DEFAULT_INDEX) {
-                    writer.name("index").value(index);
+            switch (tint) {
+                case ConstantTintSource constantTintSource -> {
+                    writer.name("type").value("constant");
+                    writer.name("value").value(constantTintSource.tint());
                 }
+                case CustomModelDataTintSource customModelDataTintSource -> {
+                    writer.name("type").value("custom_model_data");
 
-                writer.name("default").value(customModelDataTintSource.defaultTint());
-            } else if (tint instanceof GrassTintSource) {
-                GrassTintSource grassTintSource = (GrassTintSource) tint;
-                writer.name("type").value("grass");
-                writer.name("temperature").value(grassTintSource.temperature());
-                writer.name("downfall").value(grassTintSource.downfall());
-            } else if (tint instanceof KeyedAndBackedTintSource) {
-                KeyedAndBackedTintSource keyedAndBackedTintSource = (KeyedAndBackedTintSource) tint;
-                writer.name("type").value(KeySerializer.toString(keyedAndBackedTintSource.key()));
-                writer.name("default").value(keyedAndBackedTintSource.defaultTint());
-            } else {
-                throw new IllegalArgumentException("Unknown tint source type: " + tint.getClass());
+                    int index = customModelDataTintSource.index();
+                    if (index != CustomModelDataTintSource.DEFAULT_INDEX) {
+                        writer.name("index").value(index);
+                    }
+
+                    writer.name("default").value(customModelDataTintSource.defaultTint());
+                }
+                case GrassTintSource grassTintSource -> {
+                    writer.name("type").value("grass");
+                    writer.name("temperature").value(grassTintSource.temperature());
+                    writer.name("downfall").value(grassTintSource.downfall());
+                }
+                case KeyedAndBackedTintSource keyedAndBackedTintSource -> {
+                    writer.name("type").value(KeySerializer.toString(keyedAndBackedTintSource.key()));
+                    writer.name("default").value(keyedAndBackedTintSource.defaultTint());
+                }
+                default -> throw new IllegalArgumentException("Unknown tint source type: " + tint.getClass());
             }
             writer.endObject();
         }
@@ -235,63 +228,62 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         writer.name("type").value("special");
         writer.name("model").beginObject();
         final SpecialRender render = model.render();
-        if (render instanceof BannerSpecialRender) {
-            final BannerSpecialRender bannerRender = (BannerSpecialRender) render;
-            writer.name("type").value("banner");
-            writer.name("color").value(bannerRender.color().name().toLowerCase());
-        } else if (render instanceof BedSpecialRender) {
-            final BedSpecialRender bedRender = (BedSpecialRender) render;
-            writer.name("type").value("bed");
-            writer.name("texture").value(KeySerializer.toString(bedRender.texture()));
-        } else if (render instanceof ChestSpecialRender) {
-            final ChestSpecialRender chestRender = (ChestSpecialRender) render;
-            writer.name("type").value("chest");
-            writer.name("texture").value(KeySerializer.toString(chestRender.texture()));
-            final float openness = chestRender.openness();
-            if (openness != ChestSpecialRender.DEFAULT_OPENNESS) {
-                writer.name("openness").value(openness);
+        switch (render) {
+            case BannerSpecialRender bannerRender -> {
+                writer.name("type").value("banner");
+                writer.name("color").value(bannerRender.color().name().toLowerCase());
             }
-        } else if (render instanceof SignSpecialRender) { // covers both hanging & standing sign types
-            final SignSpecialRender signRender = (SignSpecialRender) render;
-            writer.name("type").value(signRender.hanging() ? "hanging_sign" : "standing_sign");
-            writer.name("wood_type").value(signRender.woodType().name().toLowerCase());
-            final Key texture = signRender.texture();
-            if (texture != null) {
-                writer.name("texture").value(KeySerializer.toString(texture));
+            case BedSpecialRender bedRender -> {
+                writer.name("type").value("bed");
+                writer.name("texture").value(KeySerializer.toString(bedRender.texture()));
             }
-        } else if (render instanceof HeadSpecialRender) {
-            final HeadSpecialRender headRender = (HeadSpecialRender) render;
-            writer.name("type").value("head");
-            writer.name("kind").value(headRender.kind().name().toLowerCase());
+            case ChestSpecialRender chestRender -> {
+                writer.name("type").value("chest");
+                writer.name("texture").value(KeySerializer.toString(chestRender.texture()));
+                final float openness = chestRender.openness();
+                if (openness != ChestSpecialRender.DEFAULT_OPENNESS) {
+                    writer.name("openness").value(openness);
+                }
+            }
+            case SignSpecialRender signRender -> { // covers both hanging & standing sign types
+                writer.name("type").value(signRender.hanging() ? "hanging_sign" : "standing_sign");
+                writer.name("wood_type").value(signRender.woodType().name().toLowerCase());
+                final Key texture = signRender.texture();
+                if (texture != null) {
+                    writer.name("texture").value(KeySerializer.toString(texture));
+                }
+            }
+            case HeadSpecialRender headRender -> {
+                writer.name("type").value("head");
+                writer.name("kind").value(headRender.kind().name().toLowerCase());
 
-            final Key texture = headRender.texture();
-            if (texture != null) {
-                writer.name("texture").value(KeySerializer.toString(texture));
-            }
+                final Key texture = headRender.texture();
+                if (texture != null) {
+                    writer.name("texture").value(KeySerializer.toString(texture));
+                }
 
-            final float animation = headRender.animation();
-            if (animation != HeadSpecialRender.DEFAULT_ANIMATION) {
-                writer.name("animation").value(animation);
+                final float animation = headRender.animation();
+                if (animation != HeadSpecialRender.DEFAULT_ANIMATION) {
+                    writer.name("animation").value(animation);
+                }
             }
-        } else if (render instanceof ShulkerBoxSpecialRender) {
-            final ShulkerBoxSpecialRender shulkerBoxRender = (ShulkerBoxSpecialRender) render;
-            writer.name("type").value("shulker_box");
-            writer.name("texture").value(KeySerializer.toString(shulkerBoxRender.texture()));
+            case ShulkerBoxSpecialRender shulkerBoxRender -> {
+                writer.name("type").value("shulker_box");
+                writer.name("texture").value(KeySerializer.toString(shulkerBoxRender.texture()));
 
-            final float openness = shulkerBoxRender.openness();
-            if (openness != ShulkerBoxSpecialRender.DEFAULT_OPENNESS) {
-                writer.name("openness").value(openness);
-            }
+                final float openness = shulkerBoxRender.openness();
+                if (openness != ShulkerBoxSpecialRender.DEFAULT_OPENNESS) {
+                    writer.name("openness").value(openness);
+                }
 
-            final CubeFace orientation = shulkerBoxRender.orientation();
-            if (orientation != ShulkerBoxSpecialRender.DEFAULT_ORIENTATION) {
-                writer.name("orientation").value(orientation.name().toLowerCase());
+                final CubeFace orientation = shulkerBoxRender.orientation();
+                if (orientation != ShulkerBoxSpecialRender.DEFAULT_ORIENTATION) {
+                    writer.name("orientation").value(orientation.name().toLowerCase());
+                }
             }
-        } else if (render instanceof NoFieldSpecialRender) {
-            final NoFieldSpecialRender noFieldRender = (NoFieldSpecialRender) render;
-            writer.name("type").value(KeySerializer.toString(noFieldRender.key()));
-        } else {
-            throw new IllegalArgumentException("Unknown special render type: " + render.getClass());
+            case NoFieldSpecialRender noFieldRender ->
+                    writer.name("type").value(KeySerializer.toString(noFieldRender.key()));
+            default -> throw new IllegalArgumentException("Unknown special render type: " + render.getClass());
         }
         writer.endObject();
         writer.name("base").value(KeySerializer.toString(model.base()));
@@ -320,7 +312,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                 break;
             case "hanging_sign":
             case "standing_sign":
-                final boolean hanging = type.equals("hanging_sign");
+                final boolean hanging = type.asMinimalString().equals("hanging_sign");
                 final WoodType woodType = WoodType.valueOf(modelNode.get("wood_type").getAsString().toUpperCase());
                 final Key signTexture = modelNode.has("texture")
                         ? Key.key(modelNode.get("texture").getAsString())
@@ -388,31 +380,34 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
     private void writeCondition(final @NotNull JsonWriter writer, final @NotNull ConditionItemModel model, final int targetPackFormat) throws IOException {
         writer.name("type").value("condition");
         final ItemBooleanProperty condition = model.condition();
-        if (condition instanceof CustomModelDataItemBooleanProperty) {
-            writer.name("property").value("custom_model_data");
-            final int index = ((CustomModelDataItemBooleanProperty) condition).index();
-            if (index != CustomModelDataItemBooleanProperty.DEFAULT_INDEX) {
-                writer.name("index").value(index);
+        switch (condition) {
+            case CustomModelDataItemBooleanProperty customModelDataItemBooleanProperty -> {
+                writer.name("property").value("custom_model_data");
+                final int index = customModelDataItemBooleanProperty.index();
+                if (index != CustomModelDataItemBooleanProperty.DEFAULT_INDEX) {
+                    writer.name("index").value(index);
+                }
             }
-        } else if (condition instanceof HasComponentItemBooleanProperty) {
-            final HasComponentItemBooleanProperty hasComponent = (HasComponentItemBooleanProperty) condition;
-            writer.name("property").value("has_component");
-            writer.name("component").value(hasComponent.component());
+            case HasComponentItemBooleanProperty hasComponent -> {
+                writer.name("property").value("has_component");
+                writer.name("component").value(hasComponent.component());
 
-            final boolean ignoreDefault = hasComponent.ignoreDefault();
-            if (ignoreDefault != HasComponentItemBooleanProperty.DEFAULT_IGNORE_DEFAULT) {
-                writer.name("ignore_default").value(ignoreDefault);
+                final boolean ignoreDefault = hasComponent.ignoreDefault();
+                if (ignoreDefault != HasComponentItemBooleanProperty.DEFAULT_IGNORE_DEFAULT) {
+                    writer.name("ignore_default").value(ignoreDefault);
+                }
             }
-        } else if (condition instanceof KeybindDownItemBooleanProperty) {
-            writer.name("property").value("keybind_down");
-            writer.name("keybind").value(((KeybindDownItemBooleanProperty) condition).key());
-        } else if (condition instanceof ComponentItemBooleanProperty component) {
-            writer.name("predicate").value(component.predicate());
-            writer.name("value").value(component.value());
-        } else if (condition instanceof NoFieldItemBooleanProperty) {
-            writer.name("property").value(KeySerializer.toString(((NoFieldItemBooleanProperty) condition).key()));
-        } else {
-            throw new IllegalArgumentException("Unknown condition type: " + condition.getClass());
+            case KeybindDownItemBooleanProperty keybindDownItemBooleanProperty -> {
+                writer.name("property").value("keybind_down");
+                writer.name("keybind").value(keybindDownItemBooleanProperty.key());
+            }
+            case ComponentItemBooleanProperty component -> {
+                writer.name("predicate").value(component.predicate());
+                writer.name("value").value(component.value());
+            }
+            case NoFieldItemBooleanProperty noFieldItemBooleanProperty ->
+                    writer.name("property").value(KeySerializer.toString(noFieldItemBooleanProperty.key()));
+            default -> throw new IllegalArgumentException("Unknown condition type: " + condition.getClass());
         }
         writer.name("on_true");
         serializeItemModel(model.onTrue(), writer, targetPackFormat);
@@ -489,35 +484,36 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         writer.name("type").value("select");
 
         final ItemStringProperty property = model.property();
-        if (property instanceof BlockStateItemStringProperty) {
-            writer.name("property").value("block_state");
-            writer.name("block_state_property").value(((BlockStateItemStringProperty) property).property());
-        } else if (property instanceof CustomModelDataItemStringProperty) {
-            writer.name("property").value("custom_model_data");
-            final int index = ((CustomModelDataItemStringProperty) property).index();
-            if (index != CustomModelDataItemStringProperty.DEFAULT_INDEX) {
-                writer.name("index").value(index);
+        switch (property) {
+            case BlockStateItemStringProperty blockStateItemStringProperty -> {
+                writer.name("property").value("block_state");
+                writer.name("block_state_property").value(blockStateItemStringProperty.property());
             }
-        } else if (property instanceof LocalTimeItemStringProperty) {
-            final LocalTimeItemStringProperty localTimeProperty = (LocalTimeItemStringProperty) property;
-            writer.name("property").value("local_time");
-            writer.name("pattern").value(localTimeProperty.pattern());
+            case CustomModelDataItemStringProperty customModelDataItemStringProperty -> {
+                writer.name("property").value("custom_model_data");
+                final int index = customModelDataItemStringProperty.index();
+                if (index != CustomModelDataItemStringProperty.DEFAULT_INDEX) {
+                    writer.name("index").value(index);
+                }
+            }
+            case LocalTimeItemStringProperty localTimeProperty -> {
+                writer.name("property").value("local_time");
+                writer.name("pattern").value(localTimeProperty.pattern());
 
-            final String locale = localTimeProperty.locale();
-            if (!locale.equals(LocalTimeItemStringProperty.DEFAULT_LOCALE)) {
-                writer.name("locale").value(locale);
-            }
+                final String locale = localTimeProperty.locale();
+                if (!locale.equals(LocalTimeItemStringProperty.DEFAULT_LOCALE)) {
+                    writer.name("locale").value(locale);
+                }
 
-            final String timezone = localTimeProperty.timezone();
-            if (timezone != null) {
-                writer.name("timezone").value(timezone);
+                final String timezone = localTimeProperty.timezone();
+                if (timezone != null) {
+                    writer.name("timezone").value(timezone);
+                }
             }
-        } else if (property instanceof ComponentItemStringProperty component) {
-            writer.name("component").value(component.component());
-        } else if (property instanceof NoFieldItemStringProperty) {
-            writer.name("property").value(KeySerializer.toString(((NoFieldItemStringProperty) property).key()));
-        } else {
-            throw new IllegalArgumentException("Unknown select property type: " + property.getClass());
+            case ComponentItemStringProperty component -> writer.name("component").value(component.component());
+            case NoFieldItemStringProperty noFieldItemStringProperty ->
+                    writer.name("property").value(KeySerializer.toString(noFieldItemStringProperty.key()));
+            default -> throw new IllegalArgumentException("Unknown select property type: " + property.getClass());
         }
 
         writer.name("cases").beginArray();
@@ -526,7 +522,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
             writer.name("when");
             final List<String> when = _case.when();
             if (when.size() == 1) {
-                writer.value(when.get(0));
+                writer.value(when.getFirst());
             } else {
                 writer.beginArray();
                 for (String value : when) {
@@ -628,57 +624,63 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         writer.name("type").value("range_dispatch");
 
         final ItemNumericProperty property = model.property();
-        if (property instanceof CompassItemNumericProperty) {
-            final CompassItemNumericProperty compassProperty = (CompassItemNumericProperty) property;
-            writer.name("property").value("compass");
-            writer.name("target").value(compassProperty.target().name().toLowerCase());
+        switch (property) {
+            case CompassItemNumericProperty compassProperty -> {
+                writer.name("property").value("compass");
+                writer.name("target").value(compassProperty.target().name().toLowerCase());
 
-            final boolean wobble = compassProperty.wobble();
-            if (wobble != CompassItemNumericProperty.DEFAULT_WOBBLE) {
-                writer.name("wobble").value(wobble);
+                final boolean wobble = compassProperty.wobble();
+                if (wobble != CompassItemNumericProperty.DEFAULT_WOBBLE) {
+                    writer.name("wobble").value(wobble);
+                }
             }
-        } else if (property instanceof CountItemNumericProperty) {
-            writer.name("property").value("count");
-            final boolean normalize = ((CountItemNumericProperty) property).normalize();
-            if (normalize != CountItemNumericProperty.DEFAULT_NORMALIZE) {
-                writer.name("normalize").value(normalize);
+            case CountItemNumericProperty countItemNumericProperty -> {
+                writer.name("property").value("count");
+                final boolean normalize = countItemNumericProperty.normalize();
+                if (normalize != CountItemNumericProperty.DEFAULT_NORMALIZE) {
+                    writer.name("normalize").value(normalize);
+                }
             }
-        } else if (property instanceof CustomModelDataItemNumericProperty) {
-            writer.name("property").value("custom_model_data");
-            final int index = ((CustomModelDataItemNumericProperty) property).index();
-            if (index != CustomModelDataItemNumericProperty.DEFAULT_INDEX) {
-                writer.name("index").value(index);
+            case CustomModelDataItemNumericProperty customModelDataItemNumericProperty -> {
+                writer.name("property").value("custom_model_data");
+                final int index = customModelDataItemNumericProperty.index();
+                if (index != CustomModelDataItemNumericProperty.DEFAULT_INDEX) {
+                    writer.name("index").value(index);
+                }
             }
-        } else if (property instanceof DamageItemNumericProperty) {
-            writer.name("property").value("damage");
-            final boolean normalize = ((DamageItemNumericProperty) property).normalize();
-            if (normalize != DamageItemNumericProperty.DEFAULT_NORMALIZE) {
-                writer.name("normalize").value(normalize);
+            case DamageItemNumericProperty damageItemNumericProperty -> {
+                writer.name("property").value("damage");
+                final boolean normalize = damageItemNumericProperty.normalize();
+                if (normalize != DamageItemNumericProperty.DEFAULT_NORMALIZE) {
+                    writer.name("normalize").value(normalize);
+                }
             }
-        } else if (property instanceof TimeItemNumericProperty) {
-            final TimeItemNumericProperty timeProperty = (TimeItemNumericProperty) property;
-            writer.name("property").value("time");
-            final boolean wobble = timeProperty.wobble();
-            if (wobble != TimeItemNumericProperty.DEFAULT_WOBBLE) {
-                writer.name("wobble").value(wobble);
+            case TimeItemNumericProperty timeProperty -> {
+                writer.name("property").value("time");
+                final boolean wobble = timeProperty.wobble();
+                if (wobble != TimeItemNumericProperty.DEFAULT_WOBBLE) {
+                    writer.name("wobble").value(wobble);
+                }
+                writer.name("source").value(timeProperty.source().name().toLowerCase());
             }
-            writer.name("source").value(timeProperty.source().name().toLowerCase());
-        } else if (property instanceof UseCycleItemNumericProperty) {
-            writer.name("property").value("use_cycle");
-            final float period = ((UseCycleItemNumericProperty) property).period();
-            if (period != UseCycleItemNumericProperty.DEFAULT_PERIOD) {
-                writer.name("period").value(period);
+            case UseCycleItemNumericProperty useCycleItemNumericProperty -> {
+                writer.name("property").value("use_cycle");
+                final float period = useCycleItemNumericProperty.period();
+                if (period != UseCycleItemNumericProperty.DEFAULT_PERIOD) {
+                    writer.name("period").value(period);
+                }
             }
-        } else if (property instanceof UseDurationItemNumericProperty) {
-            writer.name("property").value("use_duration");
-            final boolean remaining = ((UseDurationItemNumericProperty) property).remaining();
-            if (remaining != UseDurationItemNumericProperty.DEFAULT_REMAINING) {
-                writer.name("remaining").value(remaining);
+            case UseDurationItemNumericProperty useDurationItemNumericProperty -> {
+                writer.name("property").value("use_duration");
+                final boolean remaining = useDurationItemNumericProperty.remaining();
+                if (remaining != UseDurationItemNumericProperty.DEFAULT_REMAINING) {
+                    writer.name("remaining").value(remaining);
+                }
             }
-        } else if (property instanceof NoFieldItemNumericProperty) {
-            writer.name("property").value(KeySerializer.toString(((NoFieldItemNumericProperty) property).key()));
-        } else {
-            throw new IllegalArgumentException("Unknown range dispatch property type: " + property.getClass());
+            case NoFieldItemNumericProperty noFieldItemNumericProperty ->
+                    writer.name("property").value(KeySerializer.toString(noFieldItemNumericProperty.key()));
+            default ->
+                    throw new IllegalArgumentException("Unknown range dispatch property type: " + property.getClass());
         }
 
         final float scale = model.scale();

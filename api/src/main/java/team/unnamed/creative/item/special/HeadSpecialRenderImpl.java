@@ -35,11 +35,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class HeadSpecialRenderImpl implements HeadSpecialRender {
-    private final HeadType kind;
-    private final Key texture;
-    private final float animation;
-
+record HeadSpecialRenderImpl(HeadType kind, Key texture, float animation) implements HeadSpecialRender {
     HeadSpecialRenderImpl(final @NotNull HeadType kind, final @Nullable Key texture, final float animation) {
         this.kind = requireNonNull(kind, "kind");
         this.texture = texture;
@@ -57,16 +53,11 @@ final class HeadSpecialRenderImpl implements HeadSpecialRender {
     }
 
     @Override
-    public float animation() {
-        return animation;
-    }
-
-    @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("kind", kind),
-            ExaminableProperty.of("texture", texture),
-            ExaminableProperty.of("animation", animation)
+                ExaminableProperty.of("kind", kind),
+                ExaminableProperty.of("texture", texture),
+                ExaminableProperty.of("animation", animation)
         );
     }
 
@@ -75,17 +66,12 @@ final class HeadSpecialRenderImpl implements HeadSpecialRender {
         if (o == null || getClass() != o.getClass()) return false;
         HeadSpecialRenderImpl that = (HeadSpecialRenderImpl) o;
         return Float.compare(that.animation, animation) == 0 &&
-            kind == that.kind &&
-            Objects.equals(texture, that.texture);
+                kind == that.kind &&
+                Objects.equals(texture, that.texture);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(kind, texture, animation);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

@@ -73,7 +73,7 @@ public class Selector implements Examinable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 

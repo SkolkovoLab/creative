@@ -26,29 +26,10 @@ package team.unnamed.creative.metadata.animation;
 import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class AnimationFrameImpl implements AnimationFrame {
-    private final int index;
-    private final int frameTime;
-
-    AnimationFrameImpl(final int index, final int frameTime) {
-        this.index = index;
-        this.frameTime = frameTime;
-    }
-
-    @Override
-    public int index() {
-        return index;
-    }
-
-    @Override
-    public int frameTime() {
-        return frameTime;
-    }
+record AnimationFrameImpl(int index, int frameTime) implements AnimationFrame {
 
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
@@ -63,17 +44,4 @@ final class AnimationFrameImpl implements AnimationFrame {
         return examine(StringExaminer.simpleEscaping());
     }
 
-    @Override
-    public boolean equals(final @Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final AnimationFrameImpl frame = (AnimationFrameImpl) o;
-        return index == frame.index
-                && frameTime == frame.frameTime;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(index, frameTime);
-    }
 }

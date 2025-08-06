@@ -51,7 +51,7 @@ public class WaypointStyleSerializer implements JsonResourceSerializer<WaypointS
     }
 
     @Override
-    public WaypointStyle deserializeFromJson(JsonElement node, Key key) throws IOException {
+    public WaypointStyle deserializeFromJson(JsonElement node, Key key) {
         WaypointStyle.Builder builder = WaypointStyle.waypointStyle()
                 .key(key);
 

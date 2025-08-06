@@ -226,7 +226,7 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
             writer.name(type.name().toLowerCase(Locale.ROOT))
                     .beginObject();
             if (face.uv() != null) {
-                TextureUV uv = face.uv0();
+                TextureUV uv = face.uv();
                 TextureUV defaultUv = getDefaultUvForFace(type, element.from(), element.to());
                 if (uv != null && !uv.equals(defaultUv)) {
                     writer.name("uv");
@@ -256,22 +256,15 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
     private static TextureUV getDefaultUvForFace(CubeFace face, Vector3Float from, Vector3Float to) {
         from = from.divide(MINECRAFT_UV_UNIT);
         to = to.divide(MINECRAFT_UV_UNIT);
-        switch (face) {
-            case WEST:
-                return TextureUV.uv(from.z(), 1F - to.y(), to.z(), 1F - from.y());
-            case EAST:
-                return TextureUV.uv(1F - to.z(), 1F - to.y(), 1F - from.z(), 1F - from.y());
-            case DOWN:
-                return TextureUV.uv(from.x(), 1F - to.z(), to.x(), 1F - from.z());
-            case UP:
-                return TextureUV.uv(from.x(), from.z(), to.x(), to.z());
-            case NORTH:
-                return TextureUV.uv(1F - to.x(), 1F - to.y(), 1F - from.x(), 1F - from.y());
-            case SOUTH:
-                return TextureUV.uv(from.x(), 1F - to.y(), to.x(), 1F - from.y());
-            default:
-                throw new IllegalArgumentException("Unknown face: " + face);
-        }
+        return switch (face) {
+            case WEST -> TextureUV.uv(from.z(), 1F - to.y(), to.z(), 1F - from.y());
+            case EAST -> TextureUV.uv(1F - to.z(), 1F - to.y(), 1F - from.z(), 1F - from.y());
+            case DOWN -> TextureUV.uv(from.x(), 1F - to.z(), to.x(), 1F - from.z());
+            case UP -> TextureUV.uv(from.x(), from.z(), to.x(), to.z());
+            case NORTH -> TextureUV.uv(1F - to.x(), 1F - to.y(), 1F - from.x(), 1F - from.y());
+            case SOUTH -> TextureUV.uv(from.x(), 1F - to.y(), to.x(), 1F - from.y());
+            default -> throw new IllegalArgumentException("Unknown face: " + face);
+        };
     }
 
     private static Element readElement(JsonElement node) {
@@ -361,20 +354,14 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
             Object value = predicate.value();
 
             // match the type of the value and write it
-            if (value instanceof Long) {
-                writer.value((long) value);
-            } else if (value instanceof Float) {
-                writer.value((float) value);
-            } else if (value instanceof Double) {
-                writer.value((double) value);
-            } else if (value instanceof Number) {
-                writer.value((Number) value);
-            } else if (value instanceof String) {
-                writer.value((String) value);
-            } else if (value instanceof Boolean) {
-                writer.value((boolean) value);
-            } else {
-                throw new IOException("Unknown predicate value type: " + value.getClass().getName());
+            switch (value) {
+                case Long l -> writer.value(l);
+                case Float v -> writer.value(v);
+                case Double d -> writer.value(d);
+                case Number number -> writer.value(number);
+                case String s -> writer.value(s);
+                case Boolean b -> writer.value(b);
+                default -> throw new IOException("Unknown predicate value type: " + value.getClass().getName());
             }
         }
         writer.endObject()
@@ -387,24 +374,29 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
         Key key = Key.key(objectNode.get("model").getAsString());
         List<ItemPredicate> predicates = new ArrayList<>();
         for (Map.Entry<String, JsonElement> predicateEntry : objectNode.getAsJsonObject("predicate").entrySet()) {
-            JsonElement value = predicateEntry.getValue();
-            // TODO: better transformation
-            Object object;
-            if (value.isJsonPrimitive()) {
-                JsonPrimitive primitive = value.getAsJsonPrimitive();
-                if (primitive.isNumber()) {
-                    object = primitive.getAsNumber();
-                } else if (primitive.isBoolean()) {
-                    object = primitive.getAsBoolean();
-                } else {
-                    object = primitive.getAsString();
-                }
-            } else {
-                object = value.getAsString();
-            }
+            Object object = getObject(predicateEntry);
             predicates.add(ItemPredicate.custom(predicateEntry.getKey(), object));
         }
         return ItemOverride.of(key, predicates);
+    }
+
+    private static Object getObject(Map.Entry<String, JsonElement> predicateEntry) {
+        JsonElement value = predicateEntry.getValue();
+        // TODO: better transformation
+        Object object;
+        if (value.isJsonPrimitive()) {
+            JsonPrimitive primitive = value.getAsJsonPrimitive();
+            if (primitive.isNumber()) {
+                object = primitive.getAsNumber();
+            } else if (primitive.isBoolean()) {
+                object = primitive.getAsBoolean();
+            } else {
+                object = primitive.getAsString();
+            }
+        } else {
+            object = value.getAsString();
+        }
+        return object;
     }
 
     private static void writeItemTransform(JsonWriter writer, ItemTransform transform) throws IOException {

@@ -24,7 +24,6 @@
 package team.unnamed.creative.metadata.pack;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +38,6 @@ final class PackMetaImpl implements PackMeta {
 
     private final PackFormat format;
     private final Component description;
-    private String legacyDescription;
 
     PackMetaImpl(
             final @NotNull PackFormat format,
@@ -66,16 +64,7 @@ final class PackMetaImpl implements PackMeta {
     }
 
     @Override
-    public @NotNull String description() {
-        if (legacyDescription != null) {
-            return legacyDescription;
-        } else {
-            return legacyDescription = LegacyComponentSerializer.legacySection().serialize(description);
-        }
-    }
-
-    @Override
-    public @NotNull Component description0() {
+    public @NotNull Component description() {
         return description;
     }
 
@@ -88,7 +77,7 @@ final class PackMetaImpl implements PackMeta {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 

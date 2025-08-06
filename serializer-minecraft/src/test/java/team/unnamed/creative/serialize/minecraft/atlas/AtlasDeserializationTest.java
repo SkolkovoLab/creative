@@ -57,49 +57,49 @@ class AtlasDeserializationTest {
 
         // assert directory atlas sources
         {
-            AtlasSource s1 = sources.get(0);
-            assertTrue(s1 instanceof DirectoryAtlasSource, "First source must be a directory atlas source");
+            AtlasSource s1 = sources.getFirst();
+            assertInstanceOf(DirectoryAtlasSource.class, s1, "First source must be a directory atlas source");
             DirectoryAtlasSource d1 = (DirectoryAtlasSource) s1;
             assertEquals("block", d1.source(), "First source must have source = 'block'");
             assertEquals("block/", d1.prefix(), "First source must have prefix = 'block/'");
         }
         {
             AtlasSource s2 = sources.get(1);
-            assertTrue(s2 instanceof DirectoryAtlasSource, "Second source must be a directory atlas source");
+            assertInstanceOf(DirectoryAtlasSource.class, s2, "Second source must be a directory atlas source");
             DirectoryAtlasSource d2 = (DirectoryAtlasSource) s2;
             assertEquals("item", d2.source(), "Second source must have source = 'item'");
             assertEquals("item/", d2.prefix(), "Second source must have prefix = 'item/'");
         }
         {
             AtlasSource s3 = sources.get(2);
-            assertTrue(s3 instanceof DirectoryAtlasSource, "Third source must be a directory atlas source");
+            assertInstanceOf(DirectoryAtlasSource.class, s3, "Third source must be a directory atlas source");
             DirectoryAtlasSource d2 = (DirectoryAtlasSource) s3;
             assertEquals("entity/conduit", d2.source(), "Third source must have source = 'entity/conduit'");
             assertEquals("entity/conduit/", d2.prefix(), "Second source must have prefix = 'entity/conduit/'");
         }
         {
             AtlasSource s4 = sources.get(3);
-            assertTrue(s4 instanceof SingleAtlasSource, "Fourth source must be a single atlas source");
+            assertInstanceOf(SingleAtlasSource.class, s4, "Fourth source must be a single atlas source");
             SingleAtlasSource single1 = (SingleAtlasSource) s4;
             assertEquals(Key.key("entity/bell/bell_body"), single1.resource(), "Fourth source must have resource = 'minecraft:entity/bell/bell_body'");
             assertNull(single1.sprite(), "Fourth source must have sprite = null");
         }
         {
             AtlasSource s5 = sources.get(4);
-            assertTrue(s5 instanceof SingleAtlasSource, "Fifth source must be a single atlas source");
+            assertInstanceOf(SingleAtlasSource.class, s5, "Fifth source must be a single atlas source");
             SingleAtlasSource single2 = (SingleAtlasSource) s5;
             assertEquals(Key.key("entity/decorated_pot/decorated_pot_side"), single2.resource(), "Fifth source must have resource = 'minecraft:entity/decorated_pot/decorated_pot_side'");
             assertNull(single2.sprite(), "Fifth source must have sprite = null");
         }
         {
             AtlasSource s6 = sources.get(5);
-            assertTrue(s6 instanceof SingleAtlasSource, "Sixth source must be a single atlas source");
+            assertInstanceOf(SingleAtlasSource.class, s6, "Sixth source must be a single atlas source");
             SingleAtlasSource single3 = (SingleAtlasSource) s6;
             assertEquals(Key.key("entity/enchanting_table_book"), single3.resource(), "Sixth source must have resource = 'minecraft:entity/enchanting_table_book'");
         }
         {
             AtlasSource s7 = sources.get(6);
-            assertTrue(s7 instanceof PalettedPermutationsAtlasSource, "Seventh source must be a paletted permutations atlas source");
+            assertInstanceOf(PalettedPermutationsAtlasSource.class, s7, "Seventh source must be a paletted permutations atlas source");
             PalettedPermutationsAtlasSource permutations = (PalettedPermutationsAtlasSource) s7;
             assertEquals(Key.key("trims/color_palettes/trim_palette"), permutations.paletteKey(), "Seventh source must have palette key = 'minecraft:trims/color_palettes/trim_palette'");
             assertEquals(Arrays.asList(

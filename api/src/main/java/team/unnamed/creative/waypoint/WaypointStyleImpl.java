@@ -32,46 +32,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 @ApiStatus.Internal
-public class WaypointStyleImpl implements WaypointStyle {
-    private final @NotNull Key key;
-    private final int nearDistance;
-    private final int farDistance;
-    private final @NotNull List<Key> sprites;
-
-    public WaypointStyleImpl(@NotNull Key key, int nearDistance, int farDistance, @NotNull List<Key> sprites) {
-        this.key = key;
-        this.nearDistance = nearDistance;
-        this.farDistance = farDistance;
-        this.sprites = sprites;
-    }
-
-    @Override
-    public @NotNull Key key() {
-        return key;
-    }
-
-    @Override
-    public int nearDistance() {
-        return nearDistance;
-    }
-
-    @Override
-    public int farDistance() {
-        return farDistance;
-    }
+public record WaypointStyleImpl(@NotNull Key key, int nearDistance, int farDistance,
+                                @NotNull List<Key> sprites) implements WaypointStyle {
 
     @Override
     public @NotNull List<Key> sprites() {
         return Collections.unmodifiableList(sprites);
-    }
-
-    @Override
-    public @NotNull String examinableName() {
-        return WaypointStyle.super.examinableName();
     }
 
     @Override
@@ -92,20 +61,14 @@ public class WaypointStyleImpl implements WaypointStyle {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof WaypointStyleImpl)) return false;
-        WaypointStyleImpl that = (WaypointStyleImpl) obj;
+        if (!(obj instanceof WaypointStyleImpl that)) return false;
         return nearDistance == that.nearDistance
                 && farDistance == that.farDistance
                 && key.equals(that.key)
                 && sprites.equals(that.sprites);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(key, nearDistance, farDistance, sprites);
-    }
-
-    static final class BuilderImpl implements WaypointStyle.Builder {
+    static final class BuilderImpl implements Builder {
         private Key key;
         private int nearDistance = WaypointStyle.DEFAULT_NEAR_DISTANCE;
         private int farDistance = WaypointStyle.DEFAULT_FAR_DISTANCE;

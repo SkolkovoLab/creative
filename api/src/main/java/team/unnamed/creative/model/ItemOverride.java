@@ -27,10 +27,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.examination.Examinable;
 import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
-import team.unnamed.creative.item.ItemModel;
 import team.unnamed.creative.item.RangeDispatchItemModel;
 
 import java.util.Arrays;
@@ -102,7 +100,7 @@ public class ItemOverride implements Examinable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 

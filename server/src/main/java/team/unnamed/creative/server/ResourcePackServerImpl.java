@@ -85,10 +85,8 @@ final class ResourcePackServerImpl implements ResourcePackServer {
         final Headers headers = exchange.getRequestHeaders();
         final ResourcePackDownloadRequest request = ResourcePackDownloadRequestParser.parse(headers);
 
-        try {
+        try (exchange) {
             handler.onRequest(request, exchange);
-        } finally {
-            exchange.close();
         }
     }
 

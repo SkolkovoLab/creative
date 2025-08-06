@@ -29,16 +29,12 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.base.CubeFace;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ShulkerBoxSpecialRenderImpl implements ShulkerBoxSpecialRender {
-    private final Key texture;
-    private final float openness;
-    private final CubeFace orientation;
-
+record ShulkerBoxSpecialRenderImpl(Key texture, float openness,
+                                   CubeFace orientation) implements ShulkerBoxSpecialRender {
     ShulkerBoxSpecialRenderImpl(final @NotNull Key texture, final float openness, final @NotNull CubeFace orientation) {
         this.texture = requireNonNull(texture, "texture");
         this.openness = openness;
@@ -55,11 +51,6 @@ final class ShulkerBoxSpecialRenderImpl implements ShulkerBoxSpecialRender {
     }
 
     @Override
-    public float openness() {
-        return openness;
-    }
-
-    @Override
     public @NotNull CubeFace orientation() {
         return orientation;
     }
@@ -67,9 +58,9 @@ final class ShulkerBoxSpecialRenderImpl implements ShulkerBoxSpecialRender {
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("texture", texture),
-            ExaminableProperty.of("openness", openness),
-            ExaminableProperty.of("orientation", orientation)
+                ExaminableProperty.of("texture", texture),
+                ExaminableProperty.of("openness", openness),
+                ExaminableProperty.of("orientation", orientation)
         );
     }
 
@@ -78,17 +69,12 @@ final class ShulkerBoxSpecialRenderImpl implements ShulkerBoxSpecialRender {
         if (o == null || getClass() != o.getClass()) return false;
         ShulkerBoxSpecialRenderImpl that = (ShulkerBoxSpecialRenderImpl) o;
         return Float.compare(that.openness, openness) == 0 &&
-            texture.equals(that.texture) &&
-            orientation == that.orientation;
+                texture.equals(that.texture) &&
+                orientation == that.orientation;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(texture, openness, orientation);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

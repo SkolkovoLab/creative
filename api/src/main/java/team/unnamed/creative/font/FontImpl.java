@@ -31,15 +31,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class FontImpl implements Font {
-    private final Key key;
-    private final List<FontProvider> providers;
-
+record FontImpl(Key key, List<FontProvider> providers) implements Font {
     FontImpl(
             final @NotNull Key key,
             final @NotNull List<FontProvider> providers
@@ -88,12 +84,7 @@ final class FontImpl implements Font {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(key, providers);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 

@@ -24,32 +24,19 @@
 package team.unnamed.creative.model;
 
 import net.kyori.adventure.key.Key;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.ResourcePack;
-import team.unnamed.creative.base.Writable;
 import team.unnamed.creative.item.ConditionItemModel;
 import team.unnamed.creative.item.Item;
 import team.unnamed.creative.item.ItemModel;
 import team.unnamed.creative.item.RangeDispatchItemModel;
 import team.unnamed.creative.item.ReferenceItemModel;
 import team.unnamed.creative.item.SelectItemModel;
-import team.unnamed.creative.item.property.CompassItemNumericProperty;
-import team.unnamed.creative.item.property.ItemBooleanProperty;
 import team.unnamed.creative.item.property.ItemNumericProperty;
-import team.unnamed.creative.item.property.ItemProperty;
 import team.unnamed.creative.item.property.ItemStringProperty;
-import team.unnamed.creative.item.property.TimeItemNumericProperty;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static java.util.Objects.requireNonNull;
 
 public final class ItemOverrideConverter {
 
@@ -86,9 +73,9 @@ public final class ItemOverrideConverter {
 
                 } else {
                     // cases
-                    if (standardItem.model() instanceof SelectItemModel) {
+                    if (standardItem.model() instanceof SelectItemModel selectModel) {
                         SelectItemModel.Builder builder = ItemModel.select();
-                        builder.property(ItemStringProperty.customModelData()).fallback(standardItem.model());
+                        builder.property(ItemStringProperty.customModelData()).fallback(selectModel);
                         for (ItemOverride override : model.overrides()) {
                             Integer cmd = getCustomModelData(override);
                             if (cmd == null) continue;
@@ -98,16 +85,15 @@ public final class ItemOverrideConverter {
                         resourcePack.item(Item.item(itemKey, builder.build()));
                     }
                     // onTrue onFalse
-                    if (standardItem.model() instanceof ConditionItemModel) {
-                        ConditionItemModel conditionItemModel = (ConditionItemModel) standardItem.model();
+                    if (standardItem.model() instanceof ConditionItemModel conditionItemModel) {
 
                         Map<Integer, List<ItemOverride>> grouped = model.overrides().stream().filter(o -> getCustomModelData(o) != 0)
                                 .collect(Collectors.groupingBy(ItemOverrideConverter::getCustomModelData));
 
                         //onTrue Model
-                        List<ItemOverride> trueOverrides = grouped.values().stream().map(overrides -> overrides.get(overrides.size() - 1)).collect(Collectors.toList());
+                        List<ItemOverride> trueOverrides = grouped.values().stream().map(List::getLast).toList();
                         RangeDispatchItemModel.Builder trueBuilder = ItemModel.rangeDispatch();
-                        List<ItemOverride> falseOverrides = grouped.values().stream().map(overrides -> overrides.get(0)).collect(Collectors.toList());
+                        List<ItemOverride> falseOverrides = grouped.values().stream().map(List::getFirst).toList();
                         RangeDispatchItemModel.Builder falseBuilder = ItemModel.rangeDispatch();
 
                         trueBuilder.addEntry(RangeDispatchItemModel.Entry.entry(0f, conditionItemModel.onTrue()));
@@ -129,8 +115,7 @@ public final class ItemOverrideConverter {
                         resourcePack.item(Item.item(itemKey, conditionItemModel));
                     }
 
-                    if (standardItem.model() instanceof ReferenceItemModel) {
-                        ReferenceItemModel referenceItemModel = (ReferenceItemModel) standardItem.model();
+                    if (standardItem.model() instanceof ReferenceItemModel referenceItemModel) {
                         RangeDispatchItemModel.Builder builder = ItemModel.rangeDispatch();
                         builder.fallback(standardItem.model()).property(ItemNumericProperty.customModelData());
 

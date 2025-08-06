@@ -58,7 +58,7 @@ public class SodiumMetaImpl implements SodiumMeta {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 

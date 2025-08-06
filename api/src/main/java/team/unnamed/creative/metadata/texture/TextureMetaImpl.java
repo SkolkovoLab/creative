@@ -26,34 +26,15 @@ package team.unnamed.creative.metadata.texture;
 import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import team.unnamed.creative.metadata.MetadataPart;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class TextureMetaImpl implements TextureMeta {
-    private final boolean blur;
-    private final boolean clamp;
-
-    TextureMetaImpl(final boolean blur, final boolean clamp) {
-        this.blur = blur;
-        this.clamp = clamp;
-    }
+record TextureMetaImpl(boolean blur, boolean clamp) implements TextureMeta {
 
     @Override
     public @NotNull Class<? extends MetadataPart> type() {
         return TextureMeta.class;
-    }
-
-    @Override
-    public boolean blur() {
-        return blur;
-    }
-
-    @Override
-    public boolean clamp() {
-        return clamp;
     }
 
     @Override
@@ -69,17 +50,4 @@ final class TextureMetaImpl implements TextureMeta {
         return examine(StringExaminer.simpleEscaping());
     }
 
-    @Override
-    public boolean equals(final @Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final TextureMetaImpl that = (TextureMetaImpl) o;
-        return blur == that.blur
-                && clamp == that.clamp;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(blur, clamp);
-    }
 }

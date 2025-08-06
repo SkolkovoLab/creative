@@ -27,15 +27,11 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class CompassItemNumericPropertyImpl implements CompassItemNumericProperty {
-    private final Target target;
-    private final boolean wobble;
-
+record CompassItemNumericPropertyImpl(Target target, boolean wobble) implements CompassItemNumericProperty {
     CompassItemNumericPropertyImpl(final @NotNull Target target, final boolean wobble) {
         this.target = requireNonNull(target, "target");
         this.wobble = wobble;
@@ -44,11 +40,6 @@ final class CompassItemNumericPropertyImpl implements CompassItemNumericProperty
     @Override
     public @NotNull Target target() {
         return target;
-    }
-
-    @Override
-    public boolean wobble() {
-        return wobble;
     }
 
     @Override
@@ -67,12 +58,7 @@ final class CompassItemNumericPropertyImpl implements CompassItemNumericProperty
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(target, wobble);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

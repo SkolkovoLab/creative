@@ -23,7 +23,6 @@
  */
 package team.unnamed.creative.base;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -215,7 +214,7 @@ public interface Readable {
             }
 
             @Override
-            public String toString() {
+            public @NotNull String toString() {
                 return "Readable.copyInputStream";
             }
         };
@@ -283,7 +282,7 @@ public interface Readable {
             }
 
             @Override
-            public String toString() {
+            public @NotNull String toString() {
                 return "Readable { type='utf8', value='" + string + "' }";
             }
 

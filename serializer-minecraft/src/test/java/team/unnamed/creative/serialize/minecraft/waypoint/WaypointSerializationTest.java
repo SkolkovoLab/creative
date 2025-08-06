@@ -24,6 +24,7 @@
 package team.unnamed.creative.serialize.minecraft.waypoint;
 
 import net.kyori.adventure.key.Key;
+import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import team.unnamed.creative.waypoint.WaypointStyle;
@@ -51,7 +52,7 @@ public class WaypointSerializationTest {
     @Test
     @DisplayName("Test Waypoint Style JSON Deserialization")
     void test_deserialize() throws Exception {
-        String json = "{\"near_distance\":0,\"far_distance\":100,\"sprites\":[\"test:abc\",\"test:def\"]}";
+        @Language("JSON") String json = "{\"near_distance\":0,\"far_distance\":100,\"sprites\":[\"test:abc\",\"test:def\"]}";
         WaypointStyle style = WaypointStyleSerializer.INSTANCE.deserializeFromJsonString(json, Key.key("minecraft", "test"));
 
         assertEquals(Key.key("minecraft", "test"), style.key());

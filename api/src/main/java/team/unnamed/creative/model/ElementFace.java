@@ -122,47 +122,14 @@ public interface ElementFace extends Examinable {
     }
 
     /**
-     * Returns the area of the texture to
-     * use according to the scheme [x1, y1, x2, y2]
-     *
-     * <p>All components are always between 0 and
-     * 1 and then converted to 0-16 (Minecraft UV)
-     * when creating the resource pack</p>
-     *
-     * <p>If the numbers of x1 and x2 are swapped
-     * the texture flips</p>
-     *
-     * <p>UV is optional, and if not supplied it automatically
-     * generates based on the element's position.</p>
-     *
-     * @return The texture area to use
-     * @since 1.0.0
-     * @deprecated Use {@link #uv0()} instead
-     */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
-    default @Nullable Vector4Float uv() {
-        final TextureUV uv = uv0();
-        if (uv == null) {
-            return null;
-        } else {
-            return new Vector4Float(uv.from().x(), uv.from().y(), uv.to().x(), uv.to().y());
-        }
-    }
-
-    /**
      * Returns the area of the texture to use.
      *
      * <p>If the UV is not specified, it will be automatically
      * generated based on the element's position and face.</p>
      *
      * @return The texture area to use
-     * @since 1.1.0
-     * @deprecated Will be renamed to "uv" in 2.0.0
      */
-    @Deprecated
-    @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
-    @Nullable TextureUV uv0();
+    @Nullable TextureUV uv();
 
     /**
      * Returns this face's texture in variable

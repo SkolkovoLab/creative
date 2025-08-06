@@ -28,14 +28,11 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.base.DyeColor;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class BannerSpecialRenderImpl implements BannerSpecialRender {
-    private final DyeColor color;
-
+record BannerSpecialRenderImpl(DyeColor color) implements BannerSpecialRender {
     BannerSpecialRenderImpl(final @NotNull DyeColor color) {
         this.color = requireNonNull(color, "color");
     }
@@ -60,12 +57,7 @@ final class BannerSpecialRenderImpl implements BannerSpecialRender {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(color);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

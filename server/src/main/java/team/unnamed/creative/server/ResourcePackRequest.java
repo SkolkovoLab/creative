@@ -29,24 +29,18 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.server.request.ResourcePackDownloadRequest;
 
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * @deprecated Use {@link team.unnamed.creative.server.request.ResourcePackDownloadRequest} instead
+ * @deprecated Use {@link ResourcePackDownloadRequest} instead
  */
 @Deprecated
 @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
-public final class ResourcePackRequest implements ResourcePackDownloadRequest {
-
-    private final UUID uuid;
-    private final String username;
-    private final String clientVersion;
-    private final String clientVersionId;
-    private final int packFormat;
+public record ResourcePackRequest(UUID uuid, String username, String clientVersion, String clientVersionId,
+                                  int packFormat) implements ResourcePackDownloadRequest {
 
     public ResourcePackRequest(
             UUID uuid,
@@ -122,7 +116,7 @@ public final class ResourcePackRequest implements ResourcePackDownloadRequest {
      * @return The expected pack format version
      */
     @Override
-    public @NotNull int packFormat() {
+    public int packFormat() {
         return packFormat;
     }
 
@@ -138,7 +132,7 @@ public final class ResourcePackRequest implements ResourcePackDownloadRequest {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -152,11 +146,6 @@ public final class ResourcePackRequest implements ResourcePackDownloadRequest {
                 && username.equals(that.username)
                 && clientVersion.equals(that.clientVersion)
                 && clientVersionId.equals(that.clientVersionId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid, username, clientVersion, clientVersionId, packFormat);
     }
 
 }

@@ -27,22 +27,14 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
-final class CustomModelDataItemBooleanPropertyImpl implements CustomModelDataItemBooleanProperty {
-    private final int index;
-
+record CustomModelDataItemBooleanPropertyImpl(int index) implements CustomModelDataItemBooleanProperty {
     CustomModelDataItemBooleanPropertyImpl(final int index) {
         this.index = index;
         if (index < 0) {
             throw new IllegalArgumentException("custom_model_data condition must have a non-negative index, got " + index);
         }
-    }
-
-    @Override
-    public int index() {
-        return index;
     }
 
     @Override
@@ -60,12 +52,7 @@ final class CustomModelDataItemBooleanPropertyImpl implements CustomModelDataIte
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(index);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

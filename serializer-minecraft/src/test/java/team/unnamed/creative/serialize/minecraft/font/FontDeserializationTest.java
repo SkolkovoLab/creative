@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class FontDeserializationTest {
     @Test
@@ -61,15 +61,15 @@ class FontDeserializationTest {
         assertEquals(Key.key("minecraft", "default"), font.key(), "font key must be minecraft:default!");
         List<FontProvider> providers = font.providers();
         assertEquals(1, providers.size(), "there must be only one provider!");
-        FontProvider provider = providers.get(0);
-        assertTrue(provider instanceof BitMapFontProvider, "Provider must be instance of BitMap provider");
+        FontProvider provider = providers.getFirst();
+        assertInstanceOf(BitMapFontProvider.class, provider, "Provider must be instance of BitMap provider");
         BitMapFontProvider bitMapProvider = (BitMapFontProvider) provider;
         assertEquals(Key.key("creative", "test"), bitMapProvider.file(), "file must be creative:test!");
         assertEquals(8, bitMapProvider.ascent(), "ascent must be 8!");
         assertEquals(BitMapFontProvider.DEFAULT_HEIGHT, bitMapProvider.height(), "height must be default!");
         List<String> chars = bitMapProvider.characters();
         assertEquals(1, chars.size(), "chars list must be singleton!");
-        assertEquals("a", chars.get(0), "singleton string in list must be 'a'");
+        assertEquals("a", chars.getFirst(), "singleton string in list must be 'a'");
     }
 
     @Test

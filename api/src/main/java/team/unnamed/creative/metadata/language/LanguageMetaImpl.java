@@ -32,15 +32,12 @@ import org.jetbrains.annotations.Unmodifiable;
 import team.unnamed.creative.metadata.MetadataPart;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 import static team.unnamed.creative.util.MoreCollections.immutableMapOf;
 
-final class LanguageMetaImpl implements LanguageMeta {
-    private final Map<String, LanguageEntry> languages;
-
+record LanguageMetaImpl(Map<String, LanguageEntry> languages) implements LanguageMeta {
     LanguageMetaImpl(final @NotNull Map<String, LanguageEntry> languages) {
         this.languages = immutableMapOf(requireNonNull(languages, "languages"));
         validate();
@@ -86,8 +83,4 @@ final class LanguageMetaImpl implements LanguageMeta {
         return languages.equals(that.languages);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(languages);
-    }
 }

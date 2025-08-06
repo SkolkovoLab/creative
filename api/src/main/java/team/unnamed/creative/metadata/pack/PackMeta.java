@@ -72,28 +72,11 @@ public interface PackMeta extends MetadataPart {
     /**
      * Returns the pack description. Text shown below the pack name in
      * the resource pack menu. The text is shown on two lines. If the
-     * text is too long it is truncated
-     *
-     * @return The resource-pack description
-     * @since 1.0.0
-     */
-    @NotNull String description();
-
-    /**
-     * Returns the pack description. Text shown below the pack name in
-     * the resource pack menu. The text is shown on two lines. If the
      * text is too long, it is truncated.
      *
      * @return The resource-pack description
-     * @since 1.1.0
-     * @deprecated This method will be renamed to description() and the
-     * description() method that returns a string will be removed in
-     * release 2.0.0
      */
-    @ApiStatus.Internal
-    @ApiStatus.ScheduledForRemoval(inVersion = "2.0.0")
-    @Deprecated
-    @NotNull Component description0();
+    @NotNull Component description();
 
     /**
      * Creates a new {@link PackMeta} instance from

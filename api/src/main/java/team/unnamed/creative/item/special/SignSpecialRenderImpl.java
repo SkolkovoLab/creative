@@ -35,20 +35,11 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class SignSpecialRenderImpl implements SignSpecialRender {
-    private final boolean hanging;
-    private final WoodType woodType;
-    private final Key texture;
-
+record SignSpecialRenderImpl(boolean hanging, WoodType woodType, Key texture) implements SignSpecialRender {
     SignSpecialRenderImpl(final boolean hanging, final @NotNull WoodType woodType, final @Nullable Key texture) {
         this.hanging = hanging;
         this.woodType = requireNonNull(woodType, "woodType");
         this.texture = texture;
-    }
-
-    @Override
-    public boolean hanging() {
-        return hanging;
     }
 
     @Override
@@ -64,9 +55,9 @@ final class SignSpecialRenderImpl implements SignSpecialRender {
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("hanging", hanging),
-            ExaminableProperty.of("woodType", woodType),
-            ExaminableProperty.of("texture", texture)
+                ExaminableProperty.of("hanging", hanging),
+                ExaminableProperty.of("woodType", woodType),
+                ExaminableProperty.of("texture", texture)
         );
     }
 
@@ -75,17 +66,12 @@ final class SignSpecialRenderImpl implements SignSpecialRender {
         if (o == null || getClass() != o.getClass()) return false;
         SignSpecialRenderImpl that = (SignSpecialRenderImpl) o;
         return hanging == that.hanging &&
-            woodType == that.woodType &&
-            Objects.equals(texture, that.texture);
+                woodType == that.woodType &&
+                Objects.equals(texture, that.texture);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(hanging, woodType, texture);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }

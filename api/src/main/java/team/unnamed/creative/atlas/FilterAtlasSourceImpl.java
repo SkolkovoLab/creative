@@ -31,9 +31,7 @@ import team.unnamed.creative.base.KeyPattern;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-final class FilterAtlasSourceImpl implements FilterAtlasSource {
-
-    private final KeyPattern pattern;
+record FilterAtlasSourceImpl(KeyPattern pattern) implements FilterAtlasSource {
 
     FilterAtlasSourceImpl(final @NotNull KeyPattern pattern) {
         this.pattern = Objects.requireNonNull(pattern, "pattern");
@@ -52,7 +50,7 @@ final class FilterAtlasSourceImpl implements FilterAtlasSource {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -62,11 +60,6 @@ final class FilterAtlasSourceImpl implements FilterAtlasSource {
         if (o == null || getClass() != o.getClass()) return false;
         FilterAtlasSourceImpl that = (FilterAtlasSourceImpl) o;
         return pattern.equals(that.pattern);
-    }
-
-    @Override
-    public int hashCode() {
-        return pattern.hashCode();
     }
 
 }

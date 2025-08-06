@@ -28,7 +28,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import team.unnamed.creative.metadata.Metadata;
 import team.unnamed.creative.metadata.MetadataPart;
-import team.unnamed.creative.metadata.sodium.SodiumMeta;
 import team.unnamed.creative.serialize.minecraft.io.JsonResourceSerializer;
 
 import java.io.IOException;
@@ -76,7 +75,7 @@ public class MetadataSerializer implements JsonResourceSerializer<Metadata> {
 
     public Metadata readFromTree(JsonElement element) {
         JsonObject object = element.getAsJsonObject();
-        Metadata.Builder builder = Metadata.builder();
+        Metadata.Builder builder = Metadata.metadata();
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
             String partName = entry.getKey();
             if (!entry.getValue().isJsonObject()) continue;
@@ -92,8 +91,7 @@ public class MetadataSerializer implements JsonResourceSerializer<Metadata> {
     }
 
     private <T extends MetadataPart> void deserializeAndAdd(Metadata.Builder builder, MetadataPartCodec<T> codec, JsonObject node) {
-        T part = codec.read(node);
-        builder.add(codec.type(), part);
+        builder.addPart(codec.read(node));
     }
 
     private static void registerCodec(MetadataPartCodec<?> codec) {

@@ -36,11 +36,8 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class UnstitchAtlasSourceImpl implements UnstitchAtlasSource {
-
-    private final Key resource;
-    private final List<Region> regions;
-    private final Vector2Float divisor;
+record UnstitchAtlasSourceImpl(Key resource, List<Region> regions,
+                               Vector2Float divisor) implements UnstitchAtlasSource {
 
     UnstitchAtlasSourceImpl(
             final @NotNull Key resource,
@@ -77,7 +74,7 @@ final class UnstitchAtlasSourceImpl implements UnstitchAtlasSource {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -91,20 +88,7 @@ final class UnstitchAtlasSourceImpl implements UnstitchAtlasSource {
         return regions.equals(that.regions);
     }
 
-    @Override
-    public int hashCode() {
-        int result;
-        result = resource.hashCode();
-        result = 31 * result + regions.hashCode();
-        result = 31 * result + divisor.hashCode();
-        return result;
-    }
-
-    static final class RegionImpl implements Region {
-
-        private final Key sprite;
-        private final Vector2Float position;
-        private final Vector2Float dimensions;
+    record RegionImpl(Key sprite, Vector2Float position, Vector2Float dimensions) implements Region {
 
         RegionImpl(
                 final @NotNull Key sprite,

@@ -35,13 +35,8 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ElementFaceImpl implements ElementFace {
-
-    private final @Nullable TextureUV uv;
-    private final String texture;
-    private final @Nullable CubeFace cullFace;
-    private final int rotation;
-    private final int tintIndex;
+record ElementFaceImpl(@Nullable TextureUV uv, String texture, @Nullable CubeFace cullFace, int rotation,
+                       int tintIndex) implements ElementFace {
 
     ElementFaceImpl(
             final @Nullable TextureUV uv,
@@ -64,28 +59,8 @@ final class ElementFaceImpl implements ElementFace {
     }
 
     @Override
-    public @Nullable TextureUV uv0() {
-        return uv;
-    }
-
-    @Override
     public @NotNull String texture() {
         return texture;
-    }
-
-    @Override
-    public @Nullable CubeFace cullFace() {
-        return cullFace;
-    }
-
-    @Override
-    public int rotation() {
-        return rotation;
-    }
-
-    @Override
-    public int tintIndex() {
-        return tintIndex;
     }
 
     @Override
@@ -100,7 +75,7 @@ final class ElementFaceImpl implements ElementFace {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
@@ -114,11 +89,6 @@ final class ElementFaceImpl implements ElementFace {
                 && texture.equals(that.texture)
                 && cullFace == that.cullFace
                 && tintIndex == that.tintIndex;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(uv, texture, cullFace, rotation, tintIndex);
     }
 
     static final class BuilderImpl implements Builder {

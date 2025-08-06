@@ -36,12 +36,8 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class RangeDispatchItemModelImpl implements RangeDispatchItemModel {
-    private final ItemNumericProperty property;
-    private final float scale;
-    private final List<Entry> entries;
-    private final ItemModel fallback;
-
+record RangeDispatchItemModelImpl(ItemNumericProperty property, float scale, List<Entry> entries,
+                                  ItemModel fallback) implements RangeDispatchItemModel {
     RangeDispatchItemModelImpl(final @NotNull ItemNumericProperty property, final float scale, final @NotNull List<Entry> entries, final @Nullable ItemModel fallback) {
         this.property = requireNonNull(property, "property");
         this.scale = scale;
@@ -52,11 +48,6 @@ final class RangeDispatchItemModelImpl implements RangeDispatchItemModel {
     @Override
     public @NotNull ItemNumericProperty property() {
         return property;
-    }
-
-    @Override
-    public float scale() {
-        return scale;
     }
 
     @Override
@@ -72,10 +63,10 @@ final class RangeDispatchItemModelImpl implements RangeDispatchItemModel {
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("property", property),
-            ExaminableProperty.of("scale", scale),
-            ExaminableProperty.of("entries", entries),
-            ExaminableProperty.of("fallback", fallback)
+                ExaminableProperty.of("property", property),
+                ExaminableProperty.of("scale", scale),
+                ExaminableProperty.of("entries", entries),
+                ExaminableProperty.of("fallback", fallback)
         );
     }
 
@@ -84,33 +75,20 @@ final class RangeDispatchItemModelImpl implements RangeDispatchItemModel {
         if (o == null || getClass() != o.getClass()) return false;
         RangeDispatchItemModelImpl that = (RangeDispatchItemModelImpl) o;
         return Float.compare(that.scale, scale) == 0 &&
-            property.equals(that.property) &&
-            entries.equals(that.entries) &&
-            Objects.equals(fallback, that.fallback);
+                property.equals(that.property) &&
+                entries.equals(that.entries) &&
+                Objects.equals(fallback, that.fallback);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(property, scale, entries, fallback);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 
-    static final class EntryImpl implements Entry {
-        private final float threshold;
-        private final ItemModel model;
-
+    record EntryImpl(float threshold, ItemModel model) implements Entry {
         EntryImpl(final float threshold, final @NotNull ItemModel model) {
             this.threshold = threshold;
             this.model = requireNonNull(model, "model");
-        }
-
-        @Override
-        public float threshold() {
-            return threshold;
         }
 
         @Override
@@ -121,8 +99,8 @@ final class RangeDispatchItemModelImpl implements RangeDispatchItemModel {
         @Override
         public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
             return Stream.of(
-                ExaminableProperty.of("threshold", threshold),
-                ExaminableProperty.of("model", model)
+                    ExaminableProperty.of("threshold", threshold),
+                    ExaminableProperty.of("model", model)
             );
         }
 
@@ -131,16 +109,11 @@ final class RangeDispatchItemModelImpl implements RangeDispatchItemModel {
             if (o == null || getClass() != o.getClass()) return false;
             EntryImpl entry = (EntryImpl) o;
             return Float.compare(entry.threshold, threshold) == 0 &&
-                model.equals(entry.model);
+                    model.equals(entry.model);
         }
 
         @Override
-        public int hashCode() {
-            return Objects.hash(threshold, model);
-        }
-
-        @Override
-        public String toString() {
+        public @NotNull String toString() {
             return examine(StringExaminer.simpleEscaping());
         }
     }

@@ -28,19 +28,13 @@ import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class ResourcePackDownloadRequestImpl implements ResourcePackDownloadRequest {
-    private final UUID uuid;
-    private final String username;
-    private final String clientVersion;
-    private final String clientVersionId;
-    private final int packFormat;
-
+record ResourcePackDownloadRequestImpl(UUID uuid, String username, String clientVersion, String clientVersionId,
+                                       int packFormat) implements ResourcePackDownloadRequest {
     ResourcePackDownloadRequestImpl(
             final @NotNull UUID uuid,
             final @NotNull String username,
@@ -76,11 +70,6 @@ final class ResourcePackDownloadRequestImpl implements ResourcePackDownloadReque
     }
 
     @Override
-    public int packFormat() {
-        return packFormat;
-    }
-
-    @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
                 ExaminableProperty.of("uuid", uuid),
@@ -108,8 +97,4 @@ final class ResourcePackDownloadRequestImpl implements ResourcePackDownloadReque
                 && clientVersionId.equals(that.clientVersionId);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(uuid, username, clientVersion, clientVersionId, packFormat);
-    }
 }

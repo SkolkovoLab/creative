@@ -97,68 +97,66 @@ final class AtlasSourceSerializer {
 
     static void serialize(AtlasSource source, JsonWriter writer) throws IOException {
         writer.beginObject();
-        if (source instanceof SingleAtlasSource) {
-            SingleAtlasSource singleSource = (SingleAtlasSource) source;
-            Key resource = singleSource.resource();
-            @Nullable Key sprite = singleSource.sprite();
-            writer.name(TYPE_FIELD).value(KeySerializer.toString(SINGLE_TYPE))
-                    .name("resource").value(KeySerializer.toString(resource));
-            if (sprite != null && !sprite.equals(resource)) {
-                writer.name("sprite").value(KeySerializer.toString(sprite));
+        switch (source) {
+            case SingleAtlasSource singleSource -> {
+                Key resource = singleSource.resource();
+                @Nullable Key sprite = singleSource.sprite();
+                writer.name(TYPE_FIELD).value(KeySerializer.toString(SINGLE_TYPE))
+                        .name("resource").value(KeySerializer.toString(resource));
+                if (sprite != null && !sprite.equals(resource)) {
+                    writer.name("sprite").value(KeySerializer.toString(sprite));
+                }
             }
-        } else if (source instanceof DirectoryAtlasSource) {
-            DirectoryAtlasSource dirSource = (DirectoryAtlasSource) source;
-            writer
+            case DirectoryAtlasSource dirSource -> writer
                     .name(TYPE_FIELD).value(KeySerializer.toString(DIRECTORY_TYPE))
                     .name("source").value(dirSource.source())
                     .name("prefix").value(dirSource.prefix());
-        } else if (source instanceof FilterAtlasSource) {
-            FilterAtlasSource filterSource = (FilterAtlasSource) source;
-            writer
-                    .name(TYPE_FIELD).value(KeySerializer.toString(FILTER_TYPE))
-                    .name("pattern");
-            KeyPatternSerializer.serialize(filterSource.pattern(), writer);
-        } else if (source instanceof UnstitchAtlasSource) {
-            UnstitchAtlasSource unstitchSource = (UnstitchAtlasSource) source;
-            writer
-                    .name(TYPE_FIELD).value(KeySerializer.toString(UNSTITCH_TYPE))
-                    .name("resource").value(KeySerializer.toString(unstitchSource.resource()));
-            double divisorX = unstitchSource.divisor().x();
-            if (divisorX != UnstitchAtlasSource.DEFAULT_DIVISOR.x()) {
-                writer.name("divisor_x").value(divisorX);
+            case FilterAtlasSource filterSource -> {
+                writer
+                        .name(TYPE_FIELD).value(KeySerializer.toString(FILTER_TYPE))
+                        .name("pattern");
+                KeyPatternSerializer.serialize(filterSource.pattern(), writer);
             }
-            double divisorY = unstitchSource.divisor().y();
-            if (divisorY != UnstitchAtlasSource.DEFAULT_DIVISOR.y()) {
-                writer.name("divisor_y").value(divisorY);
+            case UnstitchAtlasSource unstitchSource -> {
+                writer
+                        .name(TYPE_FIELD).value(KeySerializer.toString(UNSTITCH_TYPE))
+                        .name("resource").value(KeySerializer.toString(unstitchSource.resource()));
+                double divisorX = unstitchSource.divisor().x();
+                if (divisorX != UnstitchAtlasSource.DEFAULT_DIVISOR.x()) {
+                    writer.name("divisor_x").value(divisorX);
+                }
+                double divisorY = unstitchSource.divisor().y();
+                if (divisorY != UnstitchAtlasSource.DEFAULT_DIVISOR.y()) {
+                    writer.name("divisor_y").value(divisorY);
+                }
+                writer.name("regions").beginArray();
+                for (UnstitchAtlasSource.Region region : unstitchSource.regions()) {
+                    writer.beginObject()
+                            .name("sprite").value(KeySerializer.toString(region.sprite()))
+                            .name("x").value(region.position().x())
+                            .name("y").value(region.position().y())
+                            .name("width").value(region.dimensions().x())
+                            .name("height").value(region.dimensions().y())
+                            .endObject();
+                }
+                writer.endArray();
             }
-            writer.name("regions").beginArray();
-            for (UnstitchAtlasSource.Region region : unstitchSource.regions()) {
-                writer.beginObject()
-                        .name("sprite").value(KeySerializer.toString(region.sprite()))
-                        .name("x").value(region.position().x())
-                        .name("y").value(region.position().y())
-                        .name("width").value(region.dimensions().x())
-                        .name("height").value(region.dimensions().y())
-                        .endObject();
+            case PalettedPermutationsAtlasSource ppSource -> {
+                writer
+                        .name(TYPE_FIELD).value(KeySerializer.toString(PALETTED_PERMUTATIONS_TYPE))
+                        .name("textures").beginArray();
+                for (Key texture : ppSource.textures()) {
+                    writer.value(KeySerializer.toString(texture));
+                }
+                writer.endArray();
+                writer.name("palette_key").value(KeySerializer.toString(ppSource.paletteKey()));
+                writer.name("permutations").beginObject();
+                for (Map.Entry<String, Key> entry : ppSource.permutations().entrySet()) {
+                    writer.name(entry.getKey()).value(KeySerializer.toString(entry.getValue()));
+                }
+                writer.endObject();
             }
-            writer.endArray();
-        } else if (source instanceof PalettedPermutationsAtlasSource) {
-            PalettedPermutationsAtlasSource ppSource = (PalettedPermutationsAtlasSource) source;
-            writer
-                    .name(TYPE_FIELD).value(KeySerializer.toString(PALETTED_PERMUTATIONS_TYPE))
-                    .name("textures").beginArray();
-            for (Key texture : ppSource.textures()) {
-                writer.value(KeySerializer.toString(texture));
-            }
-            writer.endArray();
-            writer.name("palette_key").value(KeySerializer.toString(ppSource.paletteKey()));
-            writer.name("permutations").beginObject();
-            for (Map.Entry<String, Key> entry : ppSource.permutations().entrySet()) {
-                writer.name(entry.getKey()).value(KeySerializer.toString(entry.getValue()));
-            }
-            writer.endObject();
-        } else {
-            throw new IllegalArgumentException("Unknown atlas source type: '" + source + "'.");
+            case null, default -> throw new IllegalArgumentException("Unknown atlas source type: '" + source + "'.");
         }
         writer.endObject();
     }

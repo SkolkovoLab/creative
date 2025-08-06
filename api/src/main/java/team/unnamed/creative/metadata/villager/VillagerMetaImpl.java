@@ -29,14 +29,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import team.unnamed.creative.metadata.MetadataPart;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class VillagerMetaImpl implements VillagerMeta {
-    private final Hat hat;
-
+record VillagerMetaImpl(Hat hat) implements VillagerMeta {
     VillagerMetaImpl(final @NotNull Hat hat) {
         this.hat = requireNonNull(hat, "hat");
     }
@@ -71,8 +68,4 @@ final class VillagerMetaImpl implements VillagerMeta {
         return hat == that.hat;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(hat);
-    }
 }

@@ -43,7 +43,7 @@ import java.io.IOException;
 
 final class PackMetaCodec implements MetadataPartCodec<PackMeta> {
 
-    static MetadataPartCodec<PackMeta> INSTANCE = new PackMetaCodec();
+    static final MetadataPartCodec<PackMeta> INSTANCE = new PackMetaCodec();
 
     private PackMetaCodec() {
     }
@@ -86,10 +86,9 @@ final class PackMetaCodec implements MetadataPartCodec<PackMeta> {
                 .name("pack_format").value(pack.formats().format());
 
         writer.name("description");
-        //noinspection deprecation
-        Component description = pack.description0();
+        Component description = pack.description();
         if (canWeUseLegacy(description)) {
-            writer.value(pack.description());
+            writer.value(LegacyComponentSerializer.legacySection().serialize(pack.description()));
         } else {
             Streams.write(GsonComponentSerializer.gson().serializeToTree(description), writer);
         }

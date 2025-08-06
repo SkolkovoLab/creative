@@ -27,23 +27,14 @@ import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class TimeItemNumericPropertyImpl implements TimeItemNumericProperty {
-    private final boolean wobble;
-    private final Source source;
-
+record TimeItemNumericPropertyImpl(boolean wobble, Source source) implements TimeItemNumericProperty {
     TimeItemNumericPropertyImpl(final boolean wobble, final @NotNull Source source) {
         this.wobble = wobble;
         this.source = requireNonNull(source, "source");
-    }
-
-    @Override
-    public boolean wobble() {
-        return wobble;
     }
 
     @Override
@@ -54,8 +45,8 @@ final class TimeItemNumericPropertyImpl implements TimeItemNumericProperty {
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
-            ExaminableProperty.of("wobble", wobble),
-            ExaminableProperty.of("source", source)
+                ExaminableProperty.of("wobble", wobble),
+                ExaminableProperty.of("source", source)
         );
     }
 
@@ -67,12 +58,7 @@ final class TimeItemNumericPropertyImpl implements TimeItemNumericProperty {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(wobble, source);
-    }
-
-    @Override
-    public String toString() {
+    public @NotNull String toString() {
         return examine(StringExaminer.simpleEscaping());
     }
 }
