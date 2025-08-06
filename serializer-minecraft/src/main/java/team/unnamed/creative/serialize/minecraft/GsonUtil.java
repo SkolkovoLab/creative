@@ -144,4 +144,31 @@ public final class GsonUtil {
         );
     }
 
+    public static int parseColor(JsonElement element) {
+        if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isNumber()) {
+            // Already a single integer
+            return element.getAsInt();
+        }
+
+        if (element.isJsonArray()) {
+            JsonArray array = element.getAsJsonArray();
+            if (array.size() != 3) {
+                throw new IllegalArgumentException("RGB array must have exactly 3 elements");
+            }
+
+            int r = (int) (clamp(array.get(0).getAsFloat()) * 255.0f);
+            int g = (int) (clamp(array.get(1).getAsFloat()) * 255.0f);
+            int b = (int) (clamp(array.get(2).getAsFloat()) * 255.0f);
+
+            // Compose ARGB with full alpha (0xFF000000)
+            return (0xFF << 24) | (r << 16) | (g << 8) | b;
+        }
+
+        throw new IllegalArgumentException("Invalid color format");
+    }
+
+    private static float clamp(float value) {
+        return Math.max(0.0f, Math.min(1.0f, value));
+    }
+
 }

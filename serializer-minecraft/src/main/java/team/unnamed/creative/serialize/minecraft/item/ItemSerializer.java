@@ -48,6 +48,7 @@ import team.unnamed.creative.item.tint.GrassTintSource;
 import team.unnamed.creative.item.tint.KeyedAndBackedTintSource;
 import team.unnamed.creative.item.tint.TintSource;
 import team.unnamed.creative.overlay.ResourceContainer;
+import team.unnamed.creative.serialize.minecraft.GsonUtil;
 import team.unnamed.creative.serialize.minecraft.ResourceCategoryImpl;
 import team.unnamed.creative.serialize.minecraft.base.KeySerializer;
 import team.unnamed.creative.serialize.minecraft.io.JsonResourceDeserializer;
@@ -206,16 +207,16 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                     tints.add(TintSource.grass(temperature, downfall));
                     break;
                 case "dye":
-                    tints.add(TintSource.dye(tintObject.get("default").getAsInt()));
+                    tints.add(TintSource.dye(GsonUtil.parseColor(tintObject.get("default"))));
                     break;
                 case "firework":
-                    tints.add(TintSource.firework(tintObject.get("default").getAsInt()));
+                    tints.add(TintSource.firework(GsonUtil.parseColor(tintObject.get("default"))));
                     break;
                 case "map_color":
-                    tints.add(TintSource.mapColor(tintObject.get("default").getAsInt()));
+                    tints.add(TintSource.mapColor(GsonUtil.parseColor(tintObject.get("default"))));
                     break;
                 case "potion":
-                    tints.add(TintSource.potion(tintObject.get("default").getAsInt()));
+                    tints.add(TintSource.potion(GsonUtil.parseColor(tintObject.get("default"))));
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown tint source type: " + type);
