@@ -511,7 +511,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                     writer.name("timezone").value(timezone);
                 }
             }
-            case ComponentItemStringProperty component -> writer.name("component").value(component.component());
+            case ComponentItemStringProperty component -> writer.name("property").value("component").name("component").value(component.component());
             case NoFieldItemStringProperty noFieldItemStringProperty ->
                     writer.name("property").value(KeySerializer.toString(noFieldItemStringProperty.key()));
             default -> throw new IllegalArgumentException("Unknown select property type: " + property.getClass());
