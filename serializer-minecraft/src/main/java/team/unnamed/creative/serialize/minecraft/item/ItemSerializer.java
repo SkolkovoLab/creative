@@ -23,6 +23,7 @@
  */
 package team.unnamed.creative.serialize.minecraft.item;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
@@ -521,13 +522,13 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         for (final SelectItemModel.Case _case : model.cases()) {
             writer.beginObject();
             writer.name("when");
-            final List<String> when = _case.when();
+            final List<JsonElement> when = _case.when();
             if (when.size() == 1) {
-                writer.value(when.getFirst());
+                writer.jsonValue(when.getFirst().toString());
             } else {
                 writer.beginArray();
-                for (String value : when) {
-                    writer.value(value);
+                for (JsonElement value : when) {
+                    writer.jsonValue(value.toString());
                 }
                 writer.endArray();
             }
@@ -598,20 +599,15 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         final List<SelectItemModel.Case> cases = new ArrayList<>();
         for (JsonElement caseElement : node.getAsJsonArray("cases")) {
             final JsonObject caseObject = caseElement.getAsJsonObject();
-            final List<String> when = new ArrayList<>();
+            final List<JsonElement> when = new ArrayList<>();
 
             JsonElement whenNode = caseObject.get("when");
-            if (whenNode.isJsonArray()) {
-                for (JsonElement whenElement : whenNode.getAsJsonArray()) {
-                    when.add(whenElement.getAsString());
-                }
+            if (whenNode instanceof JsonArray whenArray) for (JsonElement whenElement : whenArray) {
+                when.add(whenElement);
             } else {
-                when.add(whenNode.getAsString());
+                when.add(whenNode);
             }
-            cases.add(SelectItemModel.Case._case(
-                    deserializeItemModel(caseObject.get("model")),
-                    when
-            ));
+            cases.add(SelectItemModel.Case._case(deserializeItemModel(caseObject.get("model")), when));
         }
 
         final ItemModel fallback = node.has("fallback")

@@ -23,6 +23,8 @@
  */
 package team.unnamed.creative.item;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import net.kyori.examination.Examinable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -58,15 +60,15 @@ public interface SelectItemModel extends ItemModel {
     }
 
     interface Case extends Examinable {
-        @NotNull List<String> when();
+        @NotNull List<JsonElement> when();
 
         @NotNull ItemModel model();
 
-        static @NotNull Case _case(final @NotNull ItemModel model, final @NotNull List<String> when) {
+        static @NotNull Case _case(final @NotNull ItemModel model, final @NotNull List<JsonElement> when) {
             return new SelectItemModelImpl.CaseImpl(when, model);
         }
 
-        static @NotNull Case _case(final @NotNull ItemModel model, final @NotNull String @NotNull ... when) {
+        static @NotNull Case _case(final @NotNull ItemModel model, final @NotNull JsonElement @NotNull ... when) {
             return _case(model, Arrays.asList(when));
         }
     }
@@ -79,12 +81,12 @@ public interface SelectItemModel extends ItemModel {
         @NotNull Builder addCase(final @NotNull Case _case);
 
         @Contract("_, _ -> this")
-        default @NotNull Builder addCase(final @NotNull ItemModel model, final @NotNull List<String> when) {
+        default @NotNull Builder addCase(final @NotNull ItemModel model, final @NotNull List<JsonElement> when) {
             return addCase(Case._case(model, when));
         }
 
         @Contract("_, _ -> this")
-        default @NotNull Builder addCase(final @NotNull ItemModel model, final @NotNull String @NotNull ... when) {
+        default @NotNull Builder addCase(final @NotNull ItemModel model, final @NotNull JsonElement @NotNull ... when) {
             return addCase(model, Arrays.asList(when));
         }
 

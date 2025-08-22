@@ -23,6 +23,7 @@
  */
 package team.unnamed.creative.model;
 
+import com.google.gson.JsonPrimitive;
 import net.kyori.adventure.key.Key;
 import team.unnamed.creative.ResourcePack;
 import team.unnamed.creative.item.ConditionItemModel;
@@ -79,7 +80,7 @@ public final class ItemOverrideConverter {
                         for (ItemOverride override : model.overrides()) {
                             Integer cmd = getCustomModelData(override);
                             if (cmd == null) continue;
-                            builder.addCase(ItemModel.reference(override.model()), cmd.toString());
+                            builder.addCase(ItemModel.reference(override.model()), new JsonPrimitive(cmd));
                         }
 
                         resourcePack.item(Item.item(itemKey, builder.build()));

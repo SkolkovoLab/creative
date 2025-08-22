@@ -23,6 +23,7 @@
  */
 package team.unnamed.creative.item;
 
+import com.google.gson.JsonElement;
 import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
@@ -80,14 +81,14 @@ record SelectItemModelImpl(ItemStringProperty property, List<Case> cases,
         return examine(StringExaminer.simpleEscaping());
     }
 
-    record CaseImpl(List<String> when, ItemModel model) implements Case {
-        CaseImpl(final @NotNull List<String> when, final @NotNull ItemModel model) {
+    record CaseImpl(List<JsonElement> when, ItemModel model) implements Case {
+        CaseImpl(final @NotNull List<JsonElement> when, final @NotNull ItemModel model) {
             this.when = requireNonNull(when, "when");
             this.model = requireNonNull(model, "model");
         }
 
         @Override
-        public @NotNull List<String> when() {
+        public @NotNull List<JsonElement> when() {
             return when;
         }
 
