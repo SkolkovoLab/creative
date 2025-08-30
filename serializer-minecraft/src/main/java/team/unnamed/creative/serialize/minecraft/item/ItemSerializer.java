@@ -523,7 +523,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
             writer.beginObject();
             writer.name("when");
             final List<JsonElement> when = _case.when();
-            if (when.size() == 1) {
+            if (when.size() == 1 && when.getFirst().isJsonPrimitive()) {
                 writer.jsonValue(when.getFirst().toString());
             } else {
                 writer.beginArray();
