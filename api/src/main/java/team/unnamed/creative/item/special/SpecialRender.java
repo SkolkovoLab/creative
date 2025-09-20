@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import team.unnamed.creative.base.CubeFace;
 import team.unnamed.creative.base.DyeColor;
 import team.unnamed.creative.base.HeadType;
+import team.unnamed.creative.base.Pose;
 import team.unnamed.creative.base.WoodType;
 
 /**
@@ -309,5 +310,19 @@ public interface SpecialRender extends Examinable {
      */
     static @NotNull ShulkerBoxSpecialRender shulkerBox(final @NotNull Key texture) {
         return shulkerBox(texture, ShulkerBoxSpecialRender.DEFAULT_OPENNESS, ShulkerBoxSpecialRender.DEFAULT_ORIENTATION);
+    }
+
+    /**
+     * Returns a special renderer which renders a copper golem statue with a given pose and texture.
+     *
+     * @param pose The pose of the golem statue
+     * @param texture The texture of the golemn statue
+     * @return A copper golem statue special renderer
+     * @since 1.9.7
+     * @sinceMinecraft 1.21.9
+     * @sincePackFormat 65
+     */
+    static @NotNull CopperGolemStatueSpecialRender copperGolemStatue(final @NotNull Pose pose, final @NotNull Key texture) {
+        return new CopperGolemStatueSpecialRenderImpl(pose, texture);
     }
 }

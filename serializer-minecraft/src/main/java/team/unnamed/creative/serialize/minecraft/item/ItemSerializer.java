@@ -32,12 +32,14 @@ import org.jetbrains.annotations.NotNull;
 import team.unnamed.creative.base.CubeFace;
 import team.unnamed.creative.base.DyeColor;
 import team.unnamed.creative.base.HeadType;
+import team.unnamed.creative.base.Pose;
 import team.unnamed.creative.base.WoodType;
 import team.unnamed.creative.item.*;
 import team.unnamed.creative.item.property.*;
 import team.unnamed.creative.item.special.BannerSpecialRender;
 import team.unnamed.creative.item.special.BedSpecialRender;
 import team.unnamed.creative.item.special.ChestSpecialRender;
+import team.unnamed.creative.item.special.CopperGolemStatueSpecialRender;
 import team.unnamed.creative.item.special.HeadSpecialRender;
 import team.unnamed.creative.item.special.NoFieldSpecialRender;
 import team.unnamed.creative.item.special.ShulkerBoxSpecialRender;
@@ -283,6 +285,11 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                     writer.name("orientation").value(orientation.name().toLowerCase());
                 }
             }
+            case CopperGolemStatueSpecialRender copperGolemStatueRender -> {
+                writer.name("type").value("copper_golem_statue");
+                writer.name("texture").value(KeySerializer.toString(copperGolemStatueRender.texture()));
+                writer.name("pose").value(copperGolemStatueRender.pose().name().toLowerCase());
+            }
             case NoFieldSpecialRender noFieldRender ->
                     writer.name("type").value(KeySerializer.toString(noFieldRender.key()));
             default -> throw new IllegalArgumentException("Unknown special render type: " + render.getClass());
@@ -355,6 +362,11 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                 break;
             case "trident":
                 render = SpecialRender.trident();
+                break;
+            case "copper_golem_statue":
+                final Pose pose = Pose.valueOf(modelNode.get("pose").getAsString().toUpperCase());
+                final Key texture = Key.key(modelNode.get("texture").getAsString());
+                render = SpecialRender.copperGolemStatue(pose, texture);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown special render type: " + type);
