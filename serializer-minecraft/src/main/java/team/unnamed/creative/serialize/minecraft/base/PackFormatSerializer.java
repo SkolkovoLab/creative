@@ -28,6 +28,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import org.jetbrains.annotations.ApiStatus;
+import team.unnamed.creative.metadata.pack.FormatVersion;
 import team.unnamed.creative.metadata.pack.PackFormat;
 
 import java.io.IOException;
@@ -55,19 +56,29 @@ public final class PackFormatSerializer {
 
     public static void serialize(PackFormat format, JsonWriter writer) throws IOException {
         // serialize using the shortest possible version
+        int minMajor = format.minVersion().major();
+        int maxMajor = format.maxVersion().major();
+
         if (format.isSingle()) {
-            writer.value(format.format());
+            writer.value(format.formatVersion().major());
         } else {
             writer.beginArray();
-            writer.value(format.min());
-            writer.value(format.max());
+            writer.value(minMajor);
+            writer.value(maxMajor);
             writer.endArray();
+
+            if ((minMajor <= 64 && maxMajor >= 64) || minMajor >= 65) {
+                // if this pack supports 1.21.9+ format, add extra fields for compatibility
+                writer.name("min_format").value(minMajor);
+                writer.name("max_format").value(maxMajor);
+                if (minMajor < 15) writer.name("pack_format").value(15);
+            }
         }
     }
 
     public static PackFormat deserialize(JsonElement el, int format) {
         PackFormat f = deserialize(el);
-        return PackFormat.format(format, f.min(), f.max());
+        return PackFormat.format(FormatVersion.of(format), f.minVersion(), f.maxVersion());
     }
 
     public static PackFormat deserialize(JsonElement el) {
