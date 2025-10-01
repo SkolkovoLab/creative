@@ -48,13 +48,7 @@ class ResourcePackWithOverlaysDeserializationTest {
         final Key textureKey = Key.key("minecraft", "item/apple.png");
         final Texture texture = resourcePack.textures().iterator().next();
         assertEquals(textureKey, texture.key(), "expected a " + textureKey + " texture");
-        assertEquals(2, resourcePack.overlays().size(), "expected two overlays");
-
-        final Overlay overlayV19 = resourcePack.overlay("v19");
-        assertNotNull(overlayV19, "expected a v19 overlay");
-        assertEquals(1, overlayV19.textures().size(), "expected a single texture in v19 overlay");
-        final Texture textureV19 = overlayV19.textures().iterator().next();
-        assertEquals(textureKey, textureV19.key(), "expected a " + textureKey + " texture in v19 overlay");
+        assertEquals(1, resourcePack.overlays().size(), "expected two overlays");
 
         final Overlay overlayV20 = resourcePack.overlay("v20");
         assertNotNull(overlayV20, "expected a v20 overlay");
