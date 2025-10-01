@@ -23,6 +23,7 @@
  */
 package team.unnamed.creative.item.property;
 
+import com.google.gson.JsonElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -228,7 +229,7 @@ public interface ItemBooleanProperty extends ItemProperty {
      * @sinceMinecraft 1.21.5
      * @sincePackFormat 55
      */
-    static @NotNull ComponentItemBooleanProperty component(final @NotNull String predicate, final @NotNull String value) {
+    static @NotNull ComponentItemBooleanProperty component(final @NotNull String predicate, final @NotNull JsonElement value) {
         return new ComponentItemBooleanPropertyImpl(predicate, value);
     }
 }

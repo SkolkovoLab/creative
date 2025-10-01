@@ -416,8 +416,9 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                 writer.name("keybind").value(keybindDownItemBooleanProperty.key());
             }
             case ComponentItemBooleanProperty component -> {
+                writer.name("property").value("component");
                 writer.name("predicate").value(component.predicate());
-                writer.name("value").value(component.value());
+                writer.name("value").jsonValue(component.value().toString());
             }
             case NoFieldItemBooleanProperty noFieldItemBooleanProperty ->
                     writer.name("property").value(KeySerializer.toString(noFieldItemBooleanProperty.key()));
@@ -481,7 +482,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                 break;
             case "component":
                 final String predicate = node.get("predicate").getAsString();
-                final String value = node.get("value").getAsString();
+                final JsonElement value = node.get("value");
                 condition = ItemBooleanProperty.component(predicate, value);
                 break;
             default:

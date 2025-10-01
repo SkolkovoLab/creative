@@ -23,6 +23,7 @@
  */
 package team.unnamed.creative.item.property;
 
+import com.google.gson.JsonElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -48,5 +49,5 @@ public interface ComponentItemBooleanProperty extends ItemBooleanProperty {
      *
      * @return The value to match
      */
-    @NotNull String value();
+    @NotNull JsonElement value();
 }

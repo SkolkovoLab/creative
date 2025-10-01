@@ -23,6 +23,10 @@
  */
 package team.unnamed.creative.item.property;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import net.kyori.examination.ExaminableProperty;
 import net.kyori.examination.string.StringExaminer;
 import org.jetbrains.annotations.NotNull;
@@ -31,8 +35,8 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-record ComponentItemBooleanPropertyImpl(String predicate, String value) implements ComponentItemBooleanProperty {
-    ComponentItemBooleanPropertyImpl(final @NotNull String predicate, final @NotNull String value) {
+record ComponentItemBooleanPropertyImpl(String predicate, JsonElement value) implements ComponentItemBooleanProperty {
+    ComponentItemBooleanPropertyImpl(final @NotNull String predicate, final @NotNull JsonElement value) {
         this.predicate = requireNonNull(predicate, "predicate");
         this.value = requireNonNull(value, "value");
     }
@@ -43,7 +47,7 @@ record ComponentItemBooleanPropertyImpl(String predicate, String value) implemen
     }
 
     @Override
-    public @NotNull String value() {
+    public @NotNull JsonElement value() {
         return value;
     }
 
