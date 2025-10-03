@@ -60,6 +60,7 @@ import team.unnamed.creative.serialize.minecraft.io.JsonResourceSerializer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonResourceDeserializer<Item> {
     public static final ItemSerializer INSTANCE;
@@ -235,7 +236,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         switch (render) {
             case BannerSpecialRender bannerRender -> {
                 writer.name("type").value("banner");
-                writer.name("color").value(bannerRender.color().name().toLowerCase());
+                writer.name("color").value(bannerRender.color().name().toLowerCase(Locale.ENGLISH));
             }
             case BedSpecialRender bedRender -> {
                 writer.name("type").value("bed");
@@ -251,7 +252,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
             }
             case SignSpecialRender signRender -> { // covers both hanging & standing sign types
                 writer.name("type").value(signRender.hanging() ? "hanging_sign" : "standing_sign");
-                writer.name("wood_type").value(signRender.woodType().name().toLowerCase());
+                writer.name("wood_type").value(signRender.woodType().name().toLowerCase(Locale.ENGLISH));
                 final Key texture = signRender.texture();
                 if (texture != null) {
                     writer.name("texture").value(KeySerializer.toString(texture));
@@ -259,7 +260,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
             }
             case HeadSpecialRender headRender -> {
                 writer.name("type").value("head");
-                writer.name("kind").value(headRender.kind().name().toLowerCase());
+                writer.name("kind").value(headRender.kind().name().toLowerCase(Locale.ENGLISH));
 
                 final Key texture = headRender.texture();
                 if (texture != null) {
@@ -282,13 +283,13 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
 
                 final CubeFace orientation = shulkerBoxRender.orientation();
                 if (orientation != ShulkerBoxSpecialRender.DEFAULT_ORIENTATION) {
-                    writer.name("orientation").value(orientation.name().toLowerCase());
+                    writer.name("orientation").value(orientation.name().toLowerCase(Locale.ENGLISH));
                 }
             }
             case CopperGolemStatueSpecialRender copperGolemStatueRender -> {
                 writer.name("type").value("copper_golem_statue");
                 writer.name("texture").value(KeySerializer.toString(copperGolemStatueRender.texture()));
-                writer.name("pose").value(copperGolemStatueRender.pose().name().toLowerCase());
+                writer.name("pose").value(copperGolemStatueRender.pose().name().toLowerCase(Locale.ENGLISH));
             }
             case NoFieldSpecialRender noFieldRender ->
                     writer.name("type").value(KeySerializer.toString(noFieldRender.key()));
@@ -307,7 +308,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         }
         switch (type.value()) {
             case "banner":
-                render = SpecialRender.banner(DyeColor.valueOf(modelNode.get("color").getAsString().toUpperCase()));
+                render = SpecialRender.banner(DyeColor.valueOf(modelNode.get("color").getAsString().toUpperCase(Locale.ENGLISH)));
                 break;
             case "bed":
                 render = SpecialRender.bed(Key.key(modelNode.get("texture").getAsString()));
@@ -322,14 +323,14 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
             case "hanging_sign":
             case "standing_sign":
                 final boolean hanging = type.asMinimalString().equals("hanging_sign");
-                final WoodType woodType = WoodType.valueOf(modelNode.get("wood_type").getAsString().toUpperCase());
+                final WoodType woodType = WoodType.valueOf(modelNode.get("wood_type").getAsString().toUpperCase(Locale.ENGLISH));
                 final Key signTexture = modelNode.has("texture")
                         ? Key.key(modelNode.get("texture").getAsString())
                         : null;
                 render = hanging ? SpecialRender.hangingSign(woodType, signTexture) : SpecialRender.standingSign(woodType, signTexture);
                 break;
             case "head":
-                final HeadType kind = HeadType.valueOf(modelNode.get("kind").getAsString().toUpperCase());
+                final HeadType kind = HeadType.valueOf(modelNode.get("kind").getAsString().toUpperCase(Locale.ENGLISH));
                 final Key headTexture = modelNode.has("texture")
                         ? Key.key(modelNode.get("texture").getAsString())
                         : null;
@@ -347,7 +348,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                         ? modelNode.get("openness").getAsFloat()
                         : ShulkerBoxSpecialRender.DEFAULT_OPENNESS;
                 final CubeFace orientation = modelNode.has("orientation")
-                        ? CubeFace.valueOf(modelNode.get("orientation").getAsString().toUpperCase())
+                        ? CubeFace.valueOf(modelNode.get("orientation").getAsString().toUpperCase(Locale.ENGLISH))
                         : ShulkerBoxSpecialRender.DEFAULT_ORIENTATION;
                 render = SpecialRender.shulkerBox(shulkerBoxTexture, shulkerBoxOpenness, orientation);
                 break;
@@ -364,7 +365,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                 render = SpecialRender.trident();
                 break;
             case "copper_golem_statue":
-                final Pose pose = Pose.valueOf(modelNode.get("pose").getAsString().toUpperCase());
+                final Pose pose = Pose.valueOf(modelNode.get("pose").getAsString().toUpperCase(Locale.ENGLISH));
                 final Key texture = Key.key(modelNode.get("texture").getAsString());
                 render = SpecialRender.copperGolemStatue(pose, texture);
                 break;
@@ -637,7 +638,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         switch (property) {
             case CompassItemNumericProperty compassProperty -> {
                 writer.name("property").value("compass");
-                writer.name("target").value(compassProperty.target().name().toLowerCase());
+                writer.name("target").value(compassProperty.target().name().toLowerCase(Locale.ENGLISH));
 
                 final boolean wobble = compassProperty.wobble();
                 if (wobble != CompassItemNumericProperty.DEFAULT_WOBBLE) {
@@ -671,7 +672,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                 if (wobble != TimeItemNumericProperty.DEFAULT_WOBBLE) {
                     writer.name("wobble").value(wobble);
                 }
-                writer.name("source").value(timeProperty.source().name().toLowerCase());
+                writer.name("source").value(timeProperty.source().name().toLowerCase(Locale.ENGLISH));
             }
             case UseCycleItemNumericProperty useCycleItemNumericProperty -> {
                 writer.name("property").value("use_cycle");
@@ -723,7 +724,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
         }
         switch (propertyType.value()) {
             case "compass":
-                final CompassItemNumericProperty.Target target = CompassItemNumericProperty.Target.valueOf(node.get("target").getAsString().toUpperCase());
+                final CompassItemNumericProperty.Target target = CompassItemNumericProperty.Target.valueOf(node.get("target").getAsString().toUpperCase(Locale.ENGLISH));
                 final boolean wobble = node.has("wobble")
                         ? node.get("wobble").getAsBoolean()
                         : CompassItemNumericProperty.DEFAULT_WOBBLE;
@@ -751,7 +752,7 @@ public final class ItemSerializer implements JsonResourceSerializer<Item>, JsonR
                 final boolean timeWobble = node.has("wobble")
                         ? node.get("wobble").getAsBoolean()
                         : TimeItemNumericProperty.DEFAULT_WOBBLE;
-                final TimeItemNumericProperty.Source source = TimeItemNumericProperty.Source.valueOf(node.get("source").getAsString().toUpperCase());
+                final TimeItemNumericProperty.Source source = TimeItemNumericProperty.Source.valueOf(node.get("source").getAsString().toUpperCase(Locale.ENGLISH));
                 property = ItemNumericProperty.time(timeWobble, source);
                 break;
             case "use_cycle":

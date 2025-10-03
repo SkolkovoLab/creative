@@ -38,6 +38,7 @@ import team.unnamed.creative.serialize.minecraft.io.JsonResourceSerializer;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @ApiStatus.Internal
@@ -53,7 +54,7 @@ public final class EquipmentSerializer implements JsonResourceSerializer<Equipme
             .name("layers")
             .beginObject();
         for (Map.Entry<EquipmentLayerType, List<EquipmentLayer>> entry : equipment.layers().entrySet()) {
-            writer.name(entry.getKey().name().toLowerCase())
+            writer.name(entry.getKey().name().toLowerCase(Locale.ENGLISH))
                 .beginArray();
             for (EquipmentLayer layer : entry.getValue()) {
                 writer.beginObject()
@@ -86,7 +87,7 @@ public final class EquipmentSerializer implements JsonResourceSerializer<Equipme
         final Equipment.Builder builder = Equipment.equipment()
                 .key(key);
         for (Map.Entry<String, JsonElement> entry : layers.entrySet()) {
-            final EquipmentLayerType type = EquipmentLayerType.valueOf(entry.getKey().toUpperCase());
+            final EquipmentLayerType type = EquipmentLayerType.valueOf(entry.getKey().toUpperCase(Locale.ENGLISH));
             for (JsonElement element : entry.getValue().getAsJsonArray()) {
                 final JsonObject object = element.getAsJsonObject();
                 final Key texture = Key.key(object.get("texture").getAsString());
