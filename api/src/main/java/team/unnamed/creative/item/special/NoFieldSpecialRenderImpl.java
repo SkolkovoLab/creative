@@ -35,21 +35,19 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class NoFieldSpecialRenderImpl implements NoFieldSpecialRender {
+record NoFieldSpecialRenderImpl(Key key) implements NoFieldSpecialRender {
     static final NoFieldSpecialRender CONDUIT = new NoFieldSpecialRenderImpl("conduit"); // renders a conduit
     static final NoFieldSpecialRender DECORATED_POT = new NoFieldSpecialRenderImpl("decorated_pot"); // renders a decorated pot, uses values from minecraft:pot_decorations component
     static final NoFieldSpecialRender SHIELD = new NoFieldSpecialRenderImpl("shield"); // renders a shield, uses patterns from the minecraft:banner_patterns component and color from the minecraft:base_color component
     static final NoFieldSpecialRender TRIDENT = new NoFieldSpecialRenderImpl("trident"); // renders a trident
     static final NoFieldSpecialRender PLAYER_HEAD = new NoFieldSpecialRenderImpl("player_head"); // renders a player head
 
-    private final Key key;
-
     NoFieldSpecialRenderImpl(final @NotNull Key key) {
         this.key = requireNonNull(key, "key");
     }
 
     private NoFieldSpecialRenderImpl(final @Subst("conduit") @NotNull String keyValue) {
-        this.key = Key.key(Key.MINECRAFT_NAMESPACE, keyValue);
+        this(Key.key(Key.MINECRAFT_NAMESPACE, keyValue));
     }
 
     @Override
@@ -67,11 +65,6 @@ final class NoFieldSpecialRenderImpl implements NoFieldSpecialRender {
         if (o == null || getClass() != o.getClass()) return false;
         final NoFieldSpecialRenderImpl that = (NoFieldSpecialRenderImpl) o;
         return key.equals(that.key);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(key);
     }
 
     @Override

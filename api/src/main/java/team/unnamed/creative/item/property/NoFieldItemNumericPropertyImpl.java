@@ -33,19 +33,17 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class NoFieldItemNumericPropertyImpl implements NoFieldItemNumericProperty {
+record NoFieldItemNumericPropertyImpl(Key key) implements NoFieldItemNumericProperty {
     static final NoFieldItemNumericProperty BUNDLE_FULLNESS = new NoFieldItemNumericPropertyImpl("bundle/fullness");
     static final NoFieldItemNumericProperty COOLDOWN = new NoFieldItemNumericPropertyImpl("cooldown");
     static final NoFieldItemNumericProperty CROSSBOW_PULL = new NoFieldItemNumericPropertyImpl("crossbow/pull");
-
-    private final Key key;
 
     NoFieldItemNumericPropertyImpl(final @NotNull Key key) {
         this.key = requireNonNull(key, "key");
     }
 
     private NoFieldItemNumericPropertyImpl(final @NotNull @Subst("bundle/fullness") String keyValue) {
-        this.key = Key.key(Key.MINECRAFT_NAMESPACE, keyValue);
+        this(Key.key(Key.MINECRAFT_NAMESPACE, keyValue));
     }
 
     @Override
@@ -63,11 +61,6 @@ final class NoFieldItemNumericPropertyImpl implements NoFieldItemNumericProperty
         if (o == null || getClass() != o.getClass()) return false;
         NoFieldItemNumericPropertyImpl that = (NoFieldItemNumericPropertyImpl) o;
         return key.equals(that.key);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(key);
     }
 
 

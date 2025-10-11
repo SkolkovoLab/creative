@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class NoFieldItemStringPropertyImpl implements NoFieldItemStringProperty {
+record NoFieldItemStringPropertyImpl(Key key) implements NoFieldItemStringProperty {
     static final NoFieldItemStringProperty CHARGE_TYPE = new NoFieldItemStringPropertyImpl("charge_type");
     static final NoFieldItemStringProperty CONTEXT_DIMENSION = new NoFieldItemStringPropertyImpl("context_dimension");
     static final NoFieldItemStringProperty CONTEXT_ENTITY_TYPE = new NoFieldItemStringPropertyImpl("context_entity_type");
@@ -43,14 +43,12 @@ final class NoFieldItemStringPropertyImpl implements NoFieldItemStringProperty {
     static final NoFieldItemStringProperty MAIN_HAND = new NoFieldItemStringPropertyImpl("main_hand");
     static final NoFieldItemStringProperty TRIM_MATERIAL = new NoFieldItemStringPropertyImpl("trim_material");
 
-    private final Key key;
-
     NoFieldItemStringPropertyImpl(final @NotNull Key key) {
         this.key = requireNonNull(key, "key");
     }
 
     private NoFieldItemStringPropertyImpl(final @NotNull @Subst("context_dimension") String keyValue) {
-        this.key = Key.key(Key.MINECRAFT_NAMESPACE, keyValue);
+        this(Key.key(Key.MINECRAFT_NAMESPACE, keyValue));
     }
 
     @Override
@@ -68,11 +66,6 @@ final class NoFieldItemStringPropertyImpl implements NoFieldItemStringProperty {
         if (o == null || getClass() != o.getClass()) return false;
         final NoFieldItemStringPropertyImpl that = (NoFieldItemStringPropertyImpl) o;
         return key.equals(that.key);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(key);
     }
 
     @Override

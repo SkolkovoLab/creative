@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
-final class NoFieldItemBooleanPropertyImpl implements NoFieldItemBooleanProperty {
+record NoFieldItemBooleanPropertyImpl(Key key) implements NoFieldItemBooleanProperty {
     static final NoFieldItemBooleanProperty BROKEN = new NoFieldItemBooleanPropertyImpl("broken");
     static final NoFieldItemBooleanProperty BUNDLE_HAS_SELECTED_ITEM = new NoFieldItemBooleanPropertyImpl("bundle/has_selected_item");
     static final NoFieldItemBooleanProperty CARRIED = new NoFieldItemBooleanPropertyImpl("carried");
@@ -46,14 +46,12 @@ final class NoFieldItemBooleanPropertyImpl implements NoFieldItemBooleanProperty
     static final NoFieldItemBooleanProperty USING_ITEM = new NoFieldItemBooleanPropertyImpl("using_item");
     static final NoFieldItemBooleanProperty VIEW_ENTITY = new NoFieldItemBooleanPropertyImpl("view_entity");
 
-    private final Key key;
-
     NoFieldItemBooleanPropertyImpl(final @NotNull Key key) {
         this.key = requireNonNull(key, "key");
     }
 
     NoFieldItemBooleanPropertyImpl(@Subst("minecraft:broken") final @NotNull String key) {
-        this.key = Key.key(key);
+        this(Key.key(key));
     }
 
     @Override
@@ -71,11 +69,6 @@ final class NoFieldItemBooleanPropertyImpl implements NoFieldItemBooleanProperty
         if (o == null || getClass() != o.getClass()) return false;
         final NoFieldItemBooleanPropertyImpl that = (NoFieldItemBooleanPropertyImpl) o;
         return key.equals(that.key);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(key);
     }
 
     @Override
