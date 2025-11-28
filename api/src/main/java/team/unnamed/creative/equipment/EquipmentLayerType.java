@@ -122,14 +122,19 @@ public enum EquipmentLayerType {
     HAPPY_GHAST_BODY, // happy_ghast_body
 
     /**
-     * @since 1.10.1
+     * @since 1.11.0
      * @sinceMinecraft 1.21.11
      */
     NAUTILUS_BODY, // nautilus_body
 
     /**
-     * @since 1.10.1
+     * @since 1.11.0
      * @sinceMinecraft 1.21.11
      */
     NAUTILUS_SADDLE, // nautilus_saddle
+    /**
+     * @since 1.11.1
+     * @sinceMinecraft 1.21.11
+     */
+    CAMEL_HUSK_SADDLE, // camel_husk_saddle
 }

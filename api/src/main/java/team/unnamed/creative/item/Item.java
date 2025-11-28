@@ -77,7 +77,7 @@ public interface Item extends Keyed, ResourcePackPart, Examinable {
      *
      * @return The swap animation scale
      * @sinceMinecraft 1.21.11
-     * @since 1.10.1
+     * @since 1.11.0
      */
     float swapAnimationScale();
 
@@ -97,7 +97,7 @@ public interface Item extends Keyed, ResourcePackPart, Examinable {
      * @param oversizedInGui If item clipping should not be applied
      * @param swapAnimationScale The swap animation scale
      * @return The item
-     * @since 1.10.1
+     * @since 1.11.0
      */
     @Contract(value = "_, _, _, _ -> new", pure = true)
     static @NotNull Item item(final @NotNull Key key, final @NotNull ItemModel model, final boolean handAnimationOnSwap, final boolean oversizedInGui, final float swapAnimationScale) {

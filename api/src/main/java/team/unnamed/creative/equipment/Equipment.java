@@ -331,7 +331,7 @@ public interface Equipment extends ResourcePackPart, Keyed, Examinable {
          *
          * @param layer The layer to add
          * @return This builder
-         * @since 1.11.1
+         * @since 1.11.0
          * @sinceMinecraft 1.21.11
          */
         @Contract("_ -> this")
@@ -344,12 +344,25 @@ public interface Equipment extends ResourcePackPart, Keyed, Examinable {
          *
          * @param layer The layer to add
          * @return This builder
-         * @since 1.10.1
+         * @since 1.11.0
          * @sinceMinecraft 1.21.11
          */
         @Contract("_ -> this")
         default @NotNull Builder addNautilusSaddle(@NotNull EquipmentLayer layer) {
             return addLayer(EquipmentLayerType.NAUTILUS_SADDLE, layer);
+        }
+
+        /**
+         * Adds a camel husk saddle layer to the equipment.
+         *
+         * @param layer The layer to add
+         * @return This builder
+         * @since 1.11.1
+         * @sinceMinecraft 1.21.11
+         */
+        @Contract("_ -> this")
+        default @NotNull Builder addCamelHuskSaddle(@NotNull EquipmentLayer layer) {
+            return addLayer(EquipmentLayerType.CAMEL_HUSK_SADDLE, layer);
         }
         //#endregion
 
