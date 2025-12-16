@@ -84,6 +84,15 @@ public interface Atlas extends ResourcePackPart, Keyed, Examinable {
     Key GUI = Key.key("gui");
 
     /**
+     * Key for the Item texture atlas.
+     *
+     * @sinceMinecraft 1.21.11
+     * @sincePackFormat 75
+     * @since 1.11.2
+     */
+    Key ITEMS = Key.key("items");
+
+    /**
      * Gets the {@link Atlas} key, e.g. "test:fancy", note
      * that JSON extension is not included
      *
