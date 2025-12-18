@@ -28,6 +28,7 @@ import net.kyori.examination.ExaminableProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
+import team.unnamed.creative.texture.Texture;
 import team.unnamed.creative.util.MoreCollections;
 
 import java.util.ArrayList;
@@ -55,6 +56,25 @@ record AtlasImpl(Key key, List<AtlasSource> sources) implements Atlas {
     @Override
     public @Unmodifiable @NotNull List<AtlasSource> sources() {
         return sources;
+    }
+
+    @Override
+    public boolean contains(@NotNull Texture texture) {
+        return contains(texture.key());
+    }
+
+    @Override
+    public boolean contains(@NotNull Key textureKey) {
+        for (AtlasSource source : sources) {
+            if (source instanceof SingleAtlasSource single)
+                if (single.resource() == textureKey || single.sprite() == textureKey)
+                    return true;
+            else if (source instanceof DirectoryAtlasSource directory)
+                if (textureKey.value().startsWith(directory.prefix()))
+                    return true;
+            else return false;
+        }
+        return false;
     }
 
     @Override

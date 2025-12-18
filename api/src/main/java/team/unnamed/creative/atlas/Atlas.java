@@ -33,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import team.unnamed.creative.overlay.ResourceContainer;
 import team.unnamed.creative.part.ResourcePackPart;
+import team.unnamed.creative.texture.Texture;
 
 import java.util.List;
 
@@ -178,6 +179,10 @@ public interface Atlas extends ResourcePackPart, Keyed, Examinable {
     static @NotNull Builder atlas() {
         return new AtlasImpl.BuilderImpl();
     }
+
+    boolean contains(@NotNull Texture texture);
+
+    boolean contains(@NotNull Key textureKey);
 
     /**
      * A mutable builder for {@link Atlas} instances.
