@@ -262,6 +262,18 @@ public interface Atlas extends ResourcePackPart, Keyed, Examinable {
         @NotNull Builder addSource(final @NotNull AtlasSource source);
 
         /**
+         * Removes the given source to the built atlas.
+         *
+         * @param source The atlas source
+         * @return This builder
+         * @sincePackFormat 12
+         * @sinceMinecraft 1.19.3
+         * @since 1.11.6
+         */
+        @Contract("_ -> this")
+        @NotNull Builder removeSource(final @NotNull AtlasSource source);
+
+        /**
          * Builds the {@link Atlas} instance.
          *
          * @return The built atlas

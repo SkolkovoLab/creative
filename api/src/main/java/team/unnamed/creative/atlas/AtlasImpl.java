@@ -148,6 +148,16 @@ record AtlasImpl(Key key, List<AtlasSource> sources) implements Atlas {
         }
 
         @Override
+        public @NotNull Builder removeSource(final @NotNull AtlasSource source) {
+            requireNonNull(source, "source");
+            if (sources == null) {
+                sources = new ArrayList<>();
+            }
+            sources.remove(source);
+            return this;
+        }
+
+        @Override
         public @NotNull Atlas build() {
             return new AtlasImpl(key, sources);
         }
