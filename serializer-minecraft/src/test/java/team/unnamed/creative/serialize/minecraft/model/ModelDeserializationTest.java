@@ -65,8 +65,7 @@ class ModelDeserializationTest {
                                 .rotation(
                                         ElementRotation.builder()
                                                 .origin(new Vector3Float(8.0f, 8.0f, 8.0f))
-                                                .axis(Axis3D.Y)
-                                                .angle(45.0f)
+                                                .rotation(Vector3Float.ZERO.with(Axis3D.Y, 45f))
                                                 .rescale(true)
                                                 .build()
                                 )
@@ -94,8 +93,7 @@ class ModelDeserializationTest {
                                 .rotation(
                                         ElementRotation.builder()
                                                 .origin(new Vector3Float(8.0f, 8.0f, 8.0f))
-                                                .axis(Axis3D.Y)
-                                                .angle(45.0f)
+                                                .rotation(Vector3Float.ZERO.with(Axis3D.Y, 45f))
                                                 .rescale(true)
                                                 .build()
                                 )

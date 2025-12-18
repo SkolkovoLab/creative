@@ -319,7 +319,6 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
             writer.name("x").value(rotation.rotation().x())
                     .name("y").value(rotation.rotation().y())
                     .name("z").value(rotation.rotation().z());
-            System.out.println(rotation.rotation());
         } else {
             writer.name("axis").value(rotation.axis().name().toLowerCase(Locale.ROOT))
                     .name("angle").value(rotation.angle());
