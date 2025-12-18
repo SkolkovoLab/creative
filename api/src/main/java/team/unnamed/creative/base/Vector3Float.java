@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -376,6 +377,10 @@ public record Vector3Float(float x, float y, float z) implements Examinable, Ite
      */
     public float @NotNull [] toArray() {
         return new float[]{x, y, z};
+    }
+
+    public float @NotNull [] toArray(Function<Float, Float> block) {
+        return new float[]{block.apply(x), block.apply(y), block.apply(z)};
     }
 
     @NotNull

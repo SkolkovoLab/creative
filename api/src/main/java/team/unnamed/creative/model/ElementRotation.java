@@ -46,26 +46,27 @@ public class ElementRotation implements Examinable {
     public static final boolean DEFAULT_RESCALE = false;
 
     private final Vector3Float origin;
-    private final Axis3D axis;
-    private final float angle;
+    private final Vector3Float rotation;
     private final boolean rescale;
 
     private ElementRotation(
             Vector3Float origin,
-            Axis3D axis,
-            float angle,
+            Vector3Float rotation,
             boolean rescale
     ) {
         this.origin = requireNonNull(origin, "origin");
-        this.axis = requireNonNull(axis, "axis");
-        this.angle = angle;
+        this.rotation = requireNonNull(rotation, "rotation");
         this.rescale = rescale;
         validate();
     }
 
     private void validate() {
-        float absAngle = Math.abs(angle);
-        if (absAngle > 45.0f)
+        // Skip if using 1.21.11+ format where one can rotate beyond -45->45 and support multiple angles
+        if (rotation.x() != 0f && (rotation.y() != 0f || rotation.z() != 0f)) return;
+        if (rotation.y() != 0f && rotation.z() != 0f) return;
+
+        float[] absAngles = rotation.toArray(Math::abs);
+        for (float absAngle : absAngles) if (absAngle > 45.0f)
             throw new IllegalArgumentException("Angle must be between [-45.0, 45.0] (inclusive), but was " + absAngle);
     }
 
@@ -86,8 +87,12 @@ public class ElementRotation implements Examinable {
      *
      * @return The rotation axis
      */
+    @Deprecated
     public Axis3D axis() {
-        return axis;
+        if (rotation.x() != 0f) return Axis3D.X;
+        else  if (rotation.y() != 0f) return Axis3D.Y;
+        else if (rotation.z() != 0f) return Axis3D.Z;
+        else return Axis3D.X;
     }
 
     /**
@@ -96,8 +101,15 @@ public class ElementRotation implements Examinable {
      *
      * @return The rotation angle
      */
+    @Deprecated
     public float angle() {
-        return angle;
+        if (rotation.x() != 0f) return rotation.x();
+        else  if (rotation.y() != 0f) return rotation.y();
+        else return rotation.z();
+    }
+
+    public Vector3Float rotation() {
+        return rotation;
     }
 
     /**
@@ -109,27 +121,18 @@ public class ElementRotation implements Examinable {
     }
 
     public ElementRotation origin(Vector3Float origin) {
-        return new ElementRotation(origin, this.axis, this.angle, this.rescale);
-    }
-
-    public ElementRotation axis(Axis3D axis) {
-        return new ElementRotation(this.origin, axis, this.angle, this.rescale);
-    }
-
-    public ElementRotation angle(float angle) {
-        return new ElementRotation(this.origin, this.axis, angle, this.rescale);
+        return new ElementRotation(origin, this.rotation, this.rescale);
     }
 
     public ElementRotation rescale(boolean rescale) {
-        return new ElementRotation(this.origin, this.axis, this.angle, rescale);
+        return new ElementRotation(this.origin, this.rotation, rescale);
     }
 
     @Override
     public @NotNull Stream<? extends ExaminableProperty> examinableProperties() {
         return Stream.of(
                 ExaminableProperty.of("origin", origin),
-                ExaminableProperty.of("axis", axis),
-                ExaminableProperty.of("angle", angle),
+                ExaminableProperty.of("rotation", rotation),
                 ExaminableProperty.of("rescale", rescale)
         );
     }
@@ -144,15 +147,12 @@ public class ElementRotation implements Examinable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ElementRotation that = (ElementRotation) o;
-        return Float.compare(that.angle, angle) == 0
-                && rescale == that.rescale
-                && origin.equals(that.origin)
-                && axis == that.axis;
+        return rescale == that.rescale && rotation.equals(that.rotation) && origin.equals(that.origin);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(origin, axis, angle, rescale);
+        return Objects.hash(origin, rotation, rescale);
     }
 
     /**
@@ -167,15 +167,18 @@ public class ElementRotation implements Examinable {
      * @return A new {@link ElementRotation} instance
      * @since 1.0.0
      */
+    @Deprecated
     public static ElementRotation of(
             Vector3Float origin,
             Axis3D axis,
             float angle,
             boolean rescale
     ) {
-        return new ElementRotation(
-                origin, axis, angle, rescale
-        );
+        Vector3Float rotation = Vector3Float.ZERO;
+        if (axis == Axis3D.Y) rotation = new Vector3Float(0f, angle, 0f);
+        else if (axis == Axis3D.X) rotation = new Vector3Float(angle, 0f, 0f);
+        else if (axis == Axis3D.Z) rotation = new Vector3Float(0f, 0f, angle);
+        return new ElementRotation(origin, rotation, rescale);
     }
 
     /**
@@ -199,8 +202,7 @@ public class ElementRotation implements Examinable {
     public static class Builder {
 
         private Vector3Float origin;
-        private Axis3D axis;
-        private float angle;
+        private Vector3Float rotation;
         private boolean rescale = DEFAULT_RESCALE;
 
         private Builder() {
@@ -211,13 +213,8 @@ public class ElementRotation implements Examinable {
             return this;
         }
 
-        public Builder axis(Axis3D axis) {
-            this.axis = requireNonNull(axis, "axis");
-            return this;
-        }
-
-        public Builder angle(float angle) {
-            this.angle = angle;
+        public Builder rotation(Vector3Float rotation) {
+            this.rotation = requireNonNull(rotation, "rotation");
             return this;
         }
 
@@ -234,7 +231,7 @@ public class ElementRotation implements Examinable {
          * @return The element rotation
          */
         public ElementRotation build() {
-            return new ElementRotation(origin, axis, angle, rescale);
+            return new ElementRotation(origin, rotation, rescale);
         }
 
     }

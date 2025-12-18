@@ -96,7 +96,7 @@ public interface Element extends Examinable {
      * @return The element rotation
      * @since 1.0.0
      */
-    @NotNull ElementRotation rotation();
+    @Nullable ElementRotation rotation();
 
     /**
      * Determines whether to render shadows

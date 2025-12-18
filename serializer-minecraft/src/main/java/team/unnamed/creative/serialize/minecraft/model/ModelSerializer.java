@@ -34,15 +34,7 @@ import team.unnamed.creative.base.Axis3D;
 import team.unnamed.creative.base.CubeFace;
 import team.unnamed.creative.base.Vector2Float;
 import team.unnamed.creative.base.Vector3Float;
-import team.unnamed.creative.model.Element;
-import team.unnamed.creative.model.ElementFace;
-import team.unnamed.creative.model.ElementRotation;
-import team.unnamed.creative.model.ItemOverride;
-import team.unnamed.creative.model.ItemPredicate;
-import team.unnamed.creative.model.ItemTransform;
-import team.unnamed.creative.model.Model;
-import team.unnamed.creative.model.ModelTexture;
-import team.unnamed.creative.model.ModelTextures;
+import team.unnamed.creative.model.*;
 import team.unnamed.creative.overlay.ResourceContainer;
 import team.unnamed.creative.serialize.minecraft.GsonUtil;
 import team.unnamed.creative.serialize.minecraft.ResourceCategoryImpl;
@@ -102,7 +94,7 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
         if (!elements.isEmpty()) {
             writer.name("elements").beginArray();
             for (Element element : elements) {
-                writeElement(writer, element);
+                writeElement(writer, element, targetPackFormat);
             }
             writer.endArray();
         }
@@ -192,10 +184,8 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
                 .build();
     }
 
-    private static void writeElement(JsonWriter writer, Element element) throws IOException {
-        writer
-                .beginObject()
-                .name("from");
+    private static void writeElement(JsonWriter writer, Element element, int targetPackFormat) throws IOException {
+        writer.beginObject().name("from");
         GsonUtil.writeVector3Float(writer, element.from());
         writer.name("to");
         GsonUtil.writeVector3Float(writer, element.to());
@@ -203,7 +193,7 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
         ElementRotation rotation = element.rotation();
         if (rotation != null) {
             writer.name("rotation");
-            writeElementRotation(writer, rotation);
+            writeElementRotation(writer, rotation, targetPackFormat);
         }
 
         boolean shade = element.shade();
@@ -321,12 +311,19 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
                 .build();
     }
 
-    private static void writeElementRotation(JsonWriter writer, ElementRotation rotation) throws IOException {
-        writer.beginObject()
-                .name("origin");
+    private static void writeElementRotation(JsonWriter writer, ElementRotation rotation, int targetPackFormat) throws IOException {
+        writer.beginObject().name("origin");
         GsonUtil.writeVector3Float(writer, rotation.origin());
-        writer.name("axis").value(rotation.axis().name().toLowerCase(Locale.ROOT))
-                .name("angle").value(rotation.angle());
+
+        if (targetPackFormat >= 75) {
+            writer.name("x").value(rotation.rotation().x())
+                    .name("y").value(rotation.rotation().y())
+                    .name("z").value(rotation.rotation().z());
+            System.out.println(rotation.rotation());
+        } else {
+            writer.name("axis").value(rotation.axis().name().toLowerCase(Locale.ROOT))
+                    .name("angle").value(rotation.angle());
+        }
 
         boolean rescale = rotation.rescale();
         if (rescale != ElementRotation.DEFAULT_RESCALE) {
@@ -338,17 +335,25 @@ public final class ModelSerializer implements JsonResourceSerializer<Model>, Jso
 
     private static ElementRotation readElementRotation(JsonElement node) {
         JsonObject objectNode = node.getAsJsonObject();
-        return ElementRotation.builder()
+        Vector3Float rotation;
+        if (objectNode.has("axis") && objectNode.has("angle")) {
+            Axis3D axis = Axis3D.valueOf(objectNode.get("axis").getAsString().toUpperCase(Locale.ROOT));
+            float angle = objectNode.get("angle").getAsFloat();
+            rotation = Vector3Float.ZERO.with(axis, angle);
+        } else {
+            float x = objectNode.get("x").getAsFloat();
+            float y = objectNode.get("y").getAsFloat();
+            float z = objectNode.get("z").getAsFloat();
+            rotation = new Vector3Float(x, y, z);
+        }
+        return ElementRotation.builder().rotation(rotation)
                 .origin(GsonUtil.readVector3Float(objectNode.get("origin")))
-                .axis(Axis3D.valueOf(objectNode.get("axis").getAsString().toUpperCase(Locale.ROOT)))
-                .angle(objectNode.get("angle").getAsFloat())
                 .rescale(GsonUtil.getBoolean(objectNode, "rescale", ElementRotation.DEFAULT_RESCALE))
                 .build();
     }
 
     private static void writeItemOverride(JsonWriter writer, ItemOverride override) throws IOException {
-        writer.beginObject()
-                .name("predicate").beginObject();
+        writer.beginObject().name("predicate").beginObject();
         for (ItemPredicate predicate : override.predicate()) {
             writer.name(predicate.name());
             Object value = predicate.value();
