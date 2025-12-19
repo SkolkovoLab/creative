@@ -4,22 +4,16 @@ plugins {
     signing
 }
 
-val repositoryName: String by project
-val snapshotRepository: String by project
-val releaseRepository: String by project
 
 publishing {
     repositories {
         maven {
-            val snapshot = project.version.toString().endsWith("-SNAPSHOT")
-
-            name = repositoryName
-            url = if (snapshot) {
-                uri(snapshotRepository)
-            } else {
-                uri(releaseRepository)
+            name = "cherry"
+            url = uri("https://repo.cherry.pizza/repository/creative/")
+            credentials {
+                username = findProperty("CHERRYPIZZA_REPO_USR")?.toString()
+                password = findProperty("CHERRYPIZZA_REPO_PSW")?.toString()
             }
-            credentials(PasswordCredentials::class)
         }
     }
     publications {
