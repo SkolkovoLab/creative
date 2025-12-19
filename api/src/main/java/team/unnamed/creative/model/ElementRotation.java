@@ -57,13 +57,12 @@ public class ElementRotation implements Examinable {
         this.origin = requireNonNull(origin, "origin");
         this.rotation = requireNonNull(rotation, "rotation");
         this.rescale = rescale;
-        validate();
     }
 
-    private void validate() {
-        // Skip if using 1.21.11+ format where one can rotate beyond -45->45 and support multiple angles
-        if (rotation.x() != 0f && (rotation.y() != 0f || rotation.z() != 0f)) return;
-        if (rotation.y() != 0f && rotation.z() != 0f) return;
+    @Deprecated
+    private void validateSingleAxis() {
+        if (rotation.x() != 0f && (rotation.y() != 0f || rotation.z() != 0f)) throw new IllegalArgumentException();
+        if (rotation.y() != 0f && rotation.z() != 0f) throw new IllegalArgumentException();
 
         float[] absAngles = rotation.toArray(Math::abs);
         for (float absAngle : absAngles) if (absAngle > 45.0f)
@@ -89,6 +88,7 @@ public class ElementRotation implements Examinable {
      */
     @Deprecated
     public Axis3D axis() {
+        validateSingleAxis();
         if (rotation.x() != 0f) return Axis3D.X;
         else  if (rotation.y() != 0f) return Axis3D.Y;
         else if (rotation.z() != 0f) return Axis3D.Z;
